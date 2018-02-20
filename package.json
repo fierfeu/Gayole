@@ -1,0 +1,27 @@
+{
+  "name": "gayole",
+  "version": "0.0.1",
+  "description": "new agile@scale tool",
+  "main": "./web/index.html",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --harmony"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fierfeu/Gayole.git"
+  },
+  "keywords": [
+    "agile",
+    "scale"
+  ],
+  "author": "fierfeu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fierfeu/Gayole/issues"
+  },
+  "homepage": "https://github.com/fierfeu/Gayole#readme"
+}
