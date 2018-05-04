@@ -2,4 +2,5 @@
 # Gayole
 new agile@scale software
 
-https://travis-ci.org/fierfeu/Gayole.svg?branch=master
+
+<a href="https://travis-ci.org/fierfeu/Gayole"><img src="https://travis-ci.org/fierfeu/Gayole.svg?branch=master" alt="Build Status"></a>
