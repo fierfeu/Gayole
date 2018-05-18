@@ -10,8 +10,9 @@ describe('test webserver lib', ()=> {
         webserver.start('8080');
         http.get('http://localhost:8080',(res)=>{
             expect(res.statusCode).to.be.equal(200);
+            webserver.stop();
         });
-        webserver.stop();
+
     });
 });
 
