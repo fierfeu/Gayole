@@ -27,12 +27,13 @@ describe('test route for webServer', ()=>{
     });
 
     afterEach (() => {
-        webserver.stop();
+
     });
 
     it ('should pass', () => {
         http.get('http://localhost:8080', (res)=>{
-            console.log(res);
+            console.log(this.res);
+            webserver.stop();
         });
     });
 });
