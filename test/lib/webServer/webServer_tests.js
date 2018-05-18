@@ -16,21 +16,22 @@ describe('test webserver lib', ()=> {
 });
 
 
-/*describe('test route for webServer', ()=>{
+describe('test route for webServer', ()=>{
     beforeEach ( ()=> {
 
         this.res=sinon.spy();
 
-        webserver.start();
+        webserver.start('8080');
 
     });
 
     afterEach (() => {
-        webserver.stop(webserver);
+        webserver.stop();
     });
 
     it ('should pass', () => {
-        http.get('http://localhost:8080');
-        console.log(this.res);
+        http.get('http://localhost:8080', (res)=>{
+            console.log(res);
+        });
     });
-});*/
+});
