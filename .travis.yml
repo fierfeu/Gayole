@@ -3,3 +3,7 @@ language : node_js
 node_js : 
    - "lts/*"
 
+deploy :
+  provider : heroku
+  api_key :
+    secure : 8d89dec2-5d46-456c-b3d5-217e22765dce
