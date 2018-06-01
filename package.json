@@ -4,11 +4,12 @@
   "description": "new agile@scale tool",
   "main": "./web/index.html",
   "directories": {
-    "lib": "lib",
+    "src": "src",
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start" : "node ./src/servers/app/index.js"
   },
   "repository": {
     "type": "git",
