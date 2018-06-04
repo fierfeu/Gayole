@@ -6,7 +6,7 @@ const app = require ('../../../src/Servers/App/index.js');
 
 describe ('webAppshould run on localhost',() => {
     before(()=>{
-        app.run('localhost',80);
+        app.run('localhost',8080);
     });
 
     after (()=>{
