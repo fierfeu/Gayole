@@ -1,7 +1,7 @@
 language : node_js
 
 env :
-    - PORT = 8080
+    - PORT=8080
 
 node_js : 
    - "lts/*"
