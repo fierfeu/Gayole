@@ -8,7 +8,7 @@ node_js :
 
 before_script :
     - "sudo iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-ports 8080"
-    - "$PORT = 8080"
+    - "export PORT=8080"
 
 deploy :
   provider : heroku
