@@ -22,15 +22,15 @@ exports.config = {
     },
 
     beforeLaunch: ()=> {
-        web.run('localhost',80);
+        web.run('localhost', process.env.PORT || 80);
 
-        console.log ('Web app launched on port 80');
+        console.log ('Web app launched');
     },
 
     afterLaunch : (exitCode)=> {
         web.stop();
 
-        console.log ('Web app stoped on port 80');
+        console.log ('Web app stoped');
     }
 
 };
