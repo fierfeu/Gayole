@@ -11,7 +11,7 @@
     "server-test": "mocha",
     "client-test": "karma start",
     "e2e-test": "protratcor",
-    "test": "mocha & npm run client-test & portractor",
+    "test": "mocha & npm run client-test & protractor",
     "start": "node ./src/Servers/index.js"
   },
   "repository": {
