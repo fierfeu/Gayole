@@ -10,7 +10,7 @@
   "scripts": {
     "server-test": "mocha",
     "client-test": "karma start",
-    "e2e-test": "protratcor",
+    "e2e-test": "protractor",
     "test": "mocha & npm run client-test & protractor",
     "start": "node ./src/Servers/index.js"
   },
