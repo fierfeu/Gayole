@@ -12,8 +12,13 @@ before_script :
     - "sudo iptables -t nat -L"
     - "export PORT=8080"
     - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
+    #- sh -e /etc/init.d/xvfb start
     - webdriver-manager update
+
+script :
+    - npm run server-test
+    - xvfb-run npm run client-test
+    - xvfb-run npm run e2e-test
 
 deploy :
   provider : heroku
