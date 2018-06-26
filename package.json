@@ -45,6 +45,6 @@
     "sinon": "^5.1.1"
   },
   "dependencies": {
-    "jslint": "^0.12.0",
+    "jslint": "^0.12.0"
   }
 }
