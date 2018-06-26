@@ -15,7 +15,7 @@ before_script :
     #- sh -e /etc/init.d/xvfb start
     #- npm install -g protractor
     - ./node_modules/protractor/bin/webdriver-manager update --firefox:60.0.2
-    - npm i npm@latest -g
+    - npm update
     #- webdriver-manager update
 
 script :
