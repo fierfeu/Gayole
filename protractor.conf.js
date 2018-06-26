@@ -29,7 +29,7 @@ exports.config = {
         console.log ('Web app launched');
     },
 
-    afterLaunch : (exitCode)=> {
+    afterLaunch : ()=> {
         web.stop();
 
         console.log ('Web app stoped');
