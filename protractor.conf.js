@@ -30,7 +30,7 @@ exports.config = {
     },
 
     afterLaunch : ()=> {
-        web.stop();
+        //web.stop();
 
         console.log ('Web app stoped');
     }
