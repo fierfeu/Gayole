@@ -10,12 +10,8 @@ before_script :
     - "sudo iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-ports 8080"
     - "sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080"
     - "sudo iptables -t nat -L"
-    - "export PORT=8080"
     - export DISPLAY=:99.0
-    #- sh -e /etc/init.d/xvfb start
-    #- npm install -g protractor
-    - ./node_modules/protractor/bin/webdriver-manager update --firefox:60.0.2
-    #- webdriver-manager update
+    - ./node_modules/protractor/bin/webdriver-manager update --chrome:false
 
 script :
     - npm run server-test
