@@ -14,6 +14,7 @@ before_script :
     - "export PORT=8080"
     - export DISPLAY=:99.0
     - npm install -g protractor
+    - npm install -g mocha
     - webdriver-manager update --chrome=false
 
 script :
