@@ -15,7 +15,6 @@ before_script :
     - export DISPLAY=:99.0
     - npm install -g protractor
     - webdriver-manager update --firefox
-    - webdriver-manager start
 
 script :
     - npm run server-test

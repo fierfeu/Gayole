@@ -22,14 +22,14 @@ exports.config = {
     capabilities: {
         'browserName' : 'firefox',
         'moz:firefoxOptions': {
-            'args': ['-headless']
+            //'args': ['-headless']
         }
     },
 
     beforeLaunch: ()=> {
         web.run('localhost', process.env.PORT || 80);
 
-        console.log ('Web app launched');
+        console.log ('Web app launched on port '+(process.env.PORT || 80));
     },
 
     afterLaunch : ()=> {
