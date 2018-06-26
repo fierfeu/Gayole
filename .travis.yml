@@ -13,8 +13,9 @@ before_script :
     - "export PORT=8080"
     - export DISPLAY=:99.0
     #- sh -e /etc/init.d/xvfb start
-    - npm install -g protractor
-    - webdriver-manager update
+    #- npm install -g protractor
+    - ./node-modules/protractor/bin/ webdriver-manager update --firefox:60.0.2
+    #- webdriver-manager update
 
 script :
     - npm run server-test
