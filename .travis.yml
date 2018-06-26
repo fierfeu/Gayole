@@ -7,6 +7,8 @@ node_js :
    - "lts/*"
 
 before_script :
+    - npm update
+    - npm audit --fix
     - "sudo iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-ports 8080"
     - "sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080"
     - "sudo iptables -t nat -L"
@@ -15,7 +17,6 @@ before_script :
     #- sh -e /etc/init.d/xvfb start
     #- npm install -g protractor
     - ./node_modules/protractor/bin/webdriver-manager update --firefox:60.0.2
-    - npm update
     #- webdriver-manager update
 
 script :
