@@ -2,9 +2,13 @@ language : node_js
 
 env :
     - PORT=8080
+    - MOZ_HEADLESS=1
 
 node_js : 
    - "lts/*"
+
+addons:
+  firefox: latest
 
 before_script :
     #- npm update
