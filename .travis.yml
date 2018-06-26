@@ -14,7 +14,7 @@ before_script :
     - export DISPLAY=:99.0
     #- sh -e /etc/init.d/xvfb start
     #- npm install -g protractor
-    - ./node-modules/protractor/bin/ webdriver-manager update --firefox:60.0.2
+    - ./node_modules/protractor/bin/webdriver-manager update --firefox:60.0.2
     #- webdriver-manager update
 
 script :
