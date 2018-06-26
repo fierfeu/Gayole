@@ -6,7 +6,7 @@ exports.config = {
 
     directConnect: true,
 
-    ignoreUncaughtExceptions: true,
+    //ignoreUncaughtExceptions: true,
 
     baseUrl:
       (process.env.WEB_HOST || 'http://localhost')+':'+(process.env.PORT ||80),
