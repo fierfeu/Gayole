@@ -6,8 +6,6 @@ exports.config = {
 
     directConnect: true,
 
-    //ignoreUncaughtExceptions: true,
-
     baseUrl:
       (process.env.WEB_HOST || 'http://localhost')+':'+(process.env.PORT ||80),
 
@@ -20,20 +18,17 @@ exports.config = {
     specs: ['test/E2E/*.js'],
 
     capabilities: {
-        'browserName' : 'firefox',
-        'moz:firefoxOptions': {
-            //'args': ['-headless']
-        }
+        'browserName' : 'firefox'
     },
 
     beforeLaunch: ()=> {
         web.run('localhost', process.env.PORT || 80);
 
-        console.log ('Web app launched on port '+(process.env.PORT || 80));
+        console.log ('Web app launched');
     },
 
-    afterLaunch : ()=> {
-        //web.stop();
+    afterLaunch : (exitCode)=> {
+        web.stop();
 
         console.log ('Web app stoped');
     }
