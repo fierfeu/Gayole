@@ -13,8 +13,9 @@ before_script :
     - export DISPLAY=:99.0
     - npm install -g npm@latest
     - npm install
+    - npm audit fix
     - npm install -g protractor
-    - weddriver-manager update
+    - /home/travis/.nvm/versions/node/v8.11.3/bin/webdriver-manager update
     #- ./node_modules/protractor/bin/webdriver-manager update
 
 script :
