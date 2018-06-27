@@ -12,6 +12,7 @@ before_script :
     - "sudo iptables -t nat -L"
     - export DISPLAY=:99.0
     - npm install -g npm@latest
+    - npm install
     - npm install -g protractor
     - weddriver-manager update
     #- ./node_modules/protractor/bin/webdriver-manager update
