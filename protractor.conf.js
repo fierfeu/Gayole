@@ -18,9 +18,7 @@ exports.config = {
     specs: ['test/E2E/*.js'],
 
     capabilities: {
-        'browserName' : 'firefox',
-        'moz:firefoxOptions': {
-          'args': ['-headless']
+        'browserName' : 'firefox'
         }
     },
 
