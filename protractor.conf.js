@@ -15,14 +15,14 @@ exports.config = {
         timeout : 10000
     },
 
-    specs: ['test/E2E/*.js'],
+    specs : ['test/E2E/*.js'],
 
-    capabilities: {
+    capabilities : {
         'browserName' : 'firefox'
         }
     },
 
-    beforeLaunch: ()=> {
+    beforeLaunch : ()=> {
         web.run('localhost', process.env.PORT || 80);
 
         console.log ('Web app launched');
