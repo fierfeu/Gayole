@@ -19,7 +19,6 @@ exports.config = {
 
     capabilities : {
         'browserName' : 'firefox'
-        }
     },
 
     beforeLaunch : ()=> {
