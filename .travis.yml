@@ -16,6 +16,7 @@ before_script :
     - npm audit fix
     - npm install -g protractor
     - /home/travis/.nvm/versions/node/v8.11.3/bin/webdriver-manager update
+    - firefox -v | more
     #- ./node_modules/protractor/bin/webdriver-manager update
 
 script :
