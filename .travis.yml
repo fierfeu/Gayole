@@ -21,7 +21,9 @@ before_script :
 script :
     - npm run server-test
     - xvfb-run npm run client-test
+    - xvfb-run protractor
     - xvfb-run npm run e2e-test
+
 
 deploy :
   provider : heroku
