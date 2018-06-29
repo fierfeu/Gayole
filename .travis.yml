@@ -7,7 +7,7 @@ node_js :
    - "lts/*"
 
 addons :
-    firefox : 'latest'
+    chrome : 'latest'
 
 before_script :
     - "sudo iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-ports 8080"
@@ -19,13 +19,11 @@ before_script :
     - npm audit fix
     - npm install -g protractor
     - /home/travis/.nvm/versions/node/v8.11.3/bin/webdriver-manager update
-    - firefox -v | more
     #- ./node_modules/protractor/bin/webdriver-manager update
 
 script :
     - npm run server-test
     - xvfb-run npm run client-test
-    - xvfb-run protractor
     - xvfb-run npm run e2e-test
 
 

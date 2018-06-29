@@ -18,9 +18,9 @@ exports.config = {
     specs : ['test/E2E/*.js'],
 
     capabilities : {
-        browserName : 'firefox',
-        firefoxOptions : {
-            args : ['-headless']
+        browserName : 'chrome',
+        chromeOptions : {
+            args : ['--headless', '--disable-gpu',]
         }
     },
 
