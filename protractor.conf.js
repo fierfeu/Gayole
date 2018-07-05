@@ -17,6 +17,8 @@ exports.config = {
 
     specs : ['test/E2E/*.js'],
 
+    seleniumAddress: 'http://localhost:4444/wd/hub',
+
     capabilities : {
         browserName : 'firefox',
         firefoxOptions : {
