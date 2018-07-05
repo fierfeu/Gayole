@@ -21,6 +21,7 @@ before_script :
     - npm install
     - npm audit fix
     - npm install -g protractor
+    - npm install -g mocha
     - 'webdriver-manager update --standalone --firefox'
     - 'webdriver-manager start 2>&1 &'
     - sleep 3
