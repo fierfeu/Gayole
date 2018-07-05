@@ -7,18 +7,24 @@ node_js :
    - "lts/*"
 
 addons :
-    chrome : 'latest'
+    chrome : latest
+    firefox : latest
 
 before_script :
     - "sudo iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-ports 8080"
     - "sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080"
     - "sudo iptables -t nat -L"
-    - export DISPLAY=:99.0
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    #- export DISPLAY=:99.0
     - npm install -g npm@latest
     - npm install
     - npm audit fix
     - npm install -g protractor
-    - /home/travis/.nvm/versions/node/v8.11.3/bin/webdriver-manager update
+    - 'node_modules/protractor/bin/webdriver-manager update --standalone --firefox'
+    - 'node_modules/protractor/bin/webdriver-manager start 2>&1 &'
+    - sleep 3
+    #- /home/travis/.nvm/versions/node/v8.11.3/bin/webdriver-manager update
     #- ./node_modules/protractor/bin/webdriver-manager update
 
 script :

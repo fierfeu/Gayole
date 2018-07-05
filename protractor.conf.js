@@ -4,7 +4,7 @@ const web = require('./src/Servers/App/index.js');
 
 exports.config = {
 
-    directConnect: true,
+    //directConnect: true,
 
     baseUrl:
       (process.env.WEB_HOST || 'http://localhost')+':'+(process.env.PORT ||80),
@@ -18,9 +18,9 @@ exports.config = {
     specs : ['test/E2E/*.js'],
 
     capabilities : {
-        browserName : 'chrome',
-        chromeOptions : {
-            args : ['--headless', '--disable-gpu','--no-sandbox']
+        browserName : 'firefox',
+        firefoxOptions : {
+            args : ['--headless', '--no-sandbox']
         }
     },
 
