@@ -21,8 +21,8 @@ before_script :
     - npm install
     - npm audit fix
     - npm install -g protractor
-    - 'node_modules/protractor/bin/webdriver-manager update --standalone --firefox'
-    - 'node_modules/protractor/bin/webdriver-manager start 2>&1 &'
+    - 'webdriver-manager update --standalone --firefox'
+    - 'webdriver-manager start 2>&1 &'
     - sleep 3
     #- /home/travis/.nvm/versions/node/v8.11.3/bin/webdriver-manager update
     #- ./node_modules/protractor/bin/webdriver-manager update
