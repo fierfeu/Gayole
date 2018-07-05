@@ -29,8 +29,8 @@ before_script :
 
 script :
     - npm run server-test
-    - xvfb-run npm run client-test
-    - xvfb-run npm run e2e-test
+    - npm run client-test
+    - npm run e2e-test
 
 
 deploy :
