@@ -32,7 +32,11 @@ exports.config = {
                 args : ['--headless','--no-sandbox']
             }
         },
-        {'browserName': 'chrome'}
+        {'browserName': 'chrome',
+            chromeOptions:{
+                args: ['--headless','--no-sandbox']
+            }
+        }
     ],
 
     beforeLaunch : ()=> {
