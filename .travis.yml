@@ -22,7 +22,7 @@ before_script :
     - npm audit fix
     - npm install -g protractor
     - npm install -g mocha
-    - 'webdriver-manager update --standalone --firefox'
+    - 'webdriver-manager update'
     - 'webdriver-manager start 2>&1 &'
     - sleep 3
     #- /home/travis/.nvm/versions/node/v8.11.3/bin/webdriver-manager update
