@@ -19,12 +19,21 @@ exports.config = {
 
     //seleniumAddress: 'http://localhost:4444/wd/hub',
 
-    capabilities : {
+    /*capabilities : {
         browserName : 'firefox',
         firefoxOptions : {
             args : ['--headless', '--no-sandbox']
         }
-    },
+    },*/
+
+    multiCapabilities: [
+        {'browserName': 'firefox',
+            firefoxOptions: {
+                args : ['--headless','--no-sandbox']
+            }
+        },
+        {'browserName': 'chrome'}
+    ],
 
     beforeLaunch : ()=> {
         web.run('localhost', process.env.PORT || 80);
