@@ -15,7 +15,7 @@ before_script :
     - "sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080"
     - "sudo iptables -t nat -L"
     - "export DISPLAY=:99.0"
-    - "sh -e /etc/init.d/xvfb start"
+    #- "sh -e /etc/init.d/xvfb start"
     #- export DISPLAY=:99.0
     - npm install -g npm@latest
     - npm install
@@ -30,8 +30,8 @@ before_script :
 
 script :
     - npm run server-test
-    - npm run client-test
-    - npm run e2e-test
+    - xvfb-run npm run client-test
+    - xvfb-run npm run e2e-test
 
 
 deploy :
