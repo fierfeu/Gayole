@@ -7,7 +7,7 @@ node_js :
    - "lts/*"
 
 addons :
-    chrome : latest
+    chrome : stable
     firefox : latest
 
 before_script :
