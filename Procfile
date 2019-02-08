@@ -1,2 +1,1 @@
-web : npm start
-#web : node index.js
+web : PORT=80 & node ./src/Servers/index.js
