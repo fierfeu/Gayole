@@ -1,6 +1,6 @@
 'use strict'
 
-const web = require(./App/index.js);
+const web = require('./App/index.js');
 // const services = require(./Services/index.js);
 
 // services.run();
