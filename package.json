@@ -2,7 +2,7 @@
   "name": "gayole",
   "version": "0.0.1",
   "description": "new agile@scale tool",
-  "main": "./web/index.html",
+  "main": "./src/Servers/index.js",
   "directories": {
     "src": "src",
     "test": "test"
