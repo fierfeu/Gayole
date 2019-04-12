@@ -31,9 +31,9 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "coveralls": "^3.0.1",
+    "coveralls": "^3.0.3",
     "eslint": "^4.19.1",
-    "karma": "^2.0.4",
+    "karma": "^4.0.1",
     "karma-chai": "^0.1.0",
     "karma-cli": "^1.0.1",
     "karma-edge-launcher": "^0.4.2",
@@ -45,7 +45,7 @@
     "sinon": "^5.1.1"
   },
   "dependencies": {
-    "npm": "^6.0.1",
+    "npm": "^6.9.0",
     "npm-registry-fetch": "^3.1.1"
   }
 }
