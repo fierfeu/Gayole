@@ -5,6 +5,6 @@ const web = require('./App/index.js');
 
 // services.run();
 
-web.run(process.env.PORT);
+web.run(process.env.HOST,process.env.PORT);
 
 console.log ('app launched on port '+ process.env.PORT)
