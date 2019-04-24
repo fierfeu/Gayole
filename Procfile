@@ -1,1 +1,1 @@
-web: PORT=80 & HOST=gayole.herokuapp.com & node start
+web: HOST=gayole.herokuapp.com & node start
