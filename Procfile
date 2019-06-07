@@ -1,1 +1,1 @@
-web: HOST=gayole.herokuapp.com & node src/Servers/index.js
+web: node src/Servers/index.js
