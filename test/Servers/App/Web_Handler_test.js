@@ -47,7 +47,7 @@ describe ("tests accès / du web handler de l'app",()=>{
 
 describe ('webhandler used urlSiteValidator', () => {
     
-    //On pase obligatoirement par la fct de validation pour ttes les requètes
+    //On passe obligatoirement par la fct de validation pour ttes les requètes
     it("must used urlSiteValidator.validate for any call to webHandler", (done) =>{
         
         sinon.spy(urlSiteValidator,'validate');
@@ -59,11 +59,10 @@ describe ('webhandler used urlSiteValidator', () => {
         
         expect(urlSiteValidator.validate.calledOnceWith('myUrl')).to.be.true;
         urlSiteValidator.validate.restore();
+
         done();
     });
-
-    // TODO La fonction de validation est la première fonction appelée.
-
+});
 
     // TODO on passe obligatoirement par la définition de la page et du fichier de rendu associé
 
@@ -79,5 +78,4 @@ describe ('webhandler used urlSiteValidator', () => {
 
     // TODO on passe obligatoirmeent par le rendu de page (send())
 
-    // TODO le rendu est obligatoirment la dernière fonction
-});
+    // TODO le rendu est obligatoirment la dernière fonction    
