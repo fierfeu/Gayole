@@ -10,7 +10,7 @@ module.exports ={
                     'content-type' : 'text/html',
                     'charset' : 'utf8'
                 });
-                res.write ('<html><head></head><body>hello world</body></html>');
+                res.write ('<html><head> <title>Gayole</ title></head><body>hello world</body></html>');
                 res.end();
             default :
                 res.writeHead(404);
