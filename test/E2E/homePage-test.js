@@ -7,9 +7,9 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe ('http://hostname/ allow acces to home page', ()=> {
-    it('return index.html when using root access',(done)=>{
-        browser.get('/');
-        expect(browser.getTitle()).to.be.equal('Gayole');
+    it('return Gayole Home Page when using root access',(done)=>{
+        browser.get(browser.baseUrl);
+        expect(browser.getTitle()).to.eventually.equal('Gayole');
         done();
     });
 });
