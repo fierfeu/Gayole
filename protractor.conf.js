@@ -41,7 +41,7 @@ exports.config = {
 
     onPrepare : () => {
         browser.ignoreSynchronization = true;
-    }
+    },
 
     beforeLaunch : ()=> {
         web.run('localhost', process.env.PORT || 80);
