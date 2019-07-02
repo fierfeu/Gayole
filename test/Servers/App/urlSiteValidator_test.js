@@ -36,7 +36,7 @@ describe("urlSiteValidator is working as expected", ()=>{
 });
 
 describe ("urlSiteValidator returns 200 for good url", () =>{
-    // TODO Pour chaque url dans la liste des pages la fonction retourne un code 200
+    // Pour chaque url dans la liste des pages la fonction retourne un code 200
     
     let sitePagesConf = {
         '/' : 'index.html',

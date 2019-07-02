@@ -1,12 +1,19 @@
 'use strict'
 const urlSiteValidator = require('./urlSiteValidator.js');
 
+// Definition de la structure du site em mode KISS
+const sitePagesConf ={
+    '/':'index.html',
+    '/index.html':'index.html'
+};
+
 module.exports ={
+
     handler : (req,res) => {
-        urlSiteValidator.validate(req.url);
+        const code = urlSiteValidator.validate(req.url,sitePagesConf);
         switch (req.url) {
             case  '/' :
-                res.writeHead (200,{
+                res.writeHead (code,{
                     'content-type' : 'text/html',
                     'charset' : 'utf8'
                 });
