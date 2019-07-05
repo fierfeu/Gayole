@@ -3,7 +3,7 @@
 const expect = require('chai').expect;
 const urlSiteValidator = require('./../../../src/Servers/App/urlSiteValidator');
 
-// TODO la présence d'un hash ne modifie pas le comportement de la focntion
+
 
 describe("urlSiteValidator is working as expected", ()=>{
     // si l'url est vide, malformatée ou pas dans la liste des pages du domaine alors la focntion retourne le code 404
@@ -43,19 +43,27 @@ describe ("urlSiteValidator returns 200 for good url", () =>{
         '/index.html' : 'index.html'
     };
 
-    it ("should return 200 for '/' access", (done)=>{
+    it ("should return 200 for '/' access", ()=>{
         let url ='/';
 
-        expect(urlSiteValidator.validate(url,sitePagesConf)).to.be .equal(200);
-        
-        done();
+        expect(urlSiteValidator.validate(url,sitePagesConf)).to.be.equal(200);
     });
 
-    it("should return 200 for '/index.html' access", (done) => {
+    it("should return 200 for '/index.html' access", () => {
         let url ='/index.html';
 
-        expect(urlSiteValidator.validate(url,sitePagesConf)).to.be .equal(200);
-        
-        done();
+        expect(urlSiteValidator.validate(url,sitePagesConf)).to.be.equal(200);
+    });
+    // La présence d'un hash ne modifie pas le comportement de la fonction
+    it("hash tag don't change return code value",()=>{
+        const url="/#aHashTag";
+
+        expect(urlSiteValidator.validate(url,sitePagesConf)).to.be.equal(200);
+    });
+    // La présence d'une query ne modifie pas le comportement de la fonction
+    it("hash tag don't change return code value",()=>{
+        const url="/?foo=bar";
+
+        expect(urlSiteValidator.validate(url,sitePagesConf)).to.be.equal(200);
     });
 });

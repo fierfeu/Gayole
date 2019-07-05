@@ -5,6 +5,7 @@ const sinon = require('sinon');
 //const sandbox = require('sinon').createSandbox;
 const Handler = require ('../../../src/Servers/App/webHandler.js');
 const urlSiteValidator = require('../../../src/Servers/App/urlSiteValidator.js');
+const targetDefinition = require('../../../src/Servers/App/targetDefinition.js');
 
 var response ={
     writeHead (statusCode,statusMessage) {
@@ -64,7 +65,37 @@ describe ('webhandler used urlSiteValidator', () => {
     });
 });
 
-    // TODO on passe obligatoirement par la définition de la page et du fichier de rendu associé
+    
+describe ('webhandler used targetDefinition',()=>{
+    // On passe obligatoirement par la définition de la page et du fichier de rendu associé
+    it("must used target definition if code 200",()=>{
+        sinon.spy(targetDefinition,'resolved');
+        const request ={
+            url : '/',
+        };
+
+        Handler.handler(request,response);
+
+        expect(targetDefinition.resolved.calledOnceWith('/')).to.be.true;
+
+        targetDefinition.resolved.restore();
+    });
+
+    it("targetDefinition not called if return code is not 200", ()=>{
+        sinon.spy(targetDefinition,'resolved');
+        
+        const request = {
+            url : 'badUrl'
+        };
+
+        Handler.handler(request,response);
+
+        expect(targetDefinition.resolved.calledOnceWith('badUrl')).to.be.false;
+
+        targetDefinition.resolved.restore();
+    });
+
+});
 
     // TODO la fonction d'identification est la seconde fonction
 

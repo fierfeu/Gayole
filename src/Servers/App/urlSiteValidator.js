@@ -1,9 +1,11 @@
 'use strict'
+const URL = require('url');
 
 module.exports = {
     validate : (url, pagesConfiguration) => {
         if (pagesConfiguration) {
-            if (pagesConfiguration.hasOwnProperty(url)) {
+            const parsedUrl = URL.parse(url);
+            if (pagesConfiguration.hasOwnProperty(parsedUrl.pathname)) {
                 return 200;
             }
         }
