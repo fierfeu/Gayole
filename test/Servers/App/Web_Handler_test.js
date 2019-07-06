@@ -97,7 +97,24 @@ describe ('webhandler used targetDefinition',()=>{
 
 });
 
-    // TODO la fonction d'identification est la seconde fonction
+    // TODO la fonction d'identification de la target est la seconde fonction
+describe("targetDefinition must be called after url validation", ()=>{
+    it("verification test", ()=>{
+        sinon.spy(targetDefinition,'resolved');
+        sinon.spy(urlSiteValidator,'validate');
+
+        const request = {
+            url : '/'
+        };
+
+        Handler.handler(request,response);
+
+        expect(targetDefinition.resolved.calledAfter(urlSiteValidator.validate)).to.be.true;
+
+        targetDefinition.resolved.restore();
+        urlSiteValidator.validate.restore();
+    });
+});
 
     // TODO On passe par la vérification des droits d'accès obligatoirement
 
