@@ -6,6 +6,7 @@ const sinon = require('sinon');
 const Handler = require ('../../../src/Servers/App/webHandler.js');
 const urlSiteValidator = require('../../../src/Servers/App/urlSiteValidator.js');
 const targetDefinition = require('../../../src/Servers/App/targetDefinition.js');
+const pageRender = require('../../../src/Servers/App/pageRender.js');
 
 var response ={
     writeHead (statusCode,statusMessage) {
@@ -120,10 +121,15 @@ describe("targetDefinition must be called after url validation", ()=>{
 
     // TODO la fonction de verification des droits est la troisème fonction
 
-    // TODO On passe par l'application du contexte à la page (hash)
+    // TODO On passe par l'application du contexte à la page
 
     // TODO l'application du contexte est obligatoirement en quatrième position
 
-    // TODO on passe obligatoirmeent par le rendu de page (send())
+    // TODO on passe obligatoirmeent par le rendu de page
+describe("Webhandler must go through page rendering function",()=>{
+    it("must used pageRender function",()=>{
+        sinon.spy(pageRender,'render');
+    });
+});
 
     // TODO le rendu est obligatoirment la dernière fonction    
