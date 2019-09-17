@@ -156,6 +156,40 @@ describe("Webhandler must go through page rendering function",()=>{
 });
 
     // TODO le rendu est obligatoirment la dernière fonction    
-describe ('pageRender is the latest function of web handler' () => {
-    // how to know that ?
+describe ('pageRender is the latest function of web handler', () => {
+    beforeEach ( () => {
+        sinon.spy(pageRender,'render');
+    });
+
+    afterEach ( ()=>{
+        pageRender.render.restore();
+    });
+    // TODO if good url pageRender.render must be run after targetDefinition.resolved
+    it ('if good url pageRender.render must be run after targetDefinition.resolved',()=>{
+        sinon.spy(targetDefinition,'resolved');
+
+        const request = {
+            url : '/'
+        };
+
+        Handler.handler(request,response);
+
+        expect(pageRender.render.calledAfter(targetDefinition.resolved)).to.be.true;
+
+        targetDefinition.resolved.restore();
+    });
+    // TODO if bad url pageRender.render must be run after urlSiteValidator.validate
+    it('if bad url pageRender.render must be run after urlSiteValidator.validate',()=>{
+        sinon.spy(urlSiteValidator,'validate');
+
+        const request = {
+            url : 'badUrl'
+        };
+
+        Handler.handler(request,response);
+
+        expect(pageRender.render.calledAfter(urlSiteValidator.validate)).to.be.true;
+
+        urlSiteValidator.validate.restore();
+    });
 });
