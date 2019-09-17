@@ -91,7 +91,7 @@ describe ('webhandler used targetDefinition',()=>{
 
         Handler.handler(request,response);
 
-        expect(targetDefinition.resolved.calledOnceWith('badUrl')).to.be.false;
+        expect(targetDefinition.resolved.calledOnceWith('badUrl/')).to.be.false;
 
         targetDefinition.resolved.restore();
     });
@@ -125,11 +125,37 @@ describe("targetDefinition must be called after url validation", ()=>{
 
     // TODO l'application du contexte est obligatoirement en quatrième position
 
-    // TODO on passe obligatoirmeent par le rendu de page
 describe("Webhandler must go through page rendering function",()=>{
-    it("must used pageRender function",()=>{
+    beforeEach ( () => {
         sinon.spy(pageRender,'render');
     });
+
+    afterEach ( ()=>{
+        pageRender.render.restore();
+    });
+    it("must used pageRender function with good url",()=>{
+   
+        const request = {
+            url : '/'
+        };
+
+        Handler.handler(request,response);
+
+        expect(pageRender.render.calledOnce).to.be.true;
+    });
+    it("must used pageRender function with bad url",()=>{
+
+        const request = {
+            url : 'badUrl'
+        };
+
+        Handler.handler(request,response);
+
+        expect(pageRender.render.calledOnce).to.be.true;
+    });  
 });
 
     // TODO le rendu est obligatoirment la dernière fonction    
+describe ('pageRender is the latest function of web handler' () => {
+    // how to know that ?
+});

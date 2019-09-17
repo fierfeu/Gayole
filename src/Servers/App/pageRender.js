@@ -1,5 +1,8 @@
 'use strict'
+const PATHTOHTML = '../../Client/html/';
 
 module.exports = {
-    render : () =>{}
+    render : (res) =>{
+        res.end();
+    }
 };
