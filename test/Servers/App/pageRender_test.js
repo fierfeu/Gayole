@@ -1,44 +1,51 @@
 'use strict'
-const expect = require('chai').expect;
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
+const fs=require('fs');
 const pageRender = require('../../../src/Servers/App/pageRender.js');
-const fs = require('fs');
+const response = require('./responseFake.js');
 
-var response ={
-    writeHead (statusCode,statusMessage) {
-        this.statusCode = statusCode;
-        this.statusMessage = statusMessage;
-    },
-    write (data) {this.data+=data},
-    end () {this.body=this.data},
-};
+chai.use(chaiAsPromised);
+var expect = chai.expect;
 
 
-describe('pageRender.render must return good code', ()=> {
-    it('pageRender must called res.send', ()=>{
+describe('pageRender.render must called res.end()', ()=> {
+    it ('response.end is well used in page render', () =>{
         sinon.spy(response,'end');
 
-        pageRender.render(response);
-
+        return pageRender.render(response,"./src/Client/html/index.html",200);
+        
         expect(response.end.calledOnce).to.be.true;
 
         response.end.restore();
-    });
-    it('pageRender acces to the good file given through target definition param',()=>{
-        let target='test.test';
-        let targetContent='test Ok';
-        fs.appendFile(target,targetContent, ()=>{});
 
-        pageRender.render(response,target);
-
-        expect(response.body).to.equal(targetContent);
-
-        fs.unlink(target, ()=>{});
     });
 });
 
+// pageRender acces to the good file through param
+describe ("pageRender.render return good content for a given filename",()=>{
 
+    it("return file content if file exist",()=>{
+        response.body='';
+        response.data='';
 
-// pageRender write the good file content
+        fs.writeFile("testFile.txt","txt content",(err)=>{if (err) throw err;});
 
-// pageRender write the good status code and file format
+        return pageRender.render(response,"./testFile.txt",200);
+    
+        expect(response.body).to.equal("txt content");
+        expect(response.Headers['content-type']).to.equal('text/plain');
+
+        
+
+        fs.unlink("testFile.txt",(err)=>{if (err) throw err;});
+    });
+
+    it ("return error 500 status if file doesn't exist",()=>{
+       
+        return pageRender.render(response,"badFile.bad");
+
+        expect(response.statusCode).to.equal(500);
+    });
+});

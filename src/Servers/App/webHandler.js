@@ -5,24 +5,20 @@ const pageRender = require('./pageRender.js');
 
 // Definition de la structure du site em mode KISS
 const sitePagesConf ={
-    '/':'index.html',
-    '/index.html':'index.html'
+    '/':'./src/Client/html/index.html',
+    '/index.html':'./src/Client/html/index.html'
 };
 
 module.exports ={
 
     handler : (req,res) => {
-        let target ='404.html';
-        const code = urlSiteValidator.validate(req.url,sitePagesConf);
-        res.writeHead (code,{
-            'content-type' : 'text/html',
-            'charset' : 'utf8'
-        });
+        let code = 404;
+        let target ='./src/Client/html/404.html'; //TODO remove this hard coded value but today it's simple
+        code = urlSiteValidator.validate(req.url,sitePagesConf);
         if (code===200) {
                 target = targetDefinition.resolved(req.url,sitePagesConf);
-                res.write ('<html><head> <title>Gayole</title></head><body>hello world</body></html>');
         };
-        pageRender.render(res);
+        pageRender.render(res,target,code);
     
     }
 };
