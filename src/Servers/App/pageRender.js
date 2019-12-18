@@ -4,7 +4,8 @@ const fs = require('fs');
 
 const MIME = {
     'txt':'text/plain',
-    'html': 'text/html'
+    'html': 'text/html',
+    'ico' : 'image/x-icon'
 };
 
 module.exports = {

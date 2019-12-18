@@ -6,7 +6,8 @@ const pageRender = require('./pageRender.js');
 // Definition de la structure du site em mode KISS
 const sitePagesConf ={
     '/':'./src/Client/html/index.html',
-    '/index.html':'./src/Client/html/index.html'
+    '/index.html':'./src/Client/html/index.html',
+    '/favicon.ico' : './src/Client/images/favicon.ico'
 };
 
 module.exports ={
