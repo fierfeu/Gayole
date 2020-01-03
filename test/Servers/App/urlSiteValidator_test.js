@@ -54,6 +54,7 @@ describe ("urlSiteValidator returns 200 for good url", () =>{
 
         expect(urlSiteValidator.validate(url,sitePagesConf)).to.be.equal(200);
     });
+    
     // La présence d'un hash ne modifie pas le comportement de la fonction
     it("hash tag don't change return code value",()=>{
         const url="/#aHashTag";

@@ -38,6 +38,14 @@ describe ('Gayole Web handler basic test', ()=>{
             done();
         });
     });
+
+    it('handler should return 200 for favicon',(done)=>{
+        http.get(URLROOT+'/favicon.ico', (res)=>{
+            expect (res.statusCode).to.equal(200);
+            done();
+        });
+    });
+
 });
 
 

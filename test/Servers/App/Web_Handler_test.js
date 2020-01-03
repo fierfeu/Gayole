@@ -13,34 +13,6 @@ const response = require('./responseFake.js');
 chai.use(chaiAsPromised);
 var expect = chai.expect;
 
-/*describe ("tests accès / du web handler de l'app",()=>{
-    
-    let request= {
-        url : '',
-    };
-
-    it("should return good html when accessing throught /", (done) => {
-        request.url = '/';
-
-        Handler.handler(request,response);
-        expect(response.body, "has no valid html tags").to.include('<html>').and.include ('</html>');
-        expect(response.body, "has no valid head tags").to.include('<head>').and.include ('</head>');
-        expect(response.body, "has no valid body tags").to.include('<body>').and.include ('</body>');
-        done();
-    });
-
-    it ("should return 404 for bad url",(done) =>{
-        request.url ='/bad';
-
-        return Handler.handler(request,response);
-
-        expect (response.statusCode).to.equal(404);
-        done();
-    });
-
-
-});*/
-
 
 describe ('webhandler used urlSiteValidator', () => {
     

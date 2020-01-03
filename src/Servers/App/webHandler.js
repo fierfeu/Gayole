@@ -7,7 +7,7 @@ const pageRender = require('./pageRender.js');
 const sitePagesConf ={
     '/':'./src/Client/html/index.html',
     '/index.html':'./src/Client/html/index.html',
-    '/favicon.ico' : './src/Client/images/favicon.ico'
+    '/favicon.ico' : './src/Client/images/favicon.ico' 
 };
 
 module.exports ={

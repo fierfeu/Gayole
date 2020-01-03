@@ -48,4 +48,11 @@ describe ("pageRender.render return good content for a given filename",()=>{
 
         expect(response.statusCode).to.equal(500);
     });
+
+    it ("return the good MIME type for icons", () => {
+
+        return pageRender.render(response,"favicon.ico",200);
+
+        expect (response.Headers[content-type]).to.equal('image/x-icon');
+    });
 });
