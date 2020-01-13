@@ -2,6 +2,7 @@
 const urlSiteValidator = require('./urlSiteValidator.js');
 const targetDefinition = require('./targetDefinition.js');
 const pageRender = require('./pageRender.js');
+const fs = require('fs');
 
 // Definition de la structure du site em mode KISS
 const sitePagesConf ={

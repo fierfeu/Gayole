@@ -22,6 +22,9 @@ describe ('webhandler used urlSiteValidator', () => {
         sinon.spy(urlSiteValidator,'validate');
         let request = {
             url :'myUrl',
+            socket : {
+                remoteAdress : '125.125.125.125'
+            }
         };
         
         Handler.handler(request,response);
