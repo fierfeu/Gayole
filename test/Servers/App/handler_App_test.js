@@ -6,14 +6,14 @@ const web = require ('../../../src/Servers/App/webHandler.js');
 
 const URLROOT = 'http://localhost:8008'; // we use 8008 to be able to launch test on staging and prod where web is on port 80 or port 8080
 
-describe ('Gayole Web handler basic test', ()=>{
+describe ('[handler_App] Gayole Web handler basic test', ()=>{
 
     let server;
 
     before (() => {
         server = http.createServer(web.handler).listen('8008');
     });
-    ;
+    
     after (()=>{
         server.close();
     });

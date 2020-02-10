@@ -8,7 +8,7 @@ const Handler = require ('../../../src/Servers/App/webHandler.js');
 const urlSiteValidator = require('../../../src/Servers/App/urlSiteValidator.js');
 const targetDefinition = require('../../../src/Servers/App/targetDefinition.js');
 const pageRender = require('../../../src/Servers/App/pageRender.js');
-const response = require('./responseFake.js');
+const res = require('./responseFake.js');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
@@ -18,6 +18,7 @@ describe ('webhandler used urlSiteValidator', () => {
     
     //On passe obligatoirement par la fct de validation pour ttes les requètes
     it("must used urlSiteValidator.validate for any call to webHandler", (done) =>{
+        let response = new res();
         
         sinon.spy(urlSiteValidator,'validate');
         let request = {
@@ -40,6 +41,8 @@ describe ('webhandler used urlSiteValidator', () => {
 describe ('webhandler used targetDefinition',()=>{
     // On passe obligatoirement par la définition de la page et du fichier de rendu associé
     it("must used target definition if code 200",()=>{
+        let response = new res();
+
         sinon.spy(targetDefinition,'resolved');
         const request ={
             url : '/',
@@ -53,6 +56,8 @@ describe ('webhandler used targetDefinition',()=>{
     });
 
     it("targetDefinition not called if return code is not 200", ()=>{
+        let response = new res();
+
         sinon.spy(targetDefinition,'resolved');
         
         const request = {
@@ -71,6 +76,8 @@ describe ('webhandler used targetDefinition',()=>{
     // TODO la fonction d'identification de la target est la seconde fonction
 describe("targetDefinition must be called after url validation", ()=>{
     it("verification test", ()=>{
+        let response = new res();
+
         sinon.spy(targetDefinition,'resolved');
         sinon.spy(urlSiteValidator,'validate');
 
@@ -104,7 +111,7 @@ describe("Webhandler must go through page rendering function",()=>{
         pageRender.render.restore();
     });
     it("must used pageRender function with good url",()=>{
-   
+        let response = new res();
         const request = {
             url : '/'
         };
@@ -114,7 +121,7 @@ describe("Webhandler must go through page rendering function",()=>{
         expect(pageRender.render.calledOnce).to.be.true;
     });
     it("must used pageRender function with bad url",()=>{
-
+        let response = new res();
         const request = {
             url : 'badUrl'
         };
@@ -137,7 +144,7 @@ describe ('pageRender is the latest function of web handler', () => {
     // TODO if good url pageRender.render must be run after targetDefinition.resolved
     it ('if good url pageRender.render must be run after targetDefinition.resolved',()=>{
         sinon.spy(targetDefinition,'resolved');
-
+        let response = new res();
         const request = {
             url : '/'
         };
@@ -152,6 +159,7 @@ describe ('pageRender is the latest function of web handler', () => {
     it('if bad url pageRender.render must be run after urlSiteValidator.validate',()=>{
         sinon.spy(urlSiteValidator,'validate');
 
+        let response = new res();
         const request = {
             url : 'badUrl'
         };

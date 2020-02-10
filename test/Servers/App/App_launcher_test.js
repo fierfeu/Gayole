@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const http = require('http');
 const app = require ('../../../src/Servers/App/index.js');
 
-describe ('webAppshould run on localhost',() => {
+describe ('[App_Launcher] webApp should run on localhost',() => {
     before(()=>{
         let port = process.env.PORT || 80;
         console.log(port);

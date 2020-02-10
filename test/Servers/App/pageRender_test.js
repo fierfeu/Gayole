@@ -4,19 +4,23 @@ const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const fs=require('fs');
 const pageRender = require('../../../src/Servers/App/pageRender.js');
-const response = require('./responseFake.js');
+const res = require('./responseFake.js');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
 
 
-describe('pageRender.render must called res.end()', ()=> {
-    it ('response.end is well used in page render', () =>{
-        sinon.spy(response,'end');
 
-        return pageRender.render(response,"./src/Client/html/index.html",200);
+describe('[pageRender] pageRender.render must called res.end()', ()=> {
+    it ('response.end is well used in page render', () =>{
+
+        var response = new res ();
+
+        sinon.spy(response,"end");
+
+        pageRender.render(response,'./src/Client/html/index.html',200); 
         
-        expect(response.end.calledOnce).to.be.true;
+        expect(response.end.called).to.be.true;
 
         response.end.restore();
 
@@ -24,35 +28,55 @@ describe('pageRender.render must called res.end()', ()=> {
 });
 
 // pageRender acces to the good file through param
-describe ("pageRender.render return good content for a given filename",()=>{
+describe ("[pageRender] pageRender.render return good content for a given filename",()=>{
 
     it("return file content if file exist",()=>{
-        response.body='';
-        response.data='';
+        var response = new res();
 
-        fs.writeFile("testFile.txt","txt content",(err)=>{if (err) throw err;});
+        fs.writeFileSync("testFile.txt","txt content",'utf8');
 
-        return pageRender.render(response,"./testFile.txt",200);
+        pageRender.render(response,"./testFile.txt",200);
     
         expect(response.body).to.equal("txt content");
         expect(response.Headers['content-type']).to.equal('text/plain');
 
-        
-
-        fs.unlink("testFile.txt",(err)=>{if (err) throw err;});
+        fs.unlinkSync("testFile.txt",(err)=>{if (err) throw err;});
     });
 
     it ("return error 500 status if file doesn't exist",()=>{
+        let response = new res();
        
-        return pageRender.render(response,"badFile.bad");
-
+        pageRender.render(response,"badFile.html")
+        
         expect(response.statusCode).to.equal(500);
+
     });
+
+    it ("return status code 404 if MIME type not allowed", () => {
+        let response = new res();
+
+        pageRender.render(response, "test.bad",200);
+
+        expect (response.statusCode).to.equal(404);
+    })
 
     it ("return the good MIME type for icons", () => {
+        let response = new res();
 
-        return pageRender.render(response,"favicon.ico",200);
+        pageRender.render(response,"./src/Client/images/favicon.ico",200);
 
-        expect (response.Headers[content-type]).to.equal('image/x-icon');
+        expect (response.Headers['content-type']).to.equal('image/x-icon');
     });
+
+    it("return the good MIME type for css files", ()=>{
+        let response = new res();
+
+        return pageRender.render(response,"test.css",200);
+
+        console.log(response.Headers[content-type]);
+
+        expect (response.Headers[content-type]).to.equal('text/css');
+    });
+
+    
 });
