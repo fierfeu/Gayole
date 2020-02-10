@@ -5,8 +5,9 @@ const http = require('http');
 const app = require ('../../../src/Servers/App/index.js');
 
 describe ('[App_Launcher] webApp should run on localhost',() => {
+    let port = (process.env.PORT) ? process.env.PORT : 80;
+
     before(()=>{
-        let port = process.env.PORT || 80;
         console.log(port);
         app.run('localhost',port);
     });
@@ -16,7 +17,9 @@ describe ('[App_Launcher] webApp should run on localhost',() => {
     });
 
     it('should return 200 to localhost',(done)=>{
-        http.get('http://localhost/',(res) => {
+        let url= 'http://localhost:'+port;
+        console.log (url);
+        http.get(url,(res) => {
             expect(res.statusCode).to.be.equal(200);
             done();
         });
