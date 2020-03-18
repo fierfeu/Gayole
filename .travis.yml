@@ -39,4 +39,4 @@ deploy :
   app : gayole-web
   skip_cleanup: true
   api_key :
-    secure : 850931317-b262-4c4b-be89-b8c94ae03fdf
+    secure : 02f7c972-ef15-4eb0-8755-4bb89fa337d9
