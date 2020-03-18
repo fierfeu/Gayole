@@ -3,5 +3,7 @@ body {
 }
 
 #QOGmap {
-    background-image : url(QOGMap1.jpg);
+    background-image : url('/QOGMap1.jpg');
+    height: 80%;
+    width: 80%;
 }
