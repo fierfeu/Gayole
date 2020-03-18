@@ -71,12 +71,25 @@ describe ("[pageRender] pageRender.render return good content for a given filena
     it("return the good MIME type for css files", ()=>{
         let response = new res();
 
-        return pageRender.render(response,"test.css",200);
+        fs.writeFileSync("test.css","txt content",'utf8');
 
-        console.log(response.Headers[content-type]);
-
-        expect (response.Headers[content-type]).to.equal('text/css');
+        pageRender.render(response,"test.css",200);
+        
+        expect (response.Headers['content-type']).to.equal('text/css');
+        
+        fs.unlinkSync("test.css",(err)=>{if (err) throw err;});
     });
 
+    it("Return the good MIME type for jpg files", ()=>{
+        let response = new res();
+
+        fs.writeFileSync("test.jpg");
+
+        pageRender.render(response,"test.jpg",200);
+        
+        expect (response.Headers['content-type']).to.equal('image/jpeg');
+        
+        fs.unlinkSync("test.jpg",(err)=>{if (err) throw err;});
+    });
     
 });

@@ -8,6 +8,8 @@ const fs = require('fs');
 const sitePagesConf ={
     '/':'./src/Client/html/index.html',
     '/index.html':'./src/Client/html/index.html',
+    '/index.css' : 'src/Client/css/index.css',
+    '/QuiOseGagneFE.jpg' : 'src/Client/images/QuiOseGagneFE.jpg',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };
 

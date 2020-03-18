@@ -5,6 +5,8 @@ const fs = require('fs');
 const MIME = {
     'txt':'text/plain',
     'html': 'text/html',
+    'css' : 'text/css',
+    'jpg' : 'image/jpeg',
     'ico' : 'image/x-icon'
 };
 
