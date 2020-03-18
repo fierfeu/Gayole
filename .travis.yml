@@ -37,5 +37,6 @@ script :
 deploy :
   provider : heroku
   app : gayole-web
+  skip_cleanup: true
   api_key :
     secure : 850931317-b262-4c4b-be89-b8c94ae03fdf
