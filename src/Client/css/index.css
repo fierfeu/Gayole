@@ -1,4 +1,7 @@
 body {
     background-image : url('/QuiOseGagneFE.jpg');
-    /*background-color :rgba(255,255,255,0.5);*/
+}
+
+#QOGmap {
+    background-image : url(QOGMap1.jpg);
 }
