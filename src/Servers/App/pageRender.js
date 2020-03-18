@@ -6,7 +6,11 @@ const MIME = {
     'txt':'text/plain',
     'html': 'text/html',
     'css' : 'text/css',
+    'js': 'application/javascript',
     'jpg' : 'image/jpeg',
+    'gif': 'image/gif',
+    'png': 'image/png',
+    'svg': 'image/svg+xml',
     'ico' : 'image/x-icon'
 };
 
@@ -20,9 +24,9 @@ module.exports = {
                 res.setHeader('content-type',ext)
                 let encoding;
                 if (ext.split('/').shift()==='text'){encoding='utf8'}
-                else {encoding ='base64'};
+                else {encoding = null};
                 try {let data = fs.readFileSync(file,encoding);
-                        res.setHeader('charset',encoding)
+                        if (encoding){ res.setHeader('charset',encoding)};
                         let contentToWrite = data;
                         res.writeHead(statusCode);
                         res.write(contentToWrite);
