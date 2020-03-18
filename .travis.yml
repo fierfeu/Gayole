@@ -38,4 +38,4 @@ deploy :
   provider : heroku
   app : gayole-web
   api_key :
-    secure : 8d89dec2-5d46-456c-b3d5-217e22765dce
+    secure : 850931317-b262-4c4b-be89-b8c94ae03fdf
