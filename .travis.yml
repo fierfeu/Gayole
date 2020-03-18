@@ -1,42 +1,33 @@
-language : node_js
-
-env :
-    - PORT=8080
-
-node_js : 
-   - "lts/*"
-
-addons :
-    chrome : stable
-    firefox : latest
-
-services :
-    - xvfb
-
-before_script :
-    - "sudo iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-ports 8080"
-    - "sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080"
-    - "sudo iptables -t nat -L"
-    - npm install -g npm@latest
-    - npm install
-    - npm audit fix
-    - npm install -g protractor
-    - npm install -g mocha
-    - 'webdriver-manager update'
-    - 'webdriver-manager start 2>&1 &'
-    - sleep 3
-    #- /home/travis/.nvm/versions/node/v8.11.3/bin/webdriver-manager update
-    #- ./node_modules/protractor/bin/webdriver-manager update
-
-script :
-    - npm run server-test
-    - npm run client-test
-    - npm run e2e-test
-
-
-deploy :
-  provider : heroku
-  app : gayole-web
-  skip_cleanup: true
-  api_key :
-    secure : 02f7c972-ef15-4eb0-8755-4bb89fa337d9
+language: node_js
+env:
+- PORT=8080
+node_js:
+- lts/*
+addons:
+  chrome: stable
+  firefox: latest
+services:
+- xvfb
+before_script:
+- sudo iptables -A PREROUTING -t nat -p tcp --dport 80 -j REDIRECT --to-ports 8080
+- sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports
+  8080
+- sudo iptables -t nat -L
+- npm install -g npm@latest
+- npm install
+- npm audit fix
+- npm install -g protractor
+- npm install -g mocha
+- webdriver-manager update
+- webdriver-manager start 2>&1 &
+- sleep 3
+script:
+- npm run server-test
+- npm run client-test
+- npm run e2e-test
+deploy:
+  provider: heroku
+  api_key: 02f7c972-ef15-4eb0-8755-4bb89fa337d9
+  app: gayole-web
+  on:
+    repo: fierfeu/Gayole
