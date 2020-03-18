@@ -16,10 +16,13 @@ module.exports = {
             let ext = file.split('.').pop();
             if (MIME[ext]) 
             {
-                try {let data = fs.readFileSync(file,'utf8');
-                        ext = MIME[ext];
-                        res.setHeader('content-type',ext)
-                        if (ext.split('/').shift()==='text'){res.setHeader('charset','utf8')};
+                ext = MIME[ext];
+                res.setHeader('content-type',ext)
+                let encoding;
+                if (ext.split('/').shift()==='text'){encoding='utf8'}
+                else {encoding ='base64'};
+                try {let data = fs.readFileSync(file,encoding);
+                        res.setHeader('charset',encoding)
                         let contentToWrite = data;
                         res.writeHead(statusCode);
                         res.write(contentToWrite);

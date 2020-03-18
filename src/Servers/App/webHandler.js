@@ -10,6 +10,7 @@ const sitePagesConf ={
     '/index.html':'./src/Client/html/index.html',
     '/index.css' : 'src/Client/css/index.css',
     '/QuiOseGagneFE.jpg' : 'src/Client/images/QuiOseGagneFE.jpg',
+    '/QOGMap1.jpg' : 'src/Client/images/QOGMap1.jpg',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };
 
