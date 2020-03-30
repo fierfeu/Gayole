@@ -9,7 +9,6 @@
   },
   "scripts": {
     "server-test": "mocha",
-    "client-test": "karma start",
     "e2e-test": "protractor",
     "test": "mocha & npm run client-test & protractor",
     "start": "node ./src/Servers/index.js"
@@ -45,6 +44,7 @@
     "sinon": "^5.1.1"
   },
   "dependencies": {
+    "jsdom": "^16.2.1",
     "npm": "^6.14.2",
     "npm-registry-fetch": "^3.9.1"
   }

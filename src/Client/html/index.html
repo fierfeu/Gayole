@@ -7,6 +7,14 @@
 
 
     <body>
-        <div id='QOGmap'></div>
+        <div id='mainMenu' class='minifiedMainMenu'>
+            <div>Hello WORLD</div>
+        </div>
+
+        <script type="text/javascript" src="/menu.js"></script>
+        <script type="text/javascript">
+            let mainMenu = new Menu(document.getElementById('mainMenu'),'minifiedMainMenu','maxifiedMainMenu');
+            document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle();};
+        </script>
     </body>
 </html>

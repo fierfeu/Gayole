@@ -1,9 +1,30 @@
 body {
     background-image : url('/QuiOseGagneFE.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #QOGmap {
-    background-image : url('/QOGMap1.jpg');
+    background-image : url('/QOGMap1.jpg'),url('/QOGMap2.jpg');
     height: 80%;
     width: 80%;
+}
+
+#mainMenu {
+    background-color : rgba(255, 190, 50, 0.7);
+    
+}
+
+.minifiedMainMenu {
+    height : 30px;
+    width : 30px;
+    background-image : url('/Hamburger_QOG_icon.png');
+    background-size : 100%;
+}
+
+.minifiedMainMenu > div {display : none;}
+
+.maxifiedMainMenu > div {
+    display : block;
+    background-color : rgba(91, 255, 50, 0.7);
 }

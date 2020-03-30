@@ -24,3 +24,11 @@ describe('[CSS TESTS] index.css existe and stored at the good place',()=>{
         expect (response.statusCode).to.equal(200);
     });
 });
+
+describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classes',()=>{
+    it('index.css declare minifiedMainMenu and maxifiedMainMenu',()=>{
+        let cssFile = fs.readFileSync('src/Client/css/index.css','utf8');
+            expect (cssFile).to.include('.minifiedMainMenu');
+            expect (cssFile).to.include('.maxifiedMainMenu');
+    });
+});
