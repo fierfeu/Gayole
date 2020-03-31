@@ -11,7 +11,7 @@ body {
 }
 
 #mainMenu {
-    background-color : rgba(255, 190, 50, 0.7);
+    background-color : rgba(247, 134, 41, 0.7);
     
 }
 
@@ -24,7 +24,18 @@ body {
 
 .minifiedMainMenu > div {display : none;}
 
+.maxifiedMainMenu {
+    position: absolute;
+     margin: auto;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+    width : 200px; 
+    height : 200px;
+    background-image : none;
+}
+
 .maxifiedMainMenu > div {
     display : block;
-    background-color : rgba(91, 255, 50, 0.7);
 }
