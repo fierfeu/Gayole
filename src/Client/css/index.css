@@ -12,7 +12,15 @@ body {
 
 #mainMenu {
     background-color : rgba(247, 134, 41, 0.7);
-    
+}
+
+#entete {
+    justify-content:space-between;
+    align-items: center;
+}
+
+#buttonlist {
+    flex-direction: column;
 }
 
 .minifiedMainMenu {
@@ -22,7 +30,7 @@ body {
     background-size : 100%;
 }
 
-.minifiedMainMenu > div {display : none;}
+.minifiedMainMenu > * {display : none;}
 
 .maxifiedMainMenu {
     position: absolute;
@@ -32,10 +40,17 @@ body {
      bottom: 0;
      left: 0;
     width : 200px; 
-    height : 200px;
+    height : 250px;
     background-image : none;
+    border-radius: 2%;
 }
 
-.maxifiedMainMenu > div {
-    display : block;
+.maxifiedMainMenu > * {
+    display : flex;
 }
+
+hr {
+    border: 2px solid green;
+    border-radius: 5%;
+    margin-top:0px;
+  }
