@@ -22,9 +22,7 @@ before_script:
 - webdriver-manager start 2>&1 &
 - sleep 3
 script:
-- npm run server-test
-- npm run client-test
-- npm run e2e-test
+- npm run All-tests
 deploy:
   provider: heroku
   api_key: 02f7c972-ef15-4eb0-8755-4bb89fa337d9

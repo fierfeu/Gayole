@@ -10,7 +10,7 @@
   "scripts": {
     "server-test": "mocha",
     "e2e-test": "protractor",
-    "test": "mocha & npm run client-test & protractor",
+    "All-tests": "mocha & protractor",
     "start": "node ./src/Servers/index.js"
   },
   "repository": {
