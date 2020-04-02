@@ -11,6 +11,7 @@ const MIME = {
     'gif': 'image/gif',
     'png': 'image/png',
     'svg': 'image/svg+xml',
+    'ttf': 'font/ttf',
     'ico' : 'image/x-icon'
 };
 

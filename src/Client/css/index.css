@@ -17,6 +17,7 @@ body {
 #entete {
     justify-content:space-between;
     align-items: center;
+    background-color : rgba(247, 134, 41, 1);
 }
 
 #buttonlist {
@@ -28,6 +29,15 @@ body {
     width : 30px;
     background-image : url('/Hamburger_QOG_icon.png');
     background-size : 100%;
+}
+
+@font-face {
+    font-family: 'mainMenuTitleFont';
+    src : url('/mainMenuTitle.ttf')format('truetype');
+}
+
+.mainMenuTitle {
+    font-family:'mainMenuTitleFont';
 }
 
 .minifiedMainMenu > * {display : none;}

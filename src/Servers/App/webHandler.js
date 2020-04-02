@@ -13,6 +13,7 @@ const sitePagesConf ={
     '/QOGMap1.jpg' : 'src/Client/images/QOGMap1.jpg',
     '/menu.js' : 'src/Client/JS/menu.js',
     '/Hamburger_QOG_icon.png' : 'src/Client/images/Hamburger_QOG_icon.png',
+    '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };
 
