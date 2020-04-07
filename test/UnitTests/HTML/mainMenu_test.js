@@ -1,6 +1,7 @@
 'use strict'
 
 const fs = require('fs');
+const path = require('path');
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
@@ -62,12 +63,15 @@ describe('[mainMenu] has good css class definition and good Id css definition',(
     let dom;
     let window;
     let document;
-    let ready;
 
     before (()=>{
-        const content = '<head><link rel="stylesheet" type="text/css"  href="file:///media/oem/Antlia/DevZone/Gayole/src/Client/css/index.css"></head>'+
+        let localPath = path.resolve (__dirname + '../../../..');
+        
+        localPath = 'file://'+localPath.toString();
+        console.log(localPath);
+        const content = '<head><link rel="stylesheet" type="text/css"  href="'+localPath+'/src/Client/css/index.css"></head>'+
             "<body><div id='mainMenu' class='minifiedMainMenu'><div id='entete'></div><div id='buttonList'></div></div></body>";
-        dom = new JSDOM(content,{runScripts: "dangerously", resources: "usable"});
+        dom = new JSDOM(content,{ runScripts: "dangerously", resources: "usable"});
         window = dom.window;
         document = window.document;
     });
