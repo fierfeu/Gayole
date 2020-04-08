@@ -15,7 +15,7 @@ describe ('http://hostname/ allow acces to home page &', ()=> {
 });
 
 describe ('[index.html] index content is correctly rendered', ()=>{
-    beforeEach (()=>{
+    before (()=>{
         browser.get(browser.baseUrl);
     });
     it('and has good link to load index.css', ()=>{
@@ -41,12 +41,19 @@ describe('[index.html] main Menu behavior verification',()=>{
         expect($('#mainMenu').getAttribute('class')).to.eventually.equal('minifiedMainMenu maxifiedMainMenu');
     });
 
-    it('main Menu Maxified contain good buttons to act',()=>{
-        //expect.fail('test to write');
-        // TODO le menu principal doit contenir :
-        //  1 bouton pour démarrer une partie
-        //  1 bouton pour reprendre une partie
-        //  1 bouton pour minifier le Menu
-        // les boutons sont clickables et il faut donc prévoir les tests pour chaque action associées aux boutons.
-    })
+    it('main Menu return back to minified state when clicked',()=>{
+        $('#mainMenu').click();
+        expect($('#mainMenu').getAttribute('class')).to.eventually.equal('minifiedMainMenu');
+    });
+});
+
+describe('[main Menu] button behavior verification', () => {
+    it('game saving button is unavailable at launch', () => {
+        if ($('#mainMenu').getAttribute('class') == 'minifiedMainMenu') {
+            $('#mainMenu').click();
+        }
+        const buttonSave = $('.buttonList').all(by.tagName('button')).last();
+        expect (buttonSave.getCssValue('cursor')).to.eventually.equal('not-allowed');
+        expect (buttonSave.getCssValue('opacity')).to.eventually.equal('0.5');
+    });
 });

@@ -33,7 +33,7 @@ describe('[mainMenu HTML Tests] mainMenu of index.html is well defined in HTML',
         });
     });    
     
-    it('entete div is made of 3 buttons with the second called maiMenuTitle, centered and with good className',()=>{
+    it('entete div is made of 3 divs with the second called maiMenuTitle, centered and with good className',()=>{
         return JSDOM.fromFile('src/Client/html/index.html').then(dom => {
             const entete= dom.window.document.getElementById('entete');
             const enteteDiv=entete.getElementsByTagName('div');
@@ -45,7 +45,7 @@ describe('[mainMenu HTML Tests] mainMenu of index.html is well defined in HTML',
         });
     });
 
-    it('buttonList div is made of 3 button with good height and width and the third one is unavailable by default',()=>{
+    it('buttonList div is made of 3 buttons with good height and width and the third one is unavailable by default',()=>{
         return JSDOM.fromFile('src/Client/html/index.html').then(dom => {
             const buttonList = dom.window.document.getElementById('buttonList');
             expect(buttonList.getElementsByTagName('button').length).to.equal(3);
@@ -59,7 +59,7 @@ describe('[mainMenu HTML Tests] mainMenu of index.html is well defined in HTML',
     });
 });
 
-describe('[mainMenu] has good css class definition and good Id css definition',()=>{
+describe('[mainMenu] has good css definition',()=>{
     let dom;
     let window;
     let document;
@@ -77,6 +77,7 @@ describe('[mainMenu] has good css class definition and good Id css definition',(
     });
 
     // keep this test in first position as it verify that css loading is achived
+    // don't know yet why I was anaible to verifiy it in before fucntion
     it('minifiedMenu exist and is well defined',(done)=>{
         dom.window.document.addEventListener('load',()=>{
             let mainMenu =  document.getElementsByClassName('minifiedMainMenu')[0];
@@ -103,7 +104,7 @@ describe('[mainMenu] has good css class definition and good Id css definition',(
         expect(ComputedMainMenu.getPropertyValue('background-image')).to.equal('none');
         expect(ComputedMainMenu.getPropertyValue('border-radius')).to.equal('2%');
         //to center the DIV in the body what ever is the size or the shape of the body
-        //we had verified taht main menu has body as parent
+        //we had verified that main menu has body as parent
         expect(ComputedMainMenu.getPropertyValue('position')).to.equal('absolute');
         expect(ComputedMainMenu.getPropertyValue('margin')).to.equal('auto');
         expect(ComputedMainMenu.getPropertyValue('top')).to.equal('0px');
@@ -111,4 +112,23 @@ describe('[mainMenu] has good css class definition and good Id css definition',(
         expect(ComputedMainMenu.getPropertyValue('right')).to.equal('0px');
         expect(ComputedMainMenu.getPropertyValue('left')).to.equal('0px');
     });
+
+    it('in mainMenu entete has good css definition as a flexbox',() =>{
+        const entete = document.getElementById('entete');
+        const computedEntete = window.getComputedStyle(entete);
+        //pas de transparence sur le titre
+        expect (computedEntete.getPropertyValue('background-color')).to.equal ('rgb(247, 134, 41)');
+        // direction = row, tire au centre et aligné sur le centre de l'icone de menu 
+        expect (computedEntete.getPropertyValue('justify-content')).to.equal('space-between');
+        expect (computedEntete.getPropertyValue('align-items')).to.equal('center');
+    });
+
+    it('in mainMenu buttonList div has good css definition as a flexbox', () => {
+        const buttonList = document.getElementById('buttonList');
+        const computedButtonList = window.getComputedStyle(buttonList);
+        // buttons en columns, centrés et répartis sur la div
+        expect (computedButtonList.getPropertyValue('flex-direction')).to.equal('column');
+        expect (computedButtonList.getPropertyValue('align-items')).to.equal('center');
+        expect (computedButtonList.getPropertyValue('justify-content')).to.equal('space-evenly');
+    })
 });
