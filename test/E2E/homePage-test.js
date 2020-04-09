@@ -52,7 +52,7 @@ describe('[main Menu] button behavior verification', () => {
         if ($('#mainMenu').getAttribute('class') == 'minifiedMainMenu') {
             $('#mainMenu').click();
         }
-        const buttonSave = $('.buttonList').all(by.tagName('button')).last();
+        const buttonSave = $('#buttonList').all(by.tagName('button')).last();
         expect (buttonSave.getCssValue('cursor')).to.eventually.equal('not-allowed');
         expect (buttonSave.getCssValue('opacity')).to.eventually.equal('0.5');
     });
