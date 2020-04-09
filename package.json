@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "server-test": "mocha",
+    "unit-tests": "mocha",
     "e2e-test": "protractor",
     "All-tests": "mocha & protractor",
     "start": "node ./src/Servers/index.js"
