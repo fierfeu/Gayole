@@ -9,8 +9,6 @@ const res = require('./responseFake.js');
 chai.use(chaiAsPromised);
 var expect = chai.expect;
 
-
-
 describe('[pageRender] pageRender.render must called res.end()', ()=> {
     it ('response.end is well used in page render', () =>{
 
@@ -66,6 +64,23 @@ describe ("[pageRender] pageRender.render return good content for a given filena
         pageRender.render(response,"./src/Client/images/favicon.ico",200);
 
         expect (response.Headers['content-type']).to.equal('image/x-icon');
+    });
+
+    it ("return the good MIME type for js and mjs files", () => {
+        let response = new res();
+
+        fs.writeFileSync("test.js","txt content",'utf8');
+        fs.writeFileSync("test.mjs","txt content",'utf8');
+
+        pageRender.render(response,"test.js",200);
+        expect (response.Headers['content-type']).to.equal('application/javascript');
+
+        response = new res();
+        pageRender.render(response,"test.mjs",200);
+        expect (response.Headers['content-type']).to.equal('application/javascript');
+
+        fs.unlinkSync("test.js",(err)=>{if (err) throw err;});
+        fs.unlinkSync("test.mjs",(err)=>{if (err) throw err;});
     });
 
     it("return the good MIME type for css files", ()=>{

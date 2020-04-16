@@ -7,6 +7,17 @@
     "src": "src",
     "test": "test"
   },
+  "mocha": {
+    "spec": [
+      "test/UnitTests"
+    ],
+    "extension": [
+      "js",
+      "mjs"
+    ],
+    "recursive": true,
+    "full-trace": true
+  },
   "scripts": {
     "unit-tests": "mocha",
     "e2e-test": "protractor",
@@ -32,6 +43,7 @@
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.9",
     "eslint": "^4.19.1",
+    "jsdom": "^16.2.2",
     "karma": "^4.4.1",
     "karma-chai": "^0.1.0",
     "karma-cli": "^1.0.1",
@@ -39,12 +51,11 @@
     "karma-firefox-launcher": "^1.3.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.5",
-    "mocha": "^5.2.0",
+    "mocha": "^7.1.1",
     "mocha-lcov-reporter": "^1.3.0",
-    "sinon": "^5.1.1"
+    "sinon": "^5.1.1",
   },
   "dependencies": {
-    "jsdom": "^16.2.2",
     "npm": "^6.14.2",
     "npm-registry-fetch": "^3.9.1"
   }

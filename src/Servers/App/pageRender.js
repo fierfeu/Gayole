@@ -7,6 +7,7 @@ const MIME = {
     'html': 'text/html',
     'css' : 'text/css',
     'js': 'application/javascript',
+    'mjs': 'application/javascript',
     'jpg' : 'image/jpeg',
     'gif': 'image/gif',
     'png': 'image/png',

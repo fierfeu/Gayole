@@ -7,6 +7,10 @@
 
 
     <body>
+        <script type='text/javascript'>
+            localStorage.user='null';
+            localStorage.gameLaunched = false;
+        </script>
         <div id='mainMenu' class='minifiedMainMenu'>
             <div id="entete">
                 <div class='minifiedMainMenu' ></div>
@@ -15,19 +19,16 @@
             </div> 
             <hr>
             <div id='buttonList'>
-                <button onclick= 'newGame' style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;'class = 'btn-enabled'>CREER NOUVELLE PARTIE</button>
-                <button onclick = 'loadGame' style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class ='btn-enabled'>CHARGER PARTIE EXISTANTE</button>
-                <button onclick = 'saveGame' style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class='btn-disabled'>ENREGISTRE LA PARTIE</button>
+            <button onclick= '()=>{var qog  = new QOG(localStorage);}' style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class = 'btn-enabled'>CREER NOUVELLE PARTIE</button>
+                <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class ='btn-enabled'>CHARGER PARTIE EXISTANTE</button>
+                <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class='btn-disabled'>ENREGISTRE LA PARTIE</button>
             </div>
         </div>
 
-        <script type="text/javascript" src="/menu.js"></script>
-        <script type="text/javascript">
-            newgame = () => {alert('new Game');}
-            loadgame = () => {alert('load Game');}
-            savegame = () => {alert('saved Game');}
+        <script type="module" >
+            import Menu from '/menu.mjs';
             let mainMenu = new Menu(document.getElementById('mainMenu'),'minifiedMainMenu','maxifiedMainMenu');
-            document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle();};
+            document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle()};
         </script>
     </body>
 </html>

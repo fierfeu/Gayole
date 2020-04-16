@@ -2,7 +2,7 @@ language: node_js
 env:
 - PORT=8080
 node_js:
-- lts/*
+- latest
 addons:
   chrome: stable
   firefox: latest
@@ -16,8 +16,8 @@ before_script:
 - npm install -g npm@latest
 - npm install
 - npm audit fix
-- npm install -g protractor
-- npm install -g mocha
+- npm install -g protractor@latest
+- npm install -g mocha@latest
 - webdriver-manager update
 - webdriver-manager start 2>&1 &
 - sleep 3

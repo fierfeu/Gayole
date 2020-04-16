@@ -46,9 +46,9 @@ body {
 
 .btn-disabled {
     margin : 15px auto;
+
     cursor: not-allowed;
     opacity: 0.5;
-    pointer-events: none;
 }
 
 @font-face {

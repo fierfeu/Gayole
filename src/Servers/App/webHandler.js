@@ -11,7 +11,7 @@ const sitePagesConf ={
     '/index.css' : 'src/Client/css/index.css',
     '/QuiOseGagneFE.jpg' : 'src/Client/images/QuiOseGagneFE.jpg',
     '/QOGMap1.jpg' : 'src/Client/images/QOGMap1.jpg',
-    '/menu.js' : 'src/Client/JS/menu.js',
+    '/menu.mjs' : 'src/Client/mjs/menu.mjs',
     '/Hamburger_QOG_icon.png' : 'src/Client/images/Hamburger_QOG_icon.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/favicon.ico' : './src/Client/images/favicon.ico' 

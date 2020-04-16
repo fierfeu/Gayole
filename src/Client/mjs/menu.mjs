@@ -1,9 +1,7 @@
 const MINIFIED = 0;
 const MAXIFIED = 1;
 
-//const jsdom = require("jsdom");
-
-class Menu {
+export default class Menu {
     constructor (HTMLElement, minifiedClassName,maxifiedClassName) {
         this.elm = HTMLElement;
         this.Id = this.elm.id;
@@ -27,5 +25,5 @@ class Menu {
     
 }
 
-try {module.exports = Menu}
-catch{};
+
+

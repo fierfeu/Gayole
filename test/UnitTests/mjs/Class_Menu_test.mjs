@@ -1,12 +1,10 @@
 'use strict'
 
-const Menu = require('../../../src/Client/JS/menu.js')
-
-const jsdom = require("jsdom");
+import Menu from '../../../src/Client/mjs/menu.mjs';
+import chai from 'chai';
+const expect = chai.expect;
+import jsdom from "jsdom";
 const { JSDOM } = jsdom;
-
-const chai = require('chai');
-var expect = chai.expect;
 
 describe("[Class Menu] A class menu is availabale", ()=>{
     let document;
