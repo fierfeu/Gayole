@@ -8,10 +8,6 @@
 
 
     <body>
-        <script type='text/javascript'>
-            localStorage.user='null';
-            localStorage.gameLaunched = false;
-        </script>
         <div id='mainMenu' class='minifiedMainMenu'>
             <div id="entete">
                 <div class='minifiedMainMenu' ></div>
@@ -20,7 +16,7 @@
             </div> 
             <hr>
             <div id='buttonList'>
-            <button onclick= '()=>{var qog  = new QOG(localStorage);}' style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class = 'btn-enabled'>CREER NOUVELLE PARTIE</button>
+                <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class = 'btn-enabled'>CREER NOUVELLE PARTIE</button>
                 <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class ='btn-enabled'>CHARGER PARTIE EXISTANTE</button>
                 <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class='btn-disabled'>ENREGISTRE LA PARTIE</button>
             </div>
@@ -28,8 +24,11 @@
 
         <script type="module" >
             import Menu from '/menu.mjs';
+            import QOG from '/QOG.mjs';
             let mainMenu = new Menu(document.getElementById('mainMenu'),'minifiedMainMenu','maxifiedMainMenu');
             document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle()};
+            let qog = new QOG(localStorage);
+            document.getElementsByTagName('button').item(0).onclick = ()=>{qog.create()};
         </script>
     </body>
 </html>

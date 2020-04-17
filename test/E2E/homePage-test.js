@@ -67,7 +67,8 @@ describe('[main Menu] button behavior verification', () => {
         const gameLaunched = browser.executeScript("return window.localStorage.getItem('gameLaunched');");
         expect(gameLaunched).to.eventually.equal('QOG');
         const gameEventStored = browser.executeScript("return window.localStorage.getItem('gameEventStored');");
-        expect(gameEventStored).to.eventually.equal('1');
+        console.log (gameEventStored.getText);
+        expect(gameEventStored).to.eventually.equal('{event : QOG CREATION PROCESS LAUNCH}');
     });
 
     //TODO tester que le troisième boutton est maintenant clickable
