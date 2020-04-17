@@ -66,12 +66,10 @@ describe('[mainMenu] has good css definition',()=>{
 
     before (()=>{
         let localPath = path.resolve (__dirname + '../../../..');
-        
         localPath = 'file://'+localPath.toString();
-        console.log(localPath);
         const content = '<head><link rel="stylesheet" type="text/css"  href="'+localPath+'/src/Client/css/index.css"></head>'+
             "<body><div id='mainMenu' class='minifiedMainMenu'><div id='entete'></div><div id='buttonList'></div></div></body>";
-        dom = new JSDOM(content,{ runScripts: "dangerously", resources: "usable"});
+        dom = new JSDOM(content,{ url : "http://localhost/", resources: "usable"});
         window = dom.window;
         document = window.document;
     });
@@ -129,6 +127,5 @@ describe('[mainMenu] has good css definition',()=>{
         // buttons en columns, centrés et répartis sur la div
         expect (computedButtonList.getPropertyValue('flex-direction')).to.equal('column');
         expect (computedButtonList.getPropertyValue('align-items')).to.equal('center');
-        //expect (computedButtonList.getPropertyValue('justify-content')).to.equal('space-evenly');
     })
 });

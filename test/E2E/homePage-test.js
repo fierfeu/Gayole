@@ -49,11 +49,26 @@ describe('[index.html] main Menu behavior verification',()=>{
 
 describe('[main Menu] button behavior verification', () => {
     it('game saving button is unavailable at launch', () => {
-        if ($('#mainMenu').getAttribute('class') == 'minifiedMainMenu') {
-            $('#mainMenu').click();
-        }
+        const gameLaunched = browser.executeScript("return window.localStorage.getItem('gameLaunched');");
+        expect(gameLaunched).to.eventually.equal('false');
         const buttonSave = $('#buttonList').all(by.tagName('button')).last();
         expect (buttonSave.getCssValue('cursor')).to.eventually.equal('not-allowed');
         expect (buttonSave.getCssValue('opacity')).to.eventually.equal('0.5');
     });
+
+    it('Game creation button behavior verification', () => {
+        $('#mainMenu').click();
+        let buttons = $$('.btn-enabled');
+        expect(buttons.get(0).getText()).to.eventually.equal('CREER NOUVELLE PARTIE');
+        //expect(buttons.get(0).onclick.toString()).to.eventually.equal('()=>{var qog= new QOG(user);}');
+        console.log("onclick :"+buttons.get(0).toString());
+        buttons.get(0).click();
+        expect($('#mainMenu').getAttribute('class')).to.eventually.equal('minifiedMainMenu');
+        const gameLaunched = browser.executeScript("return window.localStorage.getItem('gameLaunched');");
+        expect(gameLaunched).to.eventually.equal('QOG');
+        const gameEventStored = browser.executeScript("return window.localStorage.getItem('gameEventStored');");
+        expect(gameEventStored).to.eventually.equal('1');
+    });
+
+    //TODO tester que le troisième boutton est maintenant clickable
 });

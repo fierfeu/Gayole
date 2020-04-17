@@ -19,14 +19,14 @@ exports.config = {
 
     //seleniumAddress: 'http://localhost:4444/wd/hub',
 
-    capabilities : {
+    /*capabilities : {
         browserName : 'firefox',
         firefoxOptions : {
             args : ['--headless', '--no-sandbox']
         }
-    },
+    },*/
 
-    /*multiCapabilities: [
+    multiCapabilities: [
         {'browserName': 'firefox',
             firefoxOptions: {
                 args : ['--headless','--no-sandbox']
@@ -37,7 +37,7 @@ exports.config = {
                 args: ['--headless','--no-sandbox',"--disable-gpu"]
             }
         }
-    ],*/
+    ],
 
     onPrepare : () => {
         browser.ignoreSynchronization = true;
