@@ -98,7 +98,7 @@ describe ("[pageRender] pageRender.render return good content for a given filena
     it("Return the good MIME type for jpg files", ()=>{
         let response = new res();
 
-        fs.writeFileSync("test.jpg");
+        fs.writeFileSync("test.jpg",'content');
 
         pageRender.render(response,"test.jpg",200);
         
