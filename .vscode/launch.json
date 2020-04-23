@@ -21,6 +21,19 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Protrator Tests",
+            "program": "C:/Users/az02658-dev/AppData/Roaming/npm/node_modules/protractor/bin/protractor",
+            "args": [
+                "${workspaceFolder}/protractor.conf.js"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Program",
             "skipFiles": [
                 "<node_internals>/**"

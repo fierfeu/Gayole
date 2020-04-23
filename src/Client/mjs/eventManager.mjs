@@ -1,4 +1,5 @@
 // Must used an eventStorageInterface to work well
+
 import eventStorageInterface from '../../../src/Client/mjs/eventStorageInterface.mjs';
 
 export default class eventManager {

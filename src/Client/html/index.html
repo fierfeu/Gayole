@@ -28,7 +28,7 @@
             let mainMenu = new Menu(document.getElementById('mainMenu'),'minifiedMainMenu','maxifiedMainMenu');
             document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle()};
             let qog = new QOG(localStorage);
-            document.getElementsByTagName('button').item(0).onclick = ()=>{qog.create()};
+            document.getElementsByTagName('button').item(0).onclick = ()=>{qog.create(window)};
         </script>
     </body>
 </html>

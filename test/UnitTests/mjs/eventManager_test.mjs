@@ -1,12 +1,14 @@
 'use strict'
 
-import eventManager from '../../../src/Client/mjs/eventManager.mjs';
 import eventStorageInterface from '../../../src/Client/mjs/eventStorageInterface.mjs';
+import eventManager from '../../../src/Client/mjs/eventManager.mjs';
 
 import chai from 'chai';
 const expect = chai.expect;
 
 import sinon from 'sinon';
+
+var FILES = "../../../src/Client/mjs";
 
 describe ('[eventManager] is instanciable with an eventStorageInterface',()=>{
     let myInterface;
