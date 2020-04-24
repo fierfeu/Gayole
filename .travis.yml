@@ -22,7 +22,8 @@ before_script:
 - webdriver-manager start 2>&1 &
 - sleep 3
 script:
-- npm run unit-tests
+- COVERAGE=1 npm run unit-tests
+after_success: npm start coveralls
 - npm run e2e-test
 deploy:
   provider: heroku
