@@ -22,9 +22,9 @@ before_script:
 - webdriver-manager start 2>&1 &
 - sleep 3
 script:
-- COVERAGE=1 npm run unit-tests
+- GAYOLE_COVERAGE=1 npm run unit-tests
 - npm run e2e-test
-after_success: npm start coveralls
+#after_success: npm start coveralls
 deploy:
   provider: heroku
   api_key: 02f7c972-ef15-4eb0-8755-4bb89fa337d9
