@@ -19,8 +19,8 @@
     "full-trace": true
   },
   "scripts": {
-    "unit-tests": "mocha",
-    "e2e-test": "protractor",
+    "unit-tests": " c8 mocha --config package.json",
+    "e2e-test": " c8 protractor",
     "All-tests": "mocha & protractor",
     "start": "node ./src/Servers/index.js"
   },
@@ -52,7 +52,6 @@
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.5",
     "mocha": "^7.1.1",
-    "mocha-lcov-reporter": "^1.3.0",
     "sinon": "^9.0.2"
   },
   "dependencies": {

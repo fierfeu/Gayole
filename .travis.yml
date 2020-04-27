@@ -18,13 +18,14 @@ before_script:
 - npm audit fix
 - npm install -g protractor@latest
 - npm install -g mocha@latest
+- npm install -g c8@latest
 - webdriver-manager update
 - webdriver-manager start 2>&1 &
 - sleep 3
 script:
-- GAYOLE_COVERAGE=1 npm run unit-tests
+- npm run unit-tests
 - npm run e2e-test
-#after_success: npm start coveralls
+after_success: c8 report --reporter=html --reporter=text-lcov | coveralls
 deploy:
   provider: heroku
   api_key: 02f7c972-ef15-4eb0-8755-4bb89fa337d9
