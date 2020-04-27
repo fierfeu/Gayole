@@ -20,7 +20,7 @@
   },
   "scripts": {
     "unit-tests": " c8 mocha --config package.json",
-    "e2e-test": " c8 protractor",
+    "e2e-test": " protractor",
     "All-tests": "mocha & protractor",
     "start": "node ./src/Servers/index.js"
   },
