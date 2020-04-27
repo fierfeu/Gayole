@@ -2,7 +2,7 @@
 [travis-url]: https://travis-ci.org/fierfeu/Gayole
 
 # Gayole
-new agile@scale software
+mon bac à sable ... 
 
 
 [![Build Status][travis-image]][travis-url]
