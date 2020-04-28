@@ -13,7 +13,6 @@ export default class eventManager {
     handler () {
         let eventString = this.storage.last();
         const eventToPlay = eventString.split(':')[1];
-        console.log(this.actionsBoard);
         if (this.isDeclared(eventToPlay))
             this.actionsBoard[eventToPlay].call(this,this.storage);
         else throw ('ERROR : Unknown event code ');
