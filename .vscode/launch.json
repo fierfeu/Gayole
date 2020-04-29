@@ -10,8 +10,7 @@
             "name": "Mocha Tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
-                "--package ${workspaceFolder}/package.json",
-                "-f ${file}"
+                "-f ${file}",
             ],
             "internalConsoleOptions": "openOnSessionStart",
             "skipFiles": [
