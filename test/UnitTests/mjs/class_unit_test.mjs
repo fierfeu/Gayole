@@ -1,4 +1,5 @@
 import unit from '../../../src/Client/mjs/unit.mjs';
+import { unitSet } from '../../../src/Client/mjs/unit.mjs';
 
 import chai from 'chai';
 const expect = chai.expect;
@@ -59,5 +60,76 @@ describe('[Module Unit] allow to add action to a instance of unit',()=>{
         data={'code':'CODE','action':()=>{},'cost':2};
         goodUnit.addAction(data);
         expect(goodUnit.actions.length).to.equal(2);
+    });
+});
+
+describe('[Module unit] unitSet definition',()=>{
+    it('is possible to insatanciate some unitSet wich must be instanceof unit too',()=>{
+        let myUnitSet;
+        expect (()=>{new unitSet();}).to.throw();
+        const images=[];
+        expect(()=>{new unitSet(images);}).to.throw();
+        const name = 'unit name';
+        expect (()=>{new unitSet(images, name)}).to.throw();
+        const description ='unit description text';
+        expect (()=>{myUnitSet = new unitSet(images,name,description)}).to.not.throw();
+        expect(myUnitSet instanceof unit).to.be.true;
+        expect(myUnitSet instanceof unitSet).to.be.true;
+    });
+
+    it('is possible to attach units to a unitSet',()=>{
+        let units=[];
+        let goodImages=[];
+        goodImages['recto']='/recto123.png';
+        goodImages['verso']='/verso123.png';
+        const goodUnit1 = new unit(goodImages,'myUnit1','unit for test only');
+        const goodUnit2 = new unit(goodImages,'myUnit2','unit for test only');
+        units.push(goodUnit1);
+        units.push(goodUnit2);
+        let myUnitSet;
+        expect (()=>{myUnitSet = new unitSet(goodImages,'myUnitSet','this could be a patrol',units)}).to.not.throw();
+        console.log(myUnitSet.units);
+        expect(myUnitSet.units[goodUnit1.name].images['recto']).to.equal('/recto123.png');
+    });
+
+    it('is possible to attach some units to an instanciate unitSet',()=>{
+        let units=[];
+        let goodImages=[];
+        goodImages['recto']='/recto123.png';
+        goodImages['verso']='/verso123.png';
+        const goodUnit1 = new unit(goodImages,'myUnit1','unit for test only');
+        const goodUnit2 = new unit(goodImages,'myUnit2','unit for test only');
+        units.push(goodUnit1);
+        units.push(goodUnit2);
+        let myUnitSet;
+        let result;
+        expect (()=>{myUnitSet = new unitSet(goodImages,'myUnitSet','this could be a patrol',units)}).to.not.throw();
+        expect(()=>{myUnitSet.attach()}).to.throw();
+        expect(()=>{myUnitSet.attach('blabla')}).to.throw('ERROR you must provide a valide array of unit');
+        expect(()=>{result = myUnitSet.attach(units)}).to.not.throw();
+        expect(result).to.equal(units.length);
+        expect(myUnitSet.units[goodUnit1.name].images['recto']).to.equal('/recto123.png');
+    });
+
+    it('is possible to detach some units to an instanciate uniSet',()=>{
+        let units=[];
+        let goodImages=[];
+        goodImages['recto']='/recto123.png';
+        goodImages['verso']='/verso123.png';
+        const goodUnit1 = new unit(goodImages,'myUnit1','unit for test only');
+        const goodUnit2 = new unit(goodImages,'myUnit2','unit for test only');
+        units.push(goodUnit1);
+        units.push(goodUnit2);
+        let myUnitSet;
+        let result;
+        expect (()=>{myUnitSet = new unitSet(goodImages,'myUnitSet','this could be a patrol')}).to.not.throw();
+        expect(()=>{myUnitSet.detach()}).to.throw();
+        expect(()=>{myUnitSet.detach('blabla')}).to.throw('ERROR you must provide a valide array of unit');
+        expect(()=>{result = myUnitSet.detach(units)}).to.not.throw();
+        expect(result).to.equal(0);
+        myUnitSet.attach(units);
+        expect(()=>{result = myUnitSet.detach(units)}).to.not.throw();
+        expect(result).to.equal(units.length);
+        expect(myUnitSet.units[goodUnit1.name]).to.be.undefined;
     });
 });
