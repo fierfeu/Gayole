@@ -88,7 +88,6 @@ describe('[Module unit] unitSet definition',()=>{
         units.push(goodUnit2);
         let myUnitSet;
         expect (()=>{myUnitSet = new unitSet(goodImages,'myUnitSet','this could be a patrol',units)}).to.not.throw();
-        console.log(myUnitSet.units);
         expect(myUnitSet.units[goodUnit1.name].images['recto']).to.equal('/recto123.png');
     });
 

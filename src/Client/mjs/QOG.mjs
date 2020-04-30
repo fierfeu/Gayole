@@ -1,5 +1,5 @@
-import eventStorageInterface from '/eventStorageInterface.mjs';
-import eventManager from '/eventManager.mjs';
+import eventStorageInterface from './eventStorageInterface.mjs';
+import eventManager from './eventManager.mjs';
 
 export default class QOG {
     constructor (storage) {

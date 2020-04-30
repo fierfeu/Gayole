@@ -20,7 +20,6 @@ describe('[Module zone] it is possible to instanciate a zone',()=>{
         const div = document.getElementById('test');
         expect(()=>{new zone(div)}).to.throw();
         expect(()=>{new zone('something but an HTMLElement','zone name')}).to.throw();
-        console.log(div.tagName);
         expect(()=>{new zone(div,'zone name')}).to.not.throw();
         const area = document.getElementById('testArea');
         let areaZone;

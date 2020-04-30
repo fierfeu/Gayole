@@ -1,7 +1,7 @@
 'use strict'
 
-// testable avec Jsdom only
-// Only initiate default value
+// testable with protractor only
+// Only initiate default value in storage
 
 localStorage.setItem('user','null');
 localStorage.setItem('gameLaunched','false');
