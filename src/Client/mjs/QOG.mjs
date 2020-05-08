@@ -6,27 +6,22 @@ import zone from './zone.mjs';
 var jsonhttp,boardRequest;
 
 export default class QOG {
-    constructor (storage) {
-        if(!storage) throw 'ERROR need at least a storage interface to instanciate a QOG Game';
-        this.storage=storage;
-        console.log(this.storage);
-        //this.window = window;
+    constructor () {
+        this.myEventStorageInterface = new eventStorageInterface(window,'localStorage');
     }
 
     create (user) {
-        this.storage.setItem('gameLaunched','QOG');
+        window.localStorage.setItem('gameLaunched','QOG');
         if(user) {
-            this.storage.setItem('user','user');
+            window.localStorage.setItem('user','user');
         }
-        this.myEventStorageInterface = new eventStorageInterface(this.window,'localStorage');
-
-        if (!this.window.XMLHttpRequest) throw "ERROR you can't play Gayole with your current browser : sorry";
-        boardRequest = new this.window.XMLHttpRequest();
+        if (!XMLHttpRequest) throw "ERROR you can't play Gayole with your current browser : sorry";
+        boardRequest = new XMLHttpRequest();
         boardRequest.onload = this.initBoardGame;
         const url = "/QOG_boardGame.html";
         boardRequest.open("GET", url);
         boardRequest.send();
-        this.loadScenario(this.chooseScenario(), new this.window.XMLHttpRequest());
+        this.loadScenario(this.chooseScenario());
         
     }
 
@@ -50,10 +45,9 @@ export default class QOG {
         return liste[0].name;
     }
 
-    loadScenario(scenarioName,xhr) {
+    loadScenario(scenarioName) {
         if(!scenarioName || !xhr) throw 'ERROR : loadScenario needs a scenario name and a xhr object to work';
-        //jsonhttp = new this.window.XMLHttpRequest();
-        jsonhttp=xhr;
+        jsonhttp = new XMLHttpRequest();
         jsonhttp.onload = this.initScenario;
         const url = "/scenario_"+scenarioName+".json";
         jsonhttp.open("GET", url);
@@ -63,9 +57,7 @@ export default class QOG {
     initScenario() {
         if((jsonhttp.status >= 200 || jsonhttp.status < 300) && (jsonhttp.responseText != null)) 
         {
-            let jsonInit;
-            try {jsonInit = JSON.parse(jsonhttp.responseText)}
-            catch (e) { throw e;}
+            let jsonInit=jsonhttp.responseText;
             this.units=[];
             if(jsonInit.units) for (let ScenarUnit in jsonInit.units ){ 
                 this.units[jsonInit.units[ScenarUnit].name]= new unit(jsonInit.units[ScenarUnit].images,

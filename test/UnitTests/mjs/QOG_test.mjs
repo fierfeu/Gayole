@@ -1,4 +1,5 @@
 import QOG from '../../../src/Client/mjs/QOG.mjs';
+import unit from '../../../src/Client/mjs/unit.mjs';
 
 import fs from 'fs';
 import chai from 'chai';
@@ -9,8 +10,10 @@ const {JSDOM} = jsdom;
 var window;
 
 const scenarList = '[{"name":"ScenarioTest","description":"Seul scénario disponible pour le moment"}]';
-const boardGameTest = fs.readFileSync('./test/UnitTests/HTML/boardGameTest.html','utf8');
-boardGameTest.replace(/\s/g,"");
+
+/*const boardGameTest = fs.readFileSync('./test/UnitTests/HTML/boardGameTest.html','utf8');
+boardGameTest=boardGameTest.replace(/\s/g,"");*/
+
 const QOGString = QOG.toString();
 const HTML =    `<body>
                     <div id='GameBoard'>
@@ -74,12 +77,12 @@ describe ('[main QOG JS] init functions work well',()=>{
             )).to.equal('ScenarioTest'); 
     });*/
 
-    // the enxt functions are use as callback function for xhr onload event
+    // the next functions are used as callback functions for xhr onload event
     it('is possible tout initiate boardGame for QOG',()=>{
         const context = 'var boardRequest = {"status":200,"responseText":"'+
             "<div id='dialogZone' class='dialogZone'></div>"+
             "<div id='strategicMap' class='strategicMap'>"+
-                "<img src='/strategicMap.png' style='width:1100px;'>"+
+                "<img src='/strategicMap.png'>"+
             "</div>"+
             '"}';
         window = new JSDOM(HTML,{url:'http://localhost/',runScripts: 'dangerously'}).window;
@@ -95,12 +98,44 @@ describe ('[main QOG JS] init functions work well',()=>{
             "document.getElementById('GameBoard').getElementsByTagName('div')[0].id")).to.equal('dialogZone');
         expect(window.eval(
             "document.getElementById('GameBoard').getElementsByTagName('div')[1].id")).to.equal('strategicMap');
-/*
-        const strategicMap = gameDiv.getElementsByTagName('div')[1];
-        expect (window.eval(
-            "const stratMap = document.getElementById('GameBoard').getElementsByTagName('div')[1]"
-            strategicMap.getElementsByTagName('img')).to.exist;
-        expect (strategicMap.getElementsByTagName('img')[0].src).to.equal('http://localhost/strategicMap.png');
-        expect (strategicMap.getElementsByTagName('img')[0].style.width).to.equal('1100px');*/
+        expect(window.eval(
+            "const stratMap = document.getElementById('GameBoard').getElementsByTagName('div')[1];"+
+            "stratMap.getElementsByTagName('img');"
+        )).to.exist;
+        expect(window.eval(
+            "const stratMap = document.getElementById('GameBoard').getElementsByTagName('div')[1];"+
+            "stratMap.getElementsByTagName('img')[0].src;"
+        )).to.equal('http://localhost/strategicMap.png');
+    });
+
+    it('is possible tout initiate a scenario and all units with QOG',()=>{
+        const json = fs.readFileSync('./test/UnitTests/json/ScenarioTest.json','utf8');
+        const scenario = 'var jsonhttp = {"status":200}; jsonhttp.responseText =' + json + ';';
+
+        const unitString = unit.toString();
+
+        window = new JSDOM(HTML,{url:'http://localhost/',runScripts: 'dangerously'}).window;
+        window.alert = window.console.log.bind(window.console);
+
+        expect(()=>{window.eval(
+            unitString +"\n"+
+            QOGString+"\n "+
+            scenario+
+            "QOG.prototype.initScenario();"
+        )}).to.not.throw();
+        expect(window.eval(
+            unitString +"\n"+
+            QOGString+"\n "+
+            scenario+
+            "QOG.prototype.initScenario();"+
+            "QOG.prototype.units")
+        ).to.exist;
+        expect(window.eval(
+            unitString +"\n"+
+            QOGString+"\n "+
+            scenario+
+            "QOG.prototype.initScenario();"+
+            "QOG.prototype.units['1st Patrol'];")
+        ).to.exist;
     });
 });
