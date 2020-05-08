@@ -63,10 +63,10 @@ describe('[main Menu] button behavior verification', () => {
         //expect(buttons.get(0).onclick.toString()).to.eventually.equal('()=>{var qog= new QOG(user);}');
         buttons.get(0).click();
         expect($('#mainMenu').getAttribute('class')).to.eventually.equal('minifiedMainMenu');
-        const gameLaunched = browser.executeScript("return window.localStorage.getItem('gameLaunched');");
+        /*const gameLaunched = browser.executeScript("return window.localStorage.getItem('gameLaunched');");
         expect(gameLaunched).to.eventually.equal('QOG');
         const gameEventStored = browser.executeScript("return window.localStorage.getItem('eventsStorageQueue');");
-        expect(gameEventStored).to.eventually.equal('DONE:eventStorageInterface init');
+        expect(gameEventStored).to.eventually.equal('DONE:eventStorageInterface init');*/
     });
 
     //TODO tester que le troisième boutton est maintenant clickable

@@ -6,8 +6,9 @@ const fs = require('fs');
 
 // Definition de la structure du site em mode KISS
 const sitePagesConf ={
-    '/':'./src/Client/html/index.html',
-    '/index.html':'./src/Client/html/index.html',
+    '/':'src/Client/html/index.html',
+    '/index.html':'src/Client/html/index.html',
+    '/QOG_boardGame.html':'src/Client/html/boardGame.html',
     '/index.css' : 'src/Client/css/index.css',
     '/QuiOseGagneFE.jpg' : 'src/Client/images/QuiOseGagneFE.jpg',
     '/QOGMap1.jpg' : 'src/Client/images/QOGMap1.jpg',
@@ -15,9 +16,14 @@ const sitePagesConf ={
     '/QOG.mjs' : 'src/Client/mjs/QOG.mjs',
     '/eventStorageInterface.mjs' : 'src/Client/mjs/eventStorageInterface.mjs',
     '/eventManager.mjs' : 'src/Client/mjs/eventManager.mjs',
-    '/src/Client/mjs/eventStorageInterface.mjs' : 'src/Client/mjs/eventStorageInterface.mjs',
     '/menu.mjs' : 'src/Client/mjs/menu.mjs',
+    '/unit.mjs' : 'src/Client/mjs/unit.mjs',
+    '/zone.mjs' : 'src/Client/mjs/zone.mjs',
+    '/eventStorageInterface.mjs':'src/Client/mjs/eventStorageInterface.mjs',
+    '/eventManager.mjs':'src/Client/mjs/eventManager.mjs',
+    '/scenario_default.json':'src/Client/json/scenario_default.json',
     '/Hamburger_QOG_icon.png' : 'src/Client/images/Hamburger_QOG_icon.png',
+    '/strategicMap.png' : 'src/Client/images/QOGMap.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };

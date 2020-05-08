@@ -21,14 +21,19 @@
                 <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class='btn-disabled'>ENREGISTRE LA PARTIE</button>
             </div>
         </div>
+        <div id='GameBoard' class='gameBoardHide' ><div id='dialogZone' class='dialogZone'>
 
+            </div><div id='strategicMap' class='strategicMap'>
+
+            </div></div>
         <script type="module" >
             import Menu from '/menu.mjs';
             import QOG from '/QOG.mjs';
             let mainMenu = new Menu(document.getElementById('mainMenu'),'minifiedMainMenu','maxifiedMainMenu');
             document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle()};
-            let qog = new QOG(localStorage);
-            document.getElementsByTagName('button').item(0).onclick = ()=>{qog.create(window)};
+            let qog = new QOG(window);
+            document.getElementsByTagName('button').item(0).onclick = ()=>{qog.create()};
+            
         </script>
     </body>
 </html>
