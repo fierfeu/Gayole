@@ -9,7 +9,7 @@ const {JSDOM} = jsdom;
 var window;
 
 const scenarList = '[{"name":"ScenarioTest","description":"Seul scénario disponible pour le moment"}]';
-const boardGameTest = fs.readFileSync('test/UnitTests/html/boardGameTest.html','utf8');
+const boardGameTest = fs.readFileSync('./test/UnitTests/html/boardGameTest.html','utf8');
 boardGameTest.replace(/\s/g,"");
 const QOGString = QOG.toString();
 const HTML =    `<body>
