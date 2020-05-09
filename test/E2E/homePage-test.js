@@ -71,12 +71,12 @@ describe('[main Menu] button behavior verification', () => {
         $('#mainMenu').click();
         let buttons = $$('.btn-enabled');
         expect(buttons.get(0).getText()).to.eventually.equal('CREER NOUVELLE PARTIE');
-        /*buttons.get(0).click();
+        buttons.get(0).click().then(()=>{browser.switchTo().alert().accept();});
         expect($('#mainMenu').getAttribute('class')).to.eventually.equal('minifiedMainMenu');
         const gameLaunched = browser.executeScript("return window.localStorage.getItem('gameLaunched');");
         expect(gameLaunched).to.eventually.equal('QOG');
         const gameEventStored = browser.executeScript("return window.localStorage.getItem('eventsStorageQueue');");
-        expect(gameEventStored).to.eventually.equal('DONE:eventStorageInterface init');*/
+        expect(gameEventStored).to.eventually.equal('DONE:eventStorageInterface init');
     });
 
     //TODO tester que le troisième boutton est maintenant clickable
