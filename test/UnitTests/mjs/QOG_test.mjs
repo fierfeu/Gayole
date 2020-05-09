@@ -6,6 +6,7 @@ import chai from 'chai';
 const expect = chai.expect;
 import jsdom from 'jsdom';
 const {JSDOM} = jsdom;
+import sinon from 'sinon';
 
 var window;
 
@@ -26,7 +27,7 @@ const HTML =    `<body>
                     </div>      
                 </body>`;
 
-describe ('[main QOG JS] init functions work well',()=>{
+describe ('[main QOG MJS] init functions work well',()=>{
     beforeEach(()=>{
         
     });
@@ -137,5 +138,46 @@ describe ('[main QOG JS] init functions work well',()=>{
             "QOG.prototype.initScenario();"+
             "QOG.prototype.units['1st Patrol'];")
         ).to.exist;
+    });
+
+    it('is possible to instanciate a new QOG object',()=>{
+        const eventInterfaceString = "class eventStorageInterface {constructor (context,storage){this.context=context;this.storage=storage}}";
+        window = new JSDOM(HTML,{url:'http://localhost/',runScripts: 'dangerously'}).window;
+        expect(()=>{window.eval(
+            eventInterfaceString+"\n"+
+            QOGString+"\n "+
+            "new QOG();"
+        )}).to.not.throw();
+        expect(window.eval(
+            eventInterfaceString+"\n"+
+            QOGString+"\n "+
+            "var qog = new QOG();"+
+            "qog.myEventStorageInterface.storage;"
+        )).to.equal('localStorage');
+    });
+});
+
+describe('[main QOG MJS] Crete function works well',()=>{
+    it('create function throw errors when bad usage',()=>{
+        const eventInterfaceString = "class eventStorageInterface {constructor (context,storage){this.context=context;this.storage=storage}}";
+        window = new JSDOM(HTML,{url:'http://localhost/',runScripts: 'dangerously'}).window;
+        window.alert = window.console.log.bind(window.console);
+        window.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
+        const server = sinon.fakeServer.create();
+
+        expect(()=>{window.eval(
+            eventInterfaceString+"\n"+
+            QOGString+"\n "+
+            "var qog = new QOG();"+
+            "qog.create();"
+        )}).to.not.throw();
+        expect(()=>{window.eval(
+            eventInterfaceString+"\n"+
+            QOGString+"\n "+
+            "var qog = new QOG();"+
+            "qog.create('fierfeu');"
+        )}).to.not.throw();
+
+        server.restore();
     });
 });

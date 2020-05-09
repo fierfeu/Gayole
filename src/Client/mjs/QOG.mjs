@@ -16,12 +16,12 @@ export default class QOG {
             window.localStorage.setItem('user','user');
         }
         if (!XMLHttpRequest) throw "ERROR you can't play Gayole with your current browser : sorry";
-        boardRequest = new XMLHttpRequest();
+        const boardRequest = new XMLHttpRequest();
         boardRequest.onload = this.initBoardGame;
         const url = "/QOG_boardGame.html";
         boardRequest.open("GET", url);
         boardRequest.send();
-        this.loadScenario(this.chooseScenario());
+        this.loadScenario(this.chooseScenario([{"name":"default"}]));
         
     }
 
@@ -46,8 +46,8 @@ export default class QOG {
     }
 
     loadScenario(scenarioName) {
-        if(!scenarioName || !xhr) throw 'ERROR : loadScenario needs a scenario name and a xhr object to work';
-        jsonhttp = new XMLHttpRequest();
+        if(!scenarioName) throw 'ERROR : loadScenario needs a scenario name to work';
+        const jsonhttp = new XMLHttpRequest();
         jsonhttp.onload = this.initScenario;
         const url = "/scenario_"+scenarioName+".json";
         jsonhttp.open("GET", url);
