@@ -26,16 +26,16 @@ export default class QOG {
     }
 
     initBoardGame () {
-        if((boardRequest.status >= 200 || boardRequest.status < 300) && (boardRequest.responseText != null)) 
+        if((this.status >= 200 || this.status < 300) && (this.responseText != null)) 
         {
             // the following code is for explanatory stuff only
             document.getElementById('strategicMap').onmousemove = (event) =>{
                 document.getElementById('dialogZone').innerHTML
             };
-            document.getElementById('GameBoard').innerHTML = boardRequest.responseText;
+            document.getElementById('GameBoard').innerHTML = this.responseText;
             document.getElementById('GameBoard').style.display="inline";
             
-            this.zones=[];
+            QOG.prototype.zones=[];
         }
     }
 
@@ -55,16 +55,16 @@ export default class QOG {
     }
 
     initScenario() {
-        if((jsonhttp.status >= 200 || jsonhttp.status < 300) && (jsonhttp.responseText != null)) 
+        if((this.status >= 200 || this.status < 300) && (this.responseText != null)) 
         {
-            let jsonInit=jsonhttp.responseText;
-            this.units=[];
-            if(jsonInit.units) for (let ScenarUnit in jsonInit.units ){ 
-                this.units[jsonInit.units[ScenarUnit].name]= new unit(jsonInit.units[ScenarUnit].images,
+            let jsonInit=this.responseText;
+            QOG.prototype.units=[];
+            if(jsonInit.units) for (let ScenarUnit=0; ScenarUnit<jsonInit.units.length; ScenarUnit++){ 
+                QOG.prototype.units[jsonInit.units[ScenarUnit].name]= new unit(jsonInit.units[ScenarUnit].images,
                     jsonInit.units[ScenarUnit].name,
                     jsonInit.units[ScenarUnit].description);    
             };
-            if(this.zones && jsonInit.zones) for (let ScenarZone in jsonInit.zones){ 
+            if(jsonInit.zones) for (let ScenarZone in jsonInit.zones){ 
                 //init Zones;  
                 console.log(jsonInit.zones[ScenarZone]);  
             };

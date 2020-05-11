@@ -27,6 +27,9 @@ const HTML =    `<body>
                     </div>      
                 </body>`;
 
+// 80% of the following tests won't be counted by c8 as they are performed under jsdom global env
+// probably it would be interesting to remove QOG.mjs from test coverage 
+
 describe ('[main QOG MJS] init functions work well',()=>{
     beforeEach(()=>{
         
@@ -78,7 +81,8 @@ describe ('[main QOG MJS] init functions work well',()=>{
             )).to.equal('ScenarioTest'); 
     });*/
 
-    // the next functions are used as callback functions for xhr onload event
+    // the next functions are used as callback functions for xhr onload event  
+    
     it('is possible tout initiate boardGame for QOG',()=>{
         const context = 'var boardRequest = {"status":200,"responseText":"'+
             "<div id='dialogZone' class='dialogZone'></div>"+
@@ -90,7 +94,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(()=>{window.eval(
             QOGString+";"+
             context+";"+
-            "QOG.prototype.initBoardGame();"
+            "QOG.prototype.initBoardGame.call(boardRequest);"
         )}).to.not.throw();
         expect(window.eval("document.getElementById('GameBoard').style.display")).to.equal('inline');
         expect(window.eval(
@@ -111,7 +115,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
 
     it('is possible tout initiate a scenario and all units with QOG',()=>{
         const json = fs.readFileSync('./test/UnitTests/json/ScenarioTest.json','utf8');
-        const scenario = 'var jsonhttp = {"status":200}; jsonhttp.responseText =' + json + ';';
+        const scenario = 'var jsonhttp = {"status":200}; jsonhttp.responseText ={"units":[{"images":[{"recto":"/patrol1.png"}],"name":"1st Patrol","description":"my first patrol in game"}]};';
 
         const unitString = unit.toString();
 
@@ -122,22 +126,22 @@ describe ('[main QOG MJS] init functions work well',()=>{
             unitString +"\n"+
             QOGString+"\n "+
             scenario+
-            "QOG.prototype.initScenario();"
+            "QOG.prototype.initScenario.call(jsonhttp);"
         )}).to.not.throw();
+
         expect(window.eval(
             unitString +"\n"+
             QOGString+"\n "+
             scenario+
-            "QOG.prototype.initScenario();"+
-            "QOG.prototype.units")
-        ).to.exist;
-        expect(window.eval(
-            unitString +"\n"+
-            QOGString+"\n "+
-            scenario+
-            "QOG.prototype.initScenario();"+
+            "QOG.prototype.initScenario.call(jsonhttp);"+
             "QOG.prototype.units['1st Patrol'];")
         ).to.exist;
+
+        // for coverage value !
+        let context = {"status":200};
+        context.responseText = {"units":[{"images":[{"recto":"/patrol1.png"}],"name":"1st Patrol","description":"my first patrol in game"}]};
+        QOG.prototype.initScenario.call(context);
+        expect(QOG.prototype.units['1st Patrol']).to.exist;
     });
 
     it('is possible to instanciate a new QOG object',()=>{
