@@ -1,15 +1,6 @@
-{"name" : "Test",
-    "zones" : [],
-    "units" : [
-        {"images":[{"recto":"/patrol1.png"}],
+{
+    "units":[
+        {"images":{"recto":"/patrol1.png"},
         "name":"1st Patrol",
-        "description":"my first patrol in game"
-        },
-        {
-            "images":[{"FC":"/pionsAxeFC.png","recto":"/PionsAxe1VA"}],
-            "name":"Italiandef",
-            "description":"low level italian unit"
-        }
-        ],
-        "maxTourNb":3
+        "description":"my first patrol in game"}]
 }

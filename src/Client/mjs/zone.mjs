@@ -22,9 +22,9 @@ export default class zone {
     }
 
     moveAllowedTo(targetZone) {
-        if(!targetZone||!(targetZone instanceof zone)) return undefined;
+        if(!targetZone||!(targetZone instanceof zone)) return 'instance';
         if (this.connections[targetZone.name]) return this.connections[targetZone.name];
-        return undefined;
+        return 'not linked';
     }
 
     attach (unitToAttach) {
@@ -37,7 +37,7 @@ export default class zone {
         if(unit2move) {
             if(!(destZone instanceof zone)) throw('ERROR the good parameter order is areaZone and MyUnit');
             if(!(unit2move instanceof unit)) throw ('ERROR if you specify an second paramater it must be a valide instance of unit');
-            if (!this.moveAllowedTo(destZone)) return false;
+            if (this.moveAllowedTo(destZone)==='not linked') return false;
             destZone.attach(unit2move);
             this.units[unit2move.name]=undefined;
             return true;

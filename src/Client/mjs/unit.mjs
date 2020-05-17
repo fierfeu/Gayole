@@ -1,7 +1,7 @@
 export default class unit {
     constructor (images, name, description, values) {
         if (!images||!name||!description) {throw ('ERROR : Bad data to instanciate a unit object')};
-        if (!Array.isArray(images)) {throw ('ERROR : Bad data to instanciate a unit object images is not an array')};
+        if ((images instanceof String)||(typeof images === 'string')) {throw ('ERROR : Bad data to instanciate a unit must used an object images')};
         this.images = images;
         this.name = name;
         this.description = description;

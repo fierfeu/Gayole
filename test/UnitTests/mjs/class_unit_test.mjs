@@ -4,10 +4,10 @@ import { unitSet } from '../../../src/Client/mjs/unit.mjs';
 import chai from 'chai';
 const expect = chai.expect;
 
-describe ('[Module unit] is instaciable with array of images, a name and a description',()=>{
+describe ('[Module unit] is instaciable with objetc of images, a name and a description',()=>{
     it('throw error if bad instanciation',()=>{
         expect (()=>{new unit();}).to.throw();
-        const images=[];
+        const images= new Object;
         expect(()=>{new unit(images);}).to.throw();
         const name = 'unit name';
         expect (()=>{new unit(images, name)}).to.throw();
@@ -17,7 +17,7 @@ describe ('[Module unit] is instaciable with array of images, a name and a descr
 
     it('instanciate good unit with good minimum set of data',()=>{
         const images = 'bad data';
-        expect (()=>{new unit(images, 'myUnit','unit for test only')}).to.throw('ERROR : Bad data to instanciate a unit object images is not an array');
+        expect (()=>{new unit(images, 'myUnit','unit for test only')}).to.throw('Bad data to instanciate a unit must used an object images');
         let goodImages=[];
         goodImages['recto']='/recto123.png';
         goodImages['verso']='/verso123.png';

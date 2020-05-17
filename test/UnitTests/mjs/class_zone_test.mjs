@@ -57,7 +57,7 @@ describe ('[Module zone] allow to add links/roads between 2 zones',()=>{
         const cost =2;
         divZone.linkTo(areaZone,cost);
         expect(divZone.connections[areaZone.name]).to.equal(cost);
-        expect(divZone.moveAllowedTo(otherZone)).to.be.undefined;
+        expect(divZone.moveAllowedTo(otherZone)).to.be.equal('not linked');
         expect(divZone.moveAllowedTo(areaZone)).to.equal(cost);
     });
 
