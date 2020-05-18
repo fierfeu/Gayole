@@ -3,6 +3,14 @@
 // testable with protractor only
 // Only initiate default value in storage
 
-localStorage.setItem('user','null');
+window.localStorage.setItem('user','null');
 localStorage.setItem('gameLaunched','false');
 
+import Menu from '/menu.mjs';
+import QOG from '/QOG.mjs';
+
+globalThis.game = QOG.prototype;
+
+let mainMenu = new Menu(document.getElementById('mainMenu'),'minifiedMainMenu','maxifiedMainMenu');
+document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle()};
+document.getElementsByTagName('button').item(0).onclick = ()=>{game.create()};

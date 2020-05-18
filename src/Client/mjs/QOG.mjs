@@ -7,10 +7,11 @@ var jsonhttp,boardRequest;
 
 export default class QOG {
     constructor () {
-        this.myEventStorageInterface = new eventStorageInterface(window,'localStorage');
+        throw ('ERROR QOG is not instanciable');
     }
 
     create (user) {
+        this.myEventStorageInterface = new eventStorageInterface(window,'localStorage');
         window.localStorage.setItem('gameLaunched','QOG');
         if(user) {
             window.localStorage.setItem('user','user');

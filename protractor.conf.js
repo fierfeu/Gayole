@@ -45,14 +45,10 @@ exports.config = {
 
     beforeLaunch : ()=> {
         web.run('localhost', process.env.PORT || 80);
-
-        console.log ('Web app launched');
     },
 
     afterLaunch : (exitCode)=> {
         web.stop();
-
-        console.log ('Web app stoped');
     }
 
 };

@@ -31,6 +31,12 @@ describe ('[index.html] index content is correctly rendered', ()=>{
         expect(element(by.tagName('link')).getAttribute('href')).to.eventually.include('/index.css');
     });
 
+    it('has good script links and async to load main js',()=>{
+        expect(element(by.tagName('script')).getAttribute('src')).to.eventually.include('/QOG_Head.js');
+        expect(element(by.tagName('script')).getAttribute('async')).to.eventually.equal('true');
+        expect(element(by.tagName('script')).getAttribute('type')).to.eventually.equal('module');
+    }),
+
     it ('and has good body background', ()=>{
         expect($('body').getCssValue ('background-image')).to.eventually.include('QuiOseGagneFE.jpg');
     });
@@ -65,6 +71,13 @@ describe('[main Menu] button behavior verification', () => {
         expect (buttonSave.getCssValue('cursor')).to.eventually.equal('not-allowed');
         expect (buttonSave.getCssValue('opacity')).to.eventually.equal('0.5');
     });
+    //TODO tester que le troisième boutton est clickable après création d'une partie
+});
+
+describe('[GAME JS] Javascript available to initiate a game',()=>{
+    it('game singleton is available as global',()=>{
+        expect(browser.executeScript("return game")).to.eventually.exist;
+    });
 
     it('Game creation button behavior verification', () => {
         
@@ -78,6 +91,6 @@ describe('[main Menu] button behavior verification', () => {
         const gameEventStored = browser.executeScript("return window.localStorage.getItem('eventsStorageQueue');");
         expect(gameEventStored).to.eventually.equal('DONE:eventStorageInterface init');
     });
-
-    //TODO tester que le troisième boutton est maintenant clickable
+    //TODO if several games ar available Verifythat we're able to create the good one
+    
 });

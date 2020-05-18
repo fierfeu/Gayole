@@ -16,33 +16,3 @@ describe ('[QOG_Head.js] is well loaded', ()=>{
     });
 } );
 
-describe ('[QOG_Head.js] is available with good initialisation', ()=>{
-    let window;
-    let document;
-
-    before (()=> {
-        let localPath = path.resolve (__dirname + '../../../..');
-        localPath = 'file://'+localPath.toString();
-        const content = '<html><head><script src ="'+localPath+'/src/Client/js/QOG_Head.js"></script></head><body></body></html>'
-        const dom = new JSDOM (content,
-            {
-                url : 'http://localhost',
-                runScripts: "dangerously",
-                resources: "usable"
-            }
-        );
-        window = dom.window;
-        document = window.document;
-    });
-
-    it ('must initiate the user value and Game status in storage', (done)=>{
-        //  why done doesn't worked well in before in order to wait for load event in before ?
-        document.addEventListener('load',()=>{
-            expect (window.localStorage.getItem('user')).to.equal('null');
-            expect (window.localStorage.getItem('gameLaunched')).to.equal('false');
-            done();        
-        });
-            
-    });
-
-});

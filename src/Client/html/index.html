@@ -3,7 +3,7 @@
     <head>
         <title>Gayole</title>
         <link rel="stylesheet" type="text/css" href="/index.css">
-        <script type="text/javascript" src="/QOG_Head.js"></script>
+        <script type="module" src="/QOG_Head.js" async></script>
     </head>
 
 
@@ -26,14 +26,5 @@
             </div><div id='strategicMap' class='strategicMap'>
 
             </div></div>
-        <script type="module" >
-            import Menu from '/menu.mjs';
-            import QOG from '/QOG.mjs';
-            let mainMenu = new Menu(document.getElementById('mainMenu'),'minifiedMainMenu','maxifiedMainMenu');
-            document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle()};
-            let qog = new QOG(window);
-            document.getElementsByTagName('button').item(0).onclick = ()=>{qog.create()};
-            
-        </script>
     </body>
 </html>

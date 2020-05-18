@@ -210,20 +210,14 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(QOG.prototype.units['1st Patrol'].images['recto']).to.equal("/patrol1.png");
     });
 
-    it('is possible to instanciate a new QOG object',()=>{
+    it('is not possible to instanciate a new QOG object',()=>{
         const eventInterfaceString = "class eventStorageInterface {constructor (context,storage){this.context=context;this.storage=storage}}";
         window = new JSDOM(HTML,{url:'http://localhost/',runScripts: 'dangerously'}).window;
         expect(()=>{window.eval(
             eventInterfaceString+"\n"+
             QOGString+"\n "+
             "new QOG();"
-        )}).to.not.throw();
-        expect(window.eval(
-            eventInterfaceString+"\n"+
-            QOGString+"\n "+
-            "var qog = new QOG();"+
-            "qog.myEventStorageInterface.storage;"
-        )).to.equal('localStorage');
+        )}).to.throw('ERROR QOG is not instanciable');
     });
 });
 
@@ -238,14 +232,14 @@ describe('[main QOG MJS] Create function works well',()=>{
         expect(()=>{window.eval(
             eventInterfaceString+"\n"+
             QOGString+"\n "+
-            "var qog = new QOG();"+
-            "qog.create();"
+            "globalThis.game = QOG.prototype;"+
+            "game.create();"
         )}).to.not.throw();
         expect(()=>{window.eval(
             eventInterfaceString+"\n"+
             QOGString+"\n "+
-            "var qog = new QOG();"+
-            "qog.create('fierfeu');"
+            "globalThis.game = QOG.prototype;"+
+            "game.create('fierfeu');"
         )}).to.not.throw();
 
         server.restore();
