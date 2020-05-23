@@ -32,6 +32,19 @@ export default class zone {
         this.units[unitToAttach.name]=unitToAttach;
     }
 
+    isInZone(unit2verif) {
+        if(!unit2verif ) throw ('ERROR isInZone fct : you must provide at least a unit to test');
+        if(!(unit2verif instanceof unit)) throw ('ERROR isInZone fct can only test valide unit instance')
+        let result = false;       
+        for (let [unitName,UnitObj] of Object.entries(this.units)) {
+            if(UnitObj == unit2verif) {
+                result = true;
+                break;
+            }
+        } 
+        return result;
+    }
+
     moveTo(destZone,unit2move) {
         if(!destZone) throw ('ERROR you must specify at least a destination zone');
         if(unit2move) {
@@ -42,7 +55,7 @@ export default class zone {
             this.units[unit2move.name]=undefined;
             return true;
         }
-        else if(!(destZone instanceof zone)) throw ('ERROR you must specify at least a destination zone');
+        else if(!(destZone instanceof zone)) throw ('ERROR you must specify at least a valid destination zone');
         
     }
 }

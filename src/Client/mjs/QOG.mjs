@@ -35,6 +35,8 @@ export default class QOG {
         };
         
         for (let areaZone in QOG.prototype.zones ) {
+            QOG.prototype.zones[areaZone].Element.ondragover = QOG.prototype.dragOverHandler;
+            QOG.prototype.zones[areaZone].Element.ondrop = QOG.prototype.dropHandler;
             if(QOG.prototype.zones[areaZone].Element.dataset.links) {
                 let sourceZone=QOG.prototype.zones[areaZone].Element;
                 sourceZone=sourceZone.dataset.links.split(',');
@@ -43,6 +45,7 @@ export default class QOG {
                     const cost = sourceZone[i].split(':')[1];
                     QOG.prototype.zones[areaZone].linkTo(QOG.prototype.zones[name],cost);
                 };
+                
             };
         };
 
@@ -60,6 +63,7 @@ export default class QOG {
             let originTop=document.getElementById('strategicMap').offsetTop;
             let image = document.createElement('img');
             image.src=currentUnit.images['recto'];
+            image.name = currentUnit.name;
             image.style.position="absolute";
             let top = originTop + 457 + 10;
             image.style.top = top.toString()+'px';
@@ -68,6 +72,7 @@ export default class QOG {
             image.style.width="30px";
             image.style.boxShadow ="2px 2px #baa0396b";
             image.draggable = true;
+            image.ondragstart = QOG.prototype.dragStartHandler;
             boardDiv.appendChild(image);
         };
 
@@ -114,8 +119,40 @@ export default class QOG {
             };
             if(jsonInit.zones) QOG.prototype.placeUnits(jsonInit.zones); 
         }
-
-        
-        
     }
+
+     dragStartHandler(event) {
+        event.dataTransfer.setData("img",event.target);
+        event.dataTransfer.setData("UnitName", event.target.name);
+        event.dataTransfer.setData("NbUnits",1);// pour le moment depent si c'et un unit, un detachment ou une patrouille
+        let fromZone;
+        for (let [ZoneName,Zone] of Object.entries(QOG.prototype.zones)) {
+            const unit2move = QOG.prototype.units[event.target.name];
+            if (Zone.isInZone(unit2move)) { 
+                fromZone = ZoneName;
+                break;
+            };
+        };
+        event.dataTransfer.setData("fromZone",fromZone);     
+     }   
+
+     dragOverHandler(event) {
+        event.preventDefault();
+     }
+
+     dropHandler(event) {
+        event.preventDefault();
+        const Zone = QOG.prototype.zones[event.target.id];
+        const fromZone = QOG.prototype.zones[event.dataTransfer.getData('fromZone')];
+        const unit2move = QOG.prototype.units[event.dataTransfer.getData('UnitName')];
+        if (fromZone.moveTo(Zone,unit2move)) {
+            const img2move = document.getElementsByName(unit2move.name)[0];
+            img2move.style.left = Number(Zone.Element.coords.split(',')[0])+9+"px";
+            img2move.style.top = Number (Zone.Element.coords.split(',')[1])+63+"px";
+        }
+        
+
+     }
+        
+
 }

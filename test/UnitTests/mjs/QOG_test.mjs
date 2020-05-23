@@ -125,6 +125,9 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect (QOG.prototype.zones['Siwa'] instanceof zone).to.be.true;
         expect (QOG.prototype.zones['Siwa'].moveAllowedTo(QOG.prototype.zones['Cross1'])).to.be.equal('1');
         expect (QOG.prototype.zones['Cross1'].moveAllowedTo(QOG.prototype.zones['Siwa'])).to.be.equal('1');
+        console.log(QOG.prototype.zones['Siwa'].Element);
+        expect (QOG.prototype.zones['Cross1'].Element.ondragover).to.be.equal(QOG.prototype.dragOverHandler);
+        expect (QOG.prototype.zones['Cross1'].Element.ondrop).to.be.equal(QOG.prototype.dropHandler);
         globalThis.window = undefined;
     });
 
@@ -196,6 +199,8 @@ describe ('[main QOG MJS] init functions work well',()=>{
         const imgs = document.getElementById('strategicMap').getElementsByTagName('img');
         expect (imgs.length).to.equal(2);
         expect(imgs[1].src).to.equal('http://localhost/patrol1.png');
+        expect(imgs[1].getAttribute("draggable")).to.equal('true');
+        expect(imgs[1].ondragstart).to.equal(QOG.prototype.dragStartHandler);
         globalThis.document = globalThis.window = undefined;
     });
 
@@ -243,5 +248,62 @@ describe('[main QOG MJS] Create function works well',()=>{
         )}).to.not.throw();
 
         server.restore();
+    });
+});
+
+describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
+    let ev ={dataTransfer:{}};
+    beforeEach (()=>{
+        globalThis.document = new JSDOM('<mapname="mappy"><area id="Cross1" shape="rect" coords="100,100,200,200"> </map>'+
+            '<img name="1st Patrol" usemap="#mappy" style="position:absolute;top:520px;left:694px;" src="/patrol.png">',
+            {pretendToBeVisual:true}).window.document;
+        const scenario = {"units":[{"images":{"recto":"/patrol1.png"},
+                "name":"1st Patrol","description":"my first patrol in game"}]};
+        QOG.prototype.units = [];
+        QOG.prototype.units['1st Patrol'] = new unit (
+            scenario.units[0].images,
+            scenario.units[0].name,
+            scenario.units[0].description );
+        QOG.prototype.zones=[];
+        QOG.prototype.zones['Siwa'] = new zone(document.getElementsByTagName('area')[0],'Siwa');
+        QOG.prototype.zones['Cross1']= new zone(document.getElementsByTagName('area')[0],'Cross1');
+        QOG.prototype.zones['Siwa'].linkTo(QOG.prototype.zones['Cross1'],1);
+        QOG.prototype.zones['Cross1'].linkTo(QOG.prototype.zones['Siwa'],1);
+        QOG.prototype.zones['Siwa'].attach(QOG.prototype.units['1st Patrol']);
+        ev.dataTransfer.setData = (key,value) => { ev.dataTransfer[key]=value};
+        ev.dataTransfer.getData = (key) => {return ev.dataTransfer[key]};
+    });
+
+    it('unit image dragstart event store good data',()=>{
+        ev.target=document.getElementsByTagName('img')[0];
+        QOG.prototype.dragStartHandler(ev);
+        expect(ev.dataTransfer).to.contain({"UnitName":"1st Patrol","NbUnits":1});
+        expect(ev.dataTransfer.getData('fromZone')).to.equal("Siwa");
+    });
+
+    it('dragOver & drop handlers stop propagation and give info on movement availability',()=>{
+        ev.target=document.getElementsByTagName('img')[0];
+        QOG.prototype.dragStartHandler(ev);
+        ev.target=document.getElementsByTagName('area')[0];
+        ev.preventDefault = sinon.spy();
+        QOG.prototype.dragOverHandler(ev);
+        expect(ev.preventDefault.called).to.be.true;
+        
+        ev.preventDefault=undefined;
+    });
+
+    it('drop handler move unit in the good place',()=>{
+        const patrolImg = document.getElementsByTagName('img')[0];
+        ev.target=patrolImg;
+        QOG.prototype.dragStartHandler(ev);
+        ev.preventDefault = sinon.spy();
+        ev.target = document.getElementsByTagName('area')[0];
+        QOG.prototype.dropHandler(ev);
+        expect(ev.preventDefault.called).to.be.true;
+        expect(QOG.prototype.zones['Siwa'].units[0]).to.be.undefined;
+        expect(QOG.prototype.zones['Cross1'].units['1st Patrol']).to.equal(QOG.prototype.units['1st Patrol']);
+        expect(patrolImg.style.top).to.be.equal('163px');
+        expect(patrolImg.style.left).to.be.equal('109px');
+        ev.preventDefault=undefined;
     });
 });

@@ -71,6 +71,15 @@ describe('[main Menu] button behavior verification', () => {
         expect (buttonSave.getCssValue('cursor')).to.eventually.equal('not-allowed');
         expect (buttonSave.getCssValue('opacity')).to.eventually.equal('0.5');
     });
+
+    it('game loading button is unavailable at launch for the moment', () => {
+        const gameLaunched = browser.executeScript("return window.localStorage.getItem('gameLaunched');");
+        expect(gameLaunched).to.eventually.equal('false');
+        $('#buttonList').all(by.tagName('button')).then((buttons)=>{
+            expect (buttons[1].getCssValue('cursor')).to.eventually.equal('not-allowed');
+            expect (buttons[1].getCssValue('opacity')).to.eventually.equal('0.5');
+        });
+    });
     //TODO tester que le troisième boutton est clickable après création d'une partie
 });
 
@@ -93,4 +102,21 @@ describe('[GAME JS] Javascript available to initiate a game',()=>{
     });
     //TODO if several games ar available Verifythat we're able to create the good one
     
+});
+
+describe ('[GAME JS QOG game created] drag and drop a unit is possible if zones are linked',()=>{
+
+    it('possible to drag a unit image',()=>{
+        
+        expect(element(by.id('Cross1')).isPresent(),'drop zone').to.eventually.true;
+        const zone2receive = element(by.id('Cross1'));
+        
+        expect(element(by.name('1st Patrol')).isPresent(),'draggable unit').to.eventually.true;
+        const unit2move = element(by.name('1st Patrol'));
+
+        browser.actions().dragAndDrop(unit2move, zone2receive).perform().catch((e)=>{console.log(e)});
+        expect(element(by.name('1st Patrol')).getLocation()).to.eventually.include({x:740,y:531}); 
+
+
+    })
 });

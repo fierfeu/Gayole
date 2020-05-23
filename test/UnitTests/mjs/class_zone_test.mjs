@@ -83,7 +83,7 @@ describe ('[Module zone] allow to attach unit instance to a zone and to read all
     
     it('is possible to attach a unit to a zone',()=>{
         const divZone = new zone(div,'zone DIV');
-        let goodImages = [];
+        let goodImages = {};
         goodImages['recto']='/recto123.png';
         const myUnit = new unit(goodImages,'myUnit','unit for test only');
         expect (()=>{divZone.attach('bad Unit')}).to.throw('ERROR you try to attach something wich is not a unit');
@@ -91,16 +91,29 @@ describe ('[Module zone] allow to attach unit instance to a zone and to read all
         expect(divZone.units[myUnit.name].images['recto']).to.equal('/recto123.png');
     })
 
+    it('is possible to verify if a unit is in a zone',()=>{
+        const divZone = new zone(div,'zone DIV');
+        let goodImages = {};
+        goodImages['recto']='/recto123.png';
+        const myUnit = new unit(goodImages,'myUnit','unit for test only');
+        divZone.attach(myUnit);
+        expect(()=>{divZone.isInZone()}).to.throw('ERROR isInZone fct : you must provide at least a unit to test');
+        expect(()=>{divZone.isInZone('unit Name')}).to.throw('ERROR isInZone fct can only test valide unit instance');
+        expect(divZone.isInZone(myUnit)).to.be.true;
+        const badUnit = new unit( goodImages,'badUnit','this unit is not in the zone');
+        expect(divZone.isInZone(badUnit)).to.be .false;
+    })
+
     it('is possible to physicaly Move an attached unit to a linked zone',()=>{
         const divZone = new zone(div,'zone DIV');
         const areaZone = new zone(area,'zone AREA');
-        let goodImages = [];
+        let goodImages = {};
         goodImages['recto']='/recto123.png';
         const myUnit = new unit(goodImages,'myUnit','unit for test only');
         let result;
         divZone.attach(myUnit);
         expect(()=>{divZone.moveTo()}).to.throw('ERROR you must specify at least a destination zone');
-        expect(()=>{divZone.moveTo(myUnit)}).to.throw('ERROR you must specify at least a destination zone');
+        expect(()=>{divZone.moveTo(myUnit)}).to.throw('ERROR you must specify at least a valid destination zone');
         expect(()=>{divZone.moveTo(areaZone)}).to.not.throw();
         expect(()=>{divZone.moveTo(myUnit,areaZone)}).to.throw('ERROR the good parameter order is areaZone and MyUnit');
         expect(()=>{result = divZone.moveTo(areaZone,myUnit)}).to.not.throw();
