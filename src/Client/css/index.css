@@ -80,7 +80,8 @@ body {
     src : url('/mainMenuTitle.ttf')format('truetype');
 }
 
-.mainMenuTitle {
+
+.warLetters {
     font-family:'mainMenuTitleFont';
 }
 
