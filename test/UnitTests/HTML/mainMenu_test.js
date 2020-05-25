@@ -41,7 +41,7 @@ describe('[mainMenu HTML Tests] mainMenu of index.html is well defined in HTML',
             expect(enteteDiv[1].id).to.equal('mainMenuTitle');
             // to center the mainMenuTitle the third div must be width=2%
             expect(enteteDiv[2].style.width).to.equal('2%');
-            expect(enteteDiv[1].className).to.equal('mainMenuTitleClass');
+            expect(enteteDiv[1].className).to.equal('warLetters');
         });
     });
 
