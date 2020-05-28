@@ -1,0 +1,5 @@
+{
+    "full-trace": true,
+    "timeout":5000,
+    "watch-ignore": ["test/UnitTests/**"]
+}
