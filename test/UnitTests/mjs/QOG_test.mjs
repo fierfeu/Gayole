@@ -1,6 +1,7 @@
 import QOG from '../../../src/Client/mjs/QOG.mjs';
 import unit from '../../../src/Client/mjs/unit.mjs';
 import zone from '../../../src/Client/mjs/zone.mjs';
+import scenario from '../../../src/Client/mjs/scenario.mjs';
 
 import fs from 'fs';
 import chai from 'chai';
@@ -11,9 +12,10 @@ import sinon from 'sinon';
 
 var window;
 
-const scenarList = '[{"name":"ScenarioTest","description":"Seul scénario disponible pour le moment"}]';
+const scenarList =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
 
 const QOGString = QOG.toString();
+const scenarioString = scenario.toString();
 const ZONEString = zone.toString();
 const HTML =    `<body>
                     <div id='GameBoard'>
@@ -34,56 +36,15 @@ describe ('[main QOG MJS] init functions work well',()=>{
     it('chooseScenario authorize to select a scenario and return his name to build url to json file',()=>{
         window = new JSDOM('',{url:'http://localhost/',runScripts: 'dangerously'}).window;
         window.alert = window.console.log.bind(window.console);
-        expect(()=>{window.eval(QOGString +'QOG.prototype.chooseScenario()')}).to.throw();
-        expect(()=>{window.eval(QOGString +'QOG.prototype.chooseScenario("scenarioName")')}).to.throw();
-        expect(()=>{
-            window.eval ( QOGString +
-                "var scenarList = " + scenarList + ";" +
-                "QOG.prototype.chooseScenario(scenarList)"
-            )}).to.not.throw();
-        expect(
-            window.eval(
-                QOGString +
-                "var scenarList = " + scenarList + ";" +
-                "QOG.prototype.chooseScenario(scenarList)"
-            )).to.equal('ScenarioTest'); 
+        globalThis.window = window;
+        globalThis.alert = window.alert;
+        globalThis.document = globalThis.window.document
+        expect(()=>{QOG.prototype.chooseScenario(scenarList)}).to.not.throw();
+        expect(()=>{QOG.prototype.chooseScenario()}).to.throw();
+        expect(()=>{QOG.prototype.chooseScenario("scenarList")}).to.throw();
+        expect(QOG.prototype.chooseScenario(scenarList).units).to.exist; 
+        globalThis.document = globalThis.alert = globalThis.window = undefined
     });
-
-/* **************************************************
- *  Conservé pour mémoire car si cette méthode      *
- *  est plus lisible elle est 2 fois plus longue    *
- *  à s'exécuter que la version précédente          *
- * **************************************************
-    it('#2 chooseScenario authorize to select a scenario and return his name',()=>{
-        const HTML = '<head><script>' + 
-                    QOG.toString() +
-                    '</script></head><body><body>';
-        window = new JSDOM(HTML,{url:'http://localhost/',runScripts: 'dangerously',
-            resources : 'usable',
-            beforeParse(window) {
-                window.alert = window.console.log.bind(window.console);
-            }}).window;
-        expect(()=>{window.eval('QOG.prototype.chooseScenario()')}).to.throw();
-        expect(()=>{window.eval('QOG.prototype.chooseScenario("scenarioName")')}).to.throw();
-        expect(()=>{
-            window.eval (
-                "var scenarList = " + scenarList + ";" +
-                "QOG.prototype.chooseScenario(scenarList)"
-            )}).to.not.throw();
-        expect(
-            window.eval(
-                "const scenarList = " + scenarList + ";" +
-                "QOG.prototype.chooseScenario(scenarList)"
-            )).to.equal('ScenarioTest'); 
-    });*/
-
-    //beware today this function is include in game init but it could be interesting
-    // to include it in a build process for a game.
-    /*it('is possible to build, on server side, the game zones',()=>{
-        expect(()=>{QOG.prototype.initZones()}).to.not.throw();
-        expect (QOG.prototype.zones['Siwa']).to.exist;
-        expect(QOG.prototype.zones['Siwa'] instanceof zone).to.be.true;
-    });*/
 
     it('is possible to initiate, on client side, the game zones',()=>{
         const HTML = "<div id='strategicMap' class='strategicMap'>"+
@@ -205,12 +166,10 @@ describe ('[main QOG MJS] init functions work well',()=>{
     });
 
     it('is possible tout initiate a scenario and all units with QOG',()=>{
-        const json = fs.readFileSync('./test/UnitTests/json/ScenarioTest.json','utf8');
-        var jsonhttp = {"status":200};
-        jsonhttp.responseText = json;
+        const json = JSON.parse(fs.readFileSync('./test/UnitTests/json/ScenarioTest.json','utf8'));
         QOG.prototype.units = [];
-        expect(()=>{QOG.prototype.initScenario.call(jsonhttp);}).to.not.throw;
-        QOG.prototype.initScenario.call(jsonhttp);
+        expect(()=>{QOG.prototype.initScenario(json);}).to.not.throw;
+        QOG.prototype.initScenario(json);
         expect(QOG.prototype.units['1st Patrol']).to.exist;
         expect(QOG.prototype.units['1st Patrol'].images['recto']).to.equal("/patrol1.png");
     });
@@ -233,21 +192,16 @@ describe('[main QOG MJS] Create function works well',()=>{
         window.alert = window.console.log.bind(window.console);
         window.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
         const server = sinon.fakeServer.create();
+        globalThis.window = window;
+        globalThis.document = window.document;
+        globalThis.alert = window.alert;
+        globalThis.XMLHttpRequest = window.XMLHttpRequest;
 
-        expect(()=>{window.eval(
-            eventInterfaceString+"\n"+
-            QOGString+"\n "+
-            "globalThis.game = QOG.prototype;"+
-            "game.create();"
-        )}).to.not.throw();
-        expect(()=>{window.eval(
-            eventInterfaceString+"\n"+
-            QOGString+"\n "+
-            "globalThis.game = QOG.prototype;"+
-            "game.create('fierfeu');"
-        )}).to.not.throw();
+        expect (()=>{QOG.prototype.create()}).to.not.throw();
+        expect (()=>{QOG.prototype.create('fierfeu')}).to.not.throw();
 
         server.restore();
+        globalThis.window = globalThis.document = globalThis.alert = globalThis.XMLHttpRequest= undefined;
     });
 });
 

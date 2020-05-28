@@ -100,22 +100,46 @@ describe('[GAME JS] Javascript available to initiate a game',()=>{
         const gameEventStored = browser.executeScript("return window.localStorage.getItem('eventsStorageQueue');");
         expect(gameEventStored).to.eventually.equal('DONE:eventStorageInterface init');
     });
-    //TODO if several games ar available Verifythat we're able to create the good one
+    
     
 });
 
-describe ('[GAME JS QOG game created] drag and drop a unit is possible if zones are linked',()=>{
+describe ('[GAME JS QOG game created] playing is possible',()=>{
+    before (()=>{
+        //browser.get(browser.baseUrl);
+        browser.get(browser.baseUrl).catch(function () {
+
+            return browser.switchTo().alert().then(function (alert) {
+        
+              alert.accept();
+              return browser.get(browser.baseUrl);
+        
+            });
+            
+          });
+        
+    });
 
     it('possible to drag a unit image',()=>{
         
-        expect(element(by.id('Cross1')).isPresent(),'drop zone').to.eventually.true;
-        const zone2receive = element(by.id('Cross1'));
-        
-        expect(element(by.name('1st Patrol')).isPresent(),'draggable unit').to.eventually.true;
-        const unit2move = element(by.name('1st Patrol'));
+        $('#mainMenu').click();
+        let buttons = $$('.btn-enabled');
+        buttons.get(0).click().then(()=>{
+            browser.switchTo().alert().accept();
+            
+        });
 
-        browser.actions().dragAndDrop(unit2move, zone2receive).perform().catch((e)=>{console.log(e)});
-        expect(element(by.name('1st Patrol')).getLocation()).to.eventually.include({x:740,y:531}); 
+        //browser.sleep(2000);
+        
+        /*const Conditions = protractor.ExpectedConditions;
+        browser.wait(Conditions.presenceOf($('*[name="FirstPatrol"]')),5000,'wait for unit to be draggable');
+
+        const zone2receive = element(by.id('Cross1'));
+        const unit2move = element(by.name("FirstPatrol"));
+
+        browser.actions().mouseDown(unit2move).mouseMove(zone2receive).mouseUp().perform();
+        //browser.actions().dragAndDrop(unit2move, zone2receive).perform();
+        expect(element(by.name('1st Patrol')).getLocation()).to.eventually.include({x:740,y:531}); */
 
 
     })

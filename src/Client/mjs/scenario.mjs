@@ -3,21 +3,25 @@ export default class scenario {
         if (!scenariiListe) throw ('No liste of scenarii provided');
         if(Array.isArray(scenariiListe)) {
             this.scenarii= scenariiListe;
-            if(inputInterface) this.selectInterface = inputInterface;
-            if(loader)this.loader = loader;
+            if(inputInterface && typeof(inputInterface)!='function') this.selectInterface = inputInterface;
+            if(loader && typeof(inputInterface)=='function' )this.loader = loader;
         } else throw ('BAD liste of scenarii provided');
     }
 
     select () {
-        this.loadData(this.showSelectInterface ());
+        return this.loadData(this.showSelectInterface ());
     }
 
     showSelectInterface () {
-        return this.scenarii[0][2];
+        
+        if (!this.selectInterface) {
+            alert('Scenario par défaut : '+this.scenarii[0][0]);
+            return this.scenarii[0][2];
+        }
     }
 
     loadData () {
-        this.data = {
+        return this.data = {
             "units":[
                 {"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol",

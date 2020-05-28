@@ -4,10 +4,10 @@ body {
     background-size: cover;
 }
 
-#QOGmap {
-    background-image : url('/QOGMap1.jpg'),url('/QOGMap2.jpg');
-    height: 80%;
-    width: 80%;
+.unit {
+    position:absolute;
+    width:30px;
+    box-shadow :"2px 2px darkGoldenRod";
 }
 
 #mainMenu {
@@ -103,7 +103,7 @@ body {
 }
 
 hr {
-    border: 2px solid green;
+    border: 2px solid olive;
     border-radius: 5%;
     margin-top:0px;
   }

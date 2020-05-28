@@ -1,7 +1,8 @@
 import eventStorageInterface from './eventStorageInterface.mjs';
-import eventManager from './eventManager.mjs';
+//import eventManager from './eventManager.mjs';
 import unit from './unit.mjs';
 import zone from './zone.mjs';
+import scenario from './scenario.mjs';
 
 var jsonhttp,boardRequest;
 
@@ -22,7 +23,12 @@ export default class QOG {
         const url = "/QOG_boardGame.html";
         boardRequest.open("GET", url);
         boardRequest.send();
-        this.loadScenario(this.chooseScenario([{"name":"default"}]));
+        const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
+        this.initScenario(this.chooseScenario(ScenariiListe));
+
+        // for test only phase
+        document.getElementById("strategicMap").onmousemove = (event) => {
+            document.getElementById("dialogZone").innerHTML="left : "+event.offsetX+" top : "+event.offsetY};
         
     }
 
@@ -62,15 +68,13 @@ export default class QOG {
             let originLeft=document.getElementById('strategicMap').offsetLeft;
             let originTop=document.getElementById('strategicMap').offsetTop;
             let image = document.createElement('img');
+            image.className = "unit";
             image.src=currentUnit.images['recto'];
             image.name = currentUnit.name;
-            image.style.position="absolute";
             let top = originTop + 457 + 10;
             image.style.top = top.toString()+'px';
             let left = originLeft + 685 + 7;
             image.style.left= left.toString()+'px';
-            image.style.width="30px";
-            image.style.boxShadow ="2px 2px #baa0396b";
             image.draggable = true;
             image.ondragstart = QOG.prototype.dragStartHandler;
             boardDiv.appendChild(image);
@@ -94,31 +98,18 @@ export default class QOG {
 
     chooseScenario(liste) {
         if(!liste || !Array.isArray(liste)) throw 'ERROR QOG.chooseScenario needs a scenario list array as input';
-        alert('Scenario par défaut : '+liste[0].name);
-        return liste[0].name;
+        this.scenario = new scenario(liste);
+        return this.scenario.select();
     }
 
-    loadScenario(scenarioName) {
-        if(!scenarioName) throw 'ERROR : loadScenario needs a scenario name to work';
-        const jsonhttp = new XMLHttpRequest();
-        jsonhttp.onload = this.initScenario;
-        const url = "/scenario_"+scenarioName+".json";
-        jsonhttp.open("GET", url);
-        jsonhttp.send();
-    }
-
-    initScenario() {
-        if((this.status >= 200 || this.status < 300) && (this.responseText != null)) 
-        {
-            let jsonInit=JSON.parse(this.responseText);
+    initScenario (jsonInit) {
             QOG.prototype.units=[];
             if(jsonInit.units) for (let ScenarUnit=0; ScenarUnit<jsonInit.units.length; ScenarUnit++){ 
                 QOG.prototype.units[jsonInit.units[ScenarUnit].name]= new unit(jsonInit.units[ScenarUnit].images,
                     jsonInit.units[ScenarUnit].name,
                     jsonInit.units[ScenarUnit].description);    
             };
-            if(jsonInit.zones) QOG.prototype.placeUnits(jsonInit.zones); 
-        }
+            if(jsonInit.zones) QOG.prototype.placeUnits(jsonInit.zones);
     }
 
      dragStartHandler(event) {

@@ -18,17 +18,23 @@ describe ('[Scenario CLass] is instanciable',()=>{
 });
 
 describe('[scenario Class] allow to select a scenario and load content',()=>{
-    it('is possible to select a scenario from the liste',()=>{
-        
+    it('is possible to select a scenario from the liste only',()=>{
+        globalThis.alert = (data) => {console.log(data)};
+
         let scenar = new scenario(ScenariiListe);
         sinon.spy(scenar,'showSelectInterface');
         sinon.spy(scenar,'loadData')
+
         expect(()=>{scenar.select()}).to.not.throw();
         expect(scenar.showSelectInterface.calledOnce).to.be.true;
         expect(scenar.loadData.calledOnceWith(ScenariiListe[0][2])).to.be.true;
         expect(scenar.data).to.exist;
         expect(eval(scenar.data)).to.exist; //means a valid JSON structure ;-)
+        expect(scenar.selectInterface).to.undefined;
+        expect (scenar.loader).to.undefined;
+        
         scenar.showSelectInterface.restore();
         scenar.loadData.restore();
+        globalThis.alert = undefined;
     })
 });
