@@ -18,9 +18,9 @@
     "full-trace": true
   },
   "scripts": {
-    "unit-tests": " c8 mocha --config package.json",
-    "e2e-test": " mocha test/E2E/*.js --no-package --config test/E2E/.mocharc.json",
-    "All-tests": "mocha & protractor",
+    "unit-tests": "mocha",
+    "e2e-test": " mocha test/E2E/*.js --config test/E2E/.mocharc.json",
+    "All-tests": "mocha --config test/.mocharc.json",
     "start": "node ./src/Servers/index.js"
   },
   "repository": {

@@ -1,0 +1,11 @@
+{
+    "noPackage":true,
+    "timeout": 5000,
+    "extension": [
+      "js",
+      "mjs"
+    ],
+    "spec":["test/UnitTests","test/E2E"],
+    "recursive": true,
+    "full-trace": true
+  }

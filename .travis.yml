@@ -23,8 +23,7 @@ before_script:
 - webdriver-manager start 2>&1 &
 - sleep 3
 script:
-- npm run unit-tests
-- npm run e2e-test
+- c8 npm run All-tests
 after_success: c8 report --reporter=html --reporter=text-lcov | coveralls
 deploy:
   provider: heroku

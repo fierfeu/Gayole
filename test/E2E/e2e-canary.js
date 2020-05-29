@@ -9,7 +9,7 @@ const web = require('../../src/Servers/App/index.js');
 
 describe('CanaryTest for end to end tests', () => {
 
-    const browserDriver = new Builder().forBrowser('chrome').build();
+    const browser = new Builder().forBrowser('chrome').build();
     const host = (process.env.HOST || 'localhost');
     const port = (process.env.PORT ||80);
     const baseUrl = "http://"+host+":"+port;
@@ -19,20 +19,21 @@ describe('CanaryTest for end to end tests', () => {
         console.log('creation with host='+ host +' & PORT = '+ port);
 
         web.run(host,port);
-
-        console.log ('app launched on port '+ port)
         
     });
 
- 
+    it('must be true when it is true to verify webdriver', (done)=>{
+        expect(browser.executeScript('return true')).to.eventually.true;
+        done();
+    });
 
     it('canary test for Gayole site access', async () => {
-        await browserDriver.get(baseUrl);
-        expect(browserDriver.getTitle()).to.eventually.equal('Gayole');
+        await browser.get(baseUrl);
+        expect(browser.getTitle()).to.eventually.equal('Gayole');
     });
 
     after(async () => {
-        browserDriver.quit();
+        browser.quit();
         web.stop();
     });
 });
