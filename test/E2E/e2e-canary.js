@@ -7,32 +7,32 @@ const expect = chai.expect;
 
 const web = require('../../src/Servers/App/index.js');
 
-describe('CanaryTest', () => {
+describe('CanaryTest for end to end tests', () => {
 
-    const driver = new Builder().forBrowser('chrome').build();
+    const browserDriver = new Builder().forBrowser('chrome').build();
+    const host = (process.env.HOST || 'localhost');
+    const port = (process.env.PORT ||80);
+    const baseUrl = "http://"+host+":"+port;
 
     before(()=>{
-        // services.run();
-        process.env.HOST='localhost';
-        process.env.PORT=80;
+        
+        console.log('creation with host='+ host +' & PORT = '+ port);
 
-        console.log('creation with host='+ process.env.HOST +' & PORT = '+ process.env.PORT);
+        web.run(host,port);
 
-        web.run(process.env.HOST,process.env.PORT);
-
-        console.log ('app launched on port '+ process.env.PORT)
+        console.log ('app launched on port '+ port)
         
     });
 
  
 
-    it('Site title is Gayole', async () => {
-        await driver.get('http://localhost');
-        expect(driver.getTitle()).to.eventually.equal('Gayole');
+    it('canary test for Gayole site access', async () => {
+        await browserDriver.get(baseUrl);
+        expect(browserDriver.getTitle()).to.eventually.equal('Gayole');
     });
 
     after(async () => {
-        driver.quit();
+        browserDriver.quit();
         web.stop();
     });
 });
