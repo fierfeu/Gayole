@@ -23,8 +23,7 @@ export default class QOG {
         const url = "/QOG_boardGame.html";
         boardRequest.open("GET", url);
         boardRequest.send();
-        const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
-        this.initScenario(this.chooseScenario(ScenariiListe));
+        
 
         // for test only phase
         document.getElementById("strategicMap").onmousemove = (event) => {
@@ -93,7 +92,11 @@ export default class QOG {
             document.getElementById('GameBoard').style.display="inline";
 
             QOG.prototype.initZones();
+
+            const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
+            QOG.prototype.initScenario(QOG.prototype.chooseScenario(ScenariiListe));
         }
+        
     }
 
     chooseScenario(liste) {

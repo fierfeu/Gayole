@@ -22,9 +22,8 @@ describe('CanaryTest for end to end tests', () => {
         
     });
 
-    it('must be true when it is true to verify webdriver', (done)=>{
+    it('must be true when it is true to verify webdriver', ()=>{
         expect(browser.executeScript('return true')).to.eventually.true;
-        done();
     });
 
     it('canary test for Gayole site access', async () => {
@@ -33,7 +32,7 @@ describe('CanaryTest for end to end tests', () => {
     });
 
     after(async () => {
-        browser.quit();
+        await browser.quit();
         web.stop();
     });
 });

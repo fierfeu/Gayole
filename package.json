@@ -19,7 +19,7 @@
   },
   "scripts": {
     "unit-tests": "mocha",
-    "e2e-test": " mocha test/E2E/*.js --config test/E2E/.mocharc.json",
+    "e2e-test": " mocha --no-package --config test/E2E/.mocharc.json",
     "All-tests": "mocha --config test/.mocharc.json",
     "start": "node ./src/Servers/index.js"
   },
