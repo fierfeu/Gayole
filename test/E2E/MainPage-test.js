@@ -1,31 +1,14 @@
 'use stirct'
+const { By, Key, until } = require('selenium-webdriver');
 
 const chai = require("chai");
 const expect = chai.expect;
 // I don't use chai-as-promise due to : UnhandledPromiseRejectionWarning: AssertionError: expected 'btn-enabled' to equal '-enabled'
 // for the same reason I won't use the thenable of promise
 
-const { Builder, By, Key, until } = require('selenium-webdriver');
-const web = require('../../src/Servers/App/index.js');
 
 describe('[Main Page overall Tests]',()=>{
-    let browser;
-    before(()=>{
-        browser = new Builder().forBrowser('chrome').//how to put chromeOptions:{
-            //args: ['--headless','--no-sandbox',"--disable-gpu"] like with protractor
-        build();
-        const host = (process.env.HOST || 'localhost');
-        const port = (process.env.PORT ||80);
-        browser.baseUrl = "http://"+host+":"+port;
-
-        console.log('Server creation with host='+ host +' & PORT = '+ port);
-        web.run(host,port);
-    });
-
-    after (()=>{
-        web.stop();
-    });
-
+    
     describe('Page content is correctly rendered',  ()=>{
         before (async ()=>{
             await browser.get( browser.baseUrl);
@@ -93,8 +76,5 @@ describe('[Main Page overall Tests]',()=>{
             expect(await buttons[0].getAttribute('class')).to.equal('btn-enabled');
         });
 
-        after (async ()=>{
-            await browser.quit();
-        });
     });
 });

@@ -1,4 +1,4 @@
-'use stirct'
+'use strict'
 
 const chai = require("chai");
 const expect = chai.expect;
@@ -7,20 +7,11 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const web = require('../../src/Servers/App/index.js');
 
 describe('[QOG Game user Tests]',()=>{
-    let browser;
-    before(async ()=>{
-        browser = new Builder().forBrowser('chrome').//how to put chromeOptions:{
-            //args: ['--headless','--no-sandbox',"--disable-gpu"] like with protractor
-        build();
-        const host = (process.env.HOST || 'localhost');
-        const port = (process.env.PORT ||80);
-        browser.baseUrl = "http://"+host+":"+port;
 
-        web.run(host,port);
-        console.log('Server creation with host='+ host +' & PORT = '+ port);
+    before (async ()=>{
         await browser.get( browser.baseUrl);
     });
-
+        
     describe ('Game creation sequence',()=>{
         const alertText = 'Scenario par défaut : Default Scenario';
         before (async ()=>{
@@ -67,9 +58,5 @@ describe('[QOG Game user Tests]',()=>{
 
     });
 
-    after ( async ()=>{
-        await browser.quit();
-        web.stop();
-    });
     
 });
