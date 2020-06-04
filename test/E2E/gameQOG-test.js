@@ -51,9 +51,17 @@ describe('[QOG Game user Tests]',()=>{
             const zone2place = await browser.findElement(By.id('Cross1'));
             const unit2move = await browser.findElement(By.name("1st Patrol"));
 
-            await browser.actions({bridge:true}).dragAndDrop(unit2move,{x:-5,y:-100}).perform();
+            let coords = await zone2place.getAttribute('coords');
+            coords = coords.split(',');
+            let Rect = {"x":0,"y":0};
+            Rect.x= Number(coords[0])+9;
+            Rect.y= Number(coords[1])+63;
 
-            expect(await unit2move.getRect()).to.include({x:740,y:529});
+            await browser.actions({bridge:true})
+                .dragAndDrop(unit2move,zone2place)
+                .perform();
+
+            expect(await unit2move.getRect()).to.include({x:Rect.x,y:Rect.y});
         });
 
     });
