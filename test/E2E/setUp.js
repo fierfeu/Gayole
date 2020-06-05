@@ -6,10 +6,10 @@ const chrome = require('selenium-webdriver/chrome');
 var options = new chrome.Options();
 options.addArguments('start-maximized');
 options.addArguments('disable-popup-blocking');
-options.addArguments('test-type');
-options.addArguments('--no-sandbox');
-options.addArguments("--disable-gpu");
-options.addArguments("--headless"); 
+//options.addArguments('test-type');
+options.addArguments('no-sandbox');
+options.addArguments("disable-gpu");
+//options.addArguments("--headless"); 
 
 
 const host = (process.env.HOST || 'localhost');
@@ -18,7 +18,8 @@ const port = (process.env.PORT ||80);
 before('Before any test suite to create webdriver',async ()=>{
     global.browser = new Builder().forBrowser('chrome')
         .setChromeOptions(options).build();
-     
+    //global.browser = new Builder().forBrowser('firefox').build();
+     console.log('Before all');
     console.log('creation with host='+ host +' & PORT = '+ port);
     web.run(host,port);
     browser.baseUrl = "http://"+host+":"+port;

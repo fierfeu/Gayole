@@ -17,6 +17,7 @@ const scenarList =[["Default Scenario","This is the first scenario to learn how 
 const QOGString = QOG.toString();
 const scenarioString = scenario.toString();
 const ZONEString = zone.toString();
+const unitString = unit.toString();
 const HTML =    `<body>
                     <div id='GameBoard'>
                         <div id='dialogZone'>
@@ -110,6 +111,8 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(()=>{window.eval(
             QOGString+";"+
             ZONEString+"\n"+
+            scenarioString+"\n"+
+            unitString+"\n"+
             context+";"+
             "QOG.prototype.initBoardGame.call(boardRequest);"
         )}).to.not.throw();

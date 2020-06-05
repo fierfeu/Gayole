@@ -116,6 +116,7 @@ export default class QOG {
     }
 
      dragStartHandler(event) {
+        
         event.dataTransfer.setData("img",event.target);
         event.dataTransfer.setData("UnitName", event.target.name);
         event.dataTransfer.setData("NbUnits",1);// pour le moment depent si c'et un unit, un detachment ou une patrouille
@@ -135,6 +136,7 @@ export default class QOG {
      }
 
      dropHandler(event) {
+        
         event.preventDefault();
         const Zone = QOG.prototype.zones[event.target.id];
         const fromZone = QOG.prototype.zones[event.dataTransfer.getData('fromZone')];

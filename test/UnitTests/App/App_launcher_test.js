@@ -8,12 +8,13 @@ describe ('[App_Launcher] webApp should run on localhost',() => {
     let port = (process.env.PORT) ? process.env.PORT : 80;
 
     before(()=>{
-        console.log(port);
-        app.run('localhost',port);
+        if (!browser)
+            app.run('localhost',port);
     });
 
     after (()=>{
-        app.stop();
+        if (!browser)
+            app.stop();
     });
 
     it('should return 200 to localhost',(done)=>{

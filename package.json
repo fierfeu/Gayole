@@ -42,6 +42,7 @@
     "chai-as-promised": "^7.1.1",
     "chromedriver": "^83.0.0",
     "coveralls": "^3.1.0",
+    "geckodriver": "^1.19.1",
     "jsdom": "^16.2.2",
     "mocha": "^7.2.0",
     "selenium-webdriver": "^4.0.0-alpha.7",
