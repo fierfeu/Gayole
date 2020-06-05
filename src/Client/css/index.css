@@ -7,7 +7,12 @@ body {
 .unit {
     position:absolute;
     width:30px;
+    height:30px;
     box-shadow :"2px 2px darkGoldenRod";
+}
+
+.dragged {
+    border: solid 2px darkolivegreen;
 }
 
 #mainMenu {
