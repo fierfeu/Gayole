@@ -24,11 +24,6 @@ export default class QOG {
         boardRequest.open("GET", url);
         boardRequest.send();
         
-
-        // for test only phase
-        document.getElementById("strategicMap").onmousemove = (event) => {
-            document.getElementById("dialogZone").innerHTML="left : "+event.offsetX+" top : "+event.offsetY};
-        
     }
 
     initZones () {
@@ -74,7 +69,7 @@ export default class QOG {
             image.style.top = top.toString()+'px';
             let left = originLeft + 685 + 7;
             image.style.left= left.toString()+'px';
-            image.draggable = true;
+            image.draggable = "true";
             image.ondragstart = QOG.prototype.dragStartHandler;
             boardDiv.appendChild(image);
         };
@@ -95,6 +90,10 @@ export default class QOG {
 
             const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
             QOG.prototype.initScenario(QOG.prototype.chooseScenario(ScenariiListe));
+
+            // for test only phase
+            document.getElementById("strategicMap").onmousemove = (event) => {
+            document.getElementById("dialogZone").innerHTML="left : "+event.clientX+" top : "+event.clientY};
         }
         
     }
@@ -128,7 +127,8 @@ export default class QOG {
                 break;
             };
         };
-        event.dataTransfer.setData("fromZone",fromZone);     
+        event.dataTransfer.setData("fromZone",fromZone);  
+        event.target.classList.add('dragged');   
      }   
 
      dragOverHandler(event) {

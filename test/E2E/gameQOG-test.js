@@ -48,24 +48,44 @@ describe('[QOG Game user Tests]',()=>{
             
             await browser.wait(until.elementLocated(By.css('.unit')),4000);
             
+            const origine = await browser.findElement(By.id('strategicMap'));
             const zone2place = await browser.findElement(By.id('Cross1'));
             const unit2move = await browser.findElement(By.name("1st Patrol"));
             
             let coords = await zone2place.getAttribute('coords');
-            
             coords = coords.split(',');
-            
             let Rect = {"x":0,"y":0};
             Rect.x= Number(coords[0])+9;
             Rect.y= Number(coords[1])+63;
 
-            
+            await browser.actions({async:true})
+                .move({origin:unit2move})
+                .press()
+                .perform();
+
+            //console.log(await browser.findElement(By.id('dialogZone')).getAttribute('innerHTML'));
+            //console.log(await unit2move.getAttribute('class'));
+
+            await browser.actions({async:true})
+                .move({origin:unit2move})
+                .press()
+                .move({origin:origine,x:280,y:150})
+                .release()
+                .perform();
+
+            //console.log(await browser.findElement(By.id('dialogZone')).getAttribute('innerHTML'));
+            //console.log(await unit2move.getAttribute('class'));
+            //expect(await unit2move.getAttribute('class')).to.include('dragged');
+
+
+            //expect(await unit2move.getAttribute('class')).to.include('dragged');
+
             /*await browser.actions({bridge: true})
                 .dragAndDrop(unit2move,zone2place)
                 .perform();*/
 
-            //console.log(browser.actions().mouse.toJSON());
-            expect(await unit2move.getRect()).to.include({x:740});
+            
+            //expect(await unit2move.getRect()).to.include({x:740});
         });
 
     });

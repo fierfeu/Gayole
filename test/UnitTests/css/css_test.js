@@ -31,4 +31,15 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
             expect (cssFile).to.include('.minifiedMainMenu');
             expect (cssFile).to.include('.maxifiedMainMenu');
     });
+
+    it('index.css declare basic rules and classes for game',()=>{
+        let cssFile = fs.readFileSync('src/Client/css/index.css','utf8');
+        expect (cssFile).to.include ('body {');
+        expect (cssFile).to.include ('.unit');
+        expect (cssFile).to.include ('#mainMenu {');
+        expect (cssFile).to.include ('#buttonList');
+        expect (cssFile).to.include ('.btn-enabled');
+        expect (cssFile).to.include ('.btn-enabled:active');
+        expect (cssFile).to.include ('.btn-disabled');
+    })
 });
