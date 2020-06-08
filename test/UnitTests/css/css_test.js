@@ -97,11 +97,9 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
 
         //to be sure that font is well declared
         bodyIndex=null;
-        console.log(indexSheet);
         indexSheet.forEach((el, index )=>{
-            if(el.type === 5) bodyIndex = index;
+            if(el.type === 5) bodyIndex = index; //usefull if only one font face declaration
         });
-        console.log(bodyIndex);
         expect (indexSheet[bodyIndex].style['font-family']).to.equal("mainMenuTitleFont");
         expect (indexSheet[bodyIndex].style['src']).to.equal("url('/mainMenuTitle.ttf')format('truetype')");
 
