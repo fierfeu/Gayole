@@ -4,6 +4,7 @@ var expect=chai.expect;
 const fs = require('fs');
 const res = require('../App/responseFake.js');
 const Handler = require ('../../../src/Servers/App/webHandler.js');
+const {JSDOM} = require ('jsdom');
 
 describe('[CSS TESTS] index.css existe and stored at the good place',()=>{
 
@@ -41,5 +42,17 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (cssFile).to.include ('.btn-enabled');
         expect (cssFile).to.include ('.btn-enabled:active');
         expect (cssFile).to.include ('.btn-disabled');
+        
+    })
+
+    it('unit classes are well coded',()=>{
+        let cssFile = fs.readFileSync('src/Client/css/index.css','utf8');
+        const HTML = "<!doctype html><html><head><style>" + cssFile 
+            +"</style></head><body></body></html>";
+        const window = new JSDOM(HTML,{pretendToBeVisual: true}).window;
+        const styles = window.document.getElementsByTagName('style');
+        console.log(styles[0].sheet.cssRules[0]);
+        //getComputedStyle
+
     })
 });

@@ -22,7 +22,7 @@ before('Before any test suite to create webdriver',async ()=>{
     global.browser = new Builder().forBrowser('chrome')
         .setChromeOptions(options).build();
     //global.browser = new Builder().forBrowser('firefox').build();
-     console.log('Before all');
+    console.log('Before all');
     console.log('creation with host='+ host +' & PORT = '+ port);
     web.run(host,port);
     browser.baseUrl = "http://"+host+":"+port;
