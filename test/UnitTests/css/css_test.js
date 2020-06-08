@@ -27,14 +27,21 @@ describe('[CSS TESTS] index.css existe and stored at the good place',()=>{
 });
 
 describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classes',()=>{
+    let cssFile,indexSheet;
+    before(()=>{
+        cssFile = fs.readFileSync('src/Client/css/index.css','utf8');
+        const HTML = "<!doctype html><html><head><style>" + cssFile 
+            +"</style></head><body></body></html>";
+        const window = new JSDOM(HTML,{pretendToBeVisual: true}).window;
+        const styles = window.document.getElementsByTagName('style');
+        indexSheet = styles[0].sheet.cssRules;
+    })
     it('index.css declare minifiedMainMenu and maxifiedMainMenu',()=>{
-        let cssFile = fs.readFileSync('src/Client/css/index.css','utf8');
             expect (cssFile).to.include('.minifiedMainMenu');
             expect (cssFile).to.include('.maxifiedMainMenu');
     });
 
     it('index.css declare basic rules and classes for game',()=>{
-        let cssFile = fs.readFileSync('src/Client/css/index.css','utf8');
         expect (cssFile).to.include ('body {');
         expect (cssFile).to.include ('.unit');
         expect (cssFile).to.include ('#mainMenu {');
@@ -42,17 +49,61 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (cssFile).to.include ('.btn-enabled');
         expect (cssFile).to.include ('.btn-enabled:active');
         expect (cssFile).to.include ('.btn-disabled');
-        
+        expect (cssFile).to.include ('#entete');
+        expect (cssFile).to.include ('#buttonList');
     })
 
-    it('unit classes are well coded',()=>{
-        let cssFile = fs.readFileSync('src/Client/css/index.css','utf8');
-        const HTML = "<!doctype html><html><head><style>" + cssFile 
-            +"</style></head><body></body></html>";
-        const window = new JSDOM(HTML,{pretendToBeVisual: true}).window;
-        const styles = window.document.getElementsByTagName('style');
-        console.log(styles[0].sheet.cssRules[0]);
-        //getComputedStyle
+    it('body rules are well coded',()=>{
+        let bodyIndex=null;
+        indexSheet.forEach((el, index )=>{
+            if(el.selectorText === 'body') bodyIndex = index;
+        });
+        expect (bodyIndex,'we must have a "body" selector').to.not.be.null;
+        expect (indexSheet[bodyIndex].style['background-image']).to.equal("url('/QuiOseGagneFE.png')");
+        expect (indexSheet[bodyIndex].style['background-repeat']).to.equal("no-repeat");
+        expect (indexSheet[bodyIndex].style['background-size']).to.equal("cover");
+        //getComputedStyle ... just to remember
+    })
+
+    it('unit rules are well coded',()=>{
+        let bodyIndex=null;
+        indexSheet.forEach((el, index )=>{
+            if(el.selectorText === '.unit') bodyIndex = index;
+        });
+        expect (bodyIndex,'we must have a ".unit" selector').to.not.be.null;
+        expect (indexSheet[bodyIndex].style['position']).to.equal("absolute");
+        expect (indexSheet[bodyIndex].style['width']).to.equal("30px");
+        expect (indexSheet[bodyIndex].style['height']).to.equal("30px");
+        expect (indexSheet[bodyIndex].style['box-shadow']).to.equal("2px 2px darkGoldenRod");
+    });
+
+    it('MainMenu rules are well coded',()=>{
+        //title of the button interface (where is the create button)
+        let bodyIndex=null;
+        indexSheet.forEach((el, index )=>{
+            if(el.selectorText === '#entete') bodyIndex = index;
+        });
+        // we had allready verify that this rule exist
+        expect (indexSheet[bodyIndex].style['justify-content']).to.equal("space-between");
+        expect (indexSheet[bodyIndex].style['background-color']).to.equal("rgba(247, 134, 41, 1)");
+        expect (indexSheet[bodyIndex].style['align-items']).to.equal("center");
+
+        //to be sure that menu is always above map
+        bodyIndex=null;
+        indexSheet.forEach((el, index )=>{
+            if(el.selectorText === '.maxifiedMainMenu') bodyIndex = index;
+        });
+        expect (indexSheet[bodyIndex].style['z-index']).to.equal("10");
+
+        //to be sure that font is well declared
+        bodyIndex=null;
+        console.log(indexSheet);
+        indexSheet.forEach((el, index )=>{
+            if(el.type === 5) bodyIndex = index;
+        });
+        console.log(bodyIndex);
+        expect (indexSheet[bodyIndex].style['font-family']).to.equal("mainMenuTitleFont");
+        expect (indexSheet[bodyIndex].style['src']).to.equal("url('/mainMenuTitle.ttf')format('truetype')");
 
     })
 });

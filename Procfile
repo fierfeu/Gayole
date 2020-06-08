@@ -1,1 +1,1 @@
-web: node src/Servers/index.js
+web: export HOST=0.0.0.0 && node src/Servers/index.js

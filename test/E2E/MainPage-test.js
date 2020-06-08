@@ -30,7 +30,7 @@ describe('[Main Page overall Tests]',()=>{
     
         it ('and has good body background', async ()=>{
             let gayoleBody = await browser.findElement(By.css('body'));
-            expect(await gayoleBody.getCssValue ('background-image')).to.include('QuiOseGagneFE.jpg');
+            expect(await gayoleBody.getCssValue ('background-image')).to.include('QuiOseGagneFE.png');
             
         });
     

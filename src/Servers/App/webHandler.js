@@ -10,7 +10,7 @@ const sitePagesConf ={
     '/index.html':'src/Client/html/index.html',
     '/QOG_boardGame.html':'src/Client/html/boardGame.html',
     '/index.css' : 'src/Client/css/index.css',
-    '/QuiOseGagneFE.jpg' : 'src/Client/images/QuiOseGagneFE.jpg',
+    '/QuiOseGagneFE.png' : 'src/Client/images/QuiOseGagneFE.png',
     '/QOGMap1.jpg' : 'src/Client/images/QOGMap1.jpg',
     '/QOG_Head.js' : 'src/Client/js/QOG_Head.js',
     '/QOG.mjs' : 'src/Client/mjs/QOG.mjs',
