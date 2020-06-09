@@ -11,7 +11,7 @@ describe ('[Game Board] contains the good html',()=>{
     it('is based on a div with the good id, good parent and css class',()=>{
         return JSDOM.fromFile("src/Client/html/index.html").then((dom)=>{
             document =dom.window.document;
-            const gameBoard = document.getElementById('GameBoard');
+            const gameBoard = document.getElementById('gameBoard');
             expect(gameBoard).to.exist;
             expect(gameBoard.parentNode.nodeName).to.equal('BODY');
             expect(gameBoard.className).to.equal('gameBoardHide');
@@ -21,7 +21,7 @@ describe ('[Game Board] contains the good html',()=>{
     it ('contains 2 divs called strategicMap and dialogZone',()=>{
         return JSDOM.fromFile("src/Client/html/index.html").then((dom)=>{
             document =dom.window.document;
-            const gameBoard = document.getElementById('GameBoard');
+            const gameBoard = document.getElementById('gameBoard');
             expect(gameBoard.childNodes.length).to.equal(2);
             expect(gameBoard.childNodes[0].id).to.equal('dialogZone');
             expect(gameBoard.childNodes[0].className).to.equal('dialogZone');

@@ -25,6 +25,7 @@ const sitePagesConf ={
     '/scenario_default.json':'src/Client/json/scenario_default.json',
     '/Hamburger_QOG_icon.png' : 'src/Client/images/Hamburger_QOG_icon.png',
     '/strategicMap.png' : 'src/Client/images/QOGMap.png',
+    '/strategicBorder.png':'src/Client/images/strategicBorder.png',
     '/patrol1.png':'src/Client/images/patrol1.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/favicon.ico' : './src/Client/images/favicon.ico' 

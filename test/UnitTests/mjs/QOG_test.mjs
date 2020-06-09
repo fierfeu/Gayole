@@ -19,7 +19,7 @@ const scenarioString = scenario.toString();
 const ZONEString = zone.toString();
 const unitString = unit.toString();
 const HTML =    `<body>
-                    <div id='GameBoard'>
+                    <div id='gameBoard'>
                         <div id='dialogZone'>
 
                         </div>
@@ -116,19 +116,19 @@ describe ('[main QOG MJS] init functions work well',()=>{
             context+";"+
             "QOG.prototype.initBoardGame.call(boardRequest);"
         )}).to.not.throw();
-        expect(window.eval("document.getElementById('GameBoard').style.display")).to.equal('inline');
+        expect(window.eval("document.getElementById('gameBoard').style.display")).to.equal('block');
         expect(window.eval(
-            "document.getElementById('GameBoard').getElementsByTagName('div')[1]")).to.exist;
+            "document.getElementById('gameBoard').getElementsByTagName('div')[1]")).to.exist;
         expect(window.eval(
-            "document.getElementById('GameBoard').getElementsByTagName('div')[0].id")).to.equal('dialogZone');
+            "document.getElementById('gameBoard').getElementsByTagName('div')[0].id")).to.equal('dialogZone');
         expect(window.eval(
-            "document.getElementById('GameBoard').getElementsByTagName('div')[1].id")).to.equal('strategicMap');
+            "document.getElementById('gameBoard').getElementsByTagName('div')[1].id")).to.equal('strategicMap');
         expect(window.eval(
-            "const stratMap = document.getElementById('GameBoard').getElementsByTagName('div')[1];"+
+            "const stratMap = document.getElementById('gameBoard').getElementsByTagName('div')[1];"+
             "stratMap.getElementsByTagName('img');"
         )).to.exist;
         expect(window.eval(
-            "const stratMap = document.getElementById('GameBoard').getElementsByTagName('div')[1];"+
+            "const stratMap = document.getElementById('gameBoard').getElementsByTagName('div')[1];"+
             "stratMap.getElementsByTagName('img')[0].src;"
         )).to.equal('http://localhost/strategicMap.png');
     });

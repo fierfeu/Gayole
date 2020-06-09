@@ -51,6 +51,7 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (cssFile).to.include ('.btn-disabled');
         expect (cssFile).to.include ('#entete');
         expect (cssFile).to.include ('#buttonList');
+        expect (cssFile).to.include ('#gameBoard');
     })
 
     it('body rules are well coded',()=>{
@@ -103,5 +104,32 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (indexSheet[bodyIndex].style['font-family']).to.equal("mainMenuTitleFont");
         expect (indexSheet[bodyIndex].style['src']).to.equal("url('/mainMenuTitle.ttf')format('truetype')");
 
-    })
+    });
+
+    it('GameBoard has good rules for border',()=>{
+        // find #GameBoard index
+        let bodyIndex=null;
+        indexSheet.forEach((el, index )=>{
+            if(el.selectorText === '#gameBoard') bodyIndex = index;
+        });
+        expect (indexSheet[bodyIndex].style['border-style']).to.equal('solid'); // for chrome as firefox doesn't care
+        expect (indexSheet[bodyIndex].style['border-image-source']).to.equal("url('/strategicBorder.png')");
+        expect (indexSheet[bodyIndex].style['border-image-slice']).to.equal('30 25 34 25');
+        expect (indexSheet[bodyIndex].style['border-image-repeat']).to.equal('round');
+        expect (indexSheet[bodyIndex].style['border-image-width']).to.equal('15px');
+        expect (indexSheet[bodyIndex].style['border-image-outset']).to.equal('15px');
+        expect (indexSheet[bodyIndex].style['position']).to.equal('absolute');
+        expect (indexSheet[bodyIndex].style['top']).to.equal('18px');
+        expect (indexSheet[bodyIndex].style['left']).to.equal('58px');
+        bodyIndex=null;
+        indexSheet.forEach((el, index )=>{
+            if(el.selectorText === '.strategicMap') bodyIndex = index;
+        });
+        expect (indexSheet[bodyIndex].style['border-style']).to.equal('solid'); // for chrome as firefox doesn't care
+        expect (indexSheet[bodyIndex].style['border-image-source']).to.equal("url('/strategicBorder.png')");
+        expect (indexSheet[bodyIndex].style['border-image-slice']).to.equal('30 0 0 0');
+        expect (indexSheet[bodyIndex].style['border-image-repeat']).to.equal('round');
+        expect (indexSheet[bodyIndex].style['border-image-width']).to.equal('10px 12px 0 8.5px');
+        expect (indexSheet[bodyIndex].style['border-image-outset']).to.equal('10px');
+    });
 });

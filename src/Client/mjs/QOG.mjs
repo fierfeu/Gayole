@@ -83,8 +83,8 @@ export default class QOG {
             document.getElementById('strategicMap').onmousemove = (event) =>{
                 document.getElementById('dialogZone').innerHTML= "<p>top : "+event.offsetX+ "left :"+event.offsetY+"</p>";
             };
-            document.getElementById('GameBoard').innerHTML = this.responseText;
-            document.getElementById('GameBoard').style.display="inline";
+            document.getElementById('gameBoard').innerHTML = this.responseText;
+            document.getElementById('gameBoard').style.display="block";
 
             QOG.prototype.initZones();
 
