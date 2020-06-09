@@ -43,7 +43,7 @@ describe ('[gameBoard] load resources',()=>{
     const myResourceLoader = new CustomResourceLoader();
 
     it('is possible to load css',()=>{
-        return JSDOM.fromFile("src/Client/html/index.html",{url:"http://localhost", resources:myResourceLoader,pretendToBeVisual: true }).then((dom)=>{
+        return JSDOM.fromFile("src/Client/css/index.css",{pretendToBeVisual: true }).then((dom)=>{
             //console.log('game is launched is : '+ dom.window.localStorage.getItem ('gameLaunched'));
         });
     });
