@@ -44,14 +44,12 @@ body {
     left : 58px;
     top : 18px;
     z-index : 1;
-    height : 90%;
-    width : 1100px;
     border-style:solid;
     border-image-source: url('/strategicBorder.png');
     border-image-slice: 30 25 34 25;
     border-image-repeat: round;
     border-image-width: 15px;
-    border-image-outset: 15px;
+    border-image-outset: 13px;
 }
 
 .gameBoardHide {
@@ -59,8 +57,7 @@ body {
 }
 
 .dialogZone {
-    height : 50px;
-    width : 1100px;
+    height : 80px;
     
     display:flex;
     flex-direction: row;
@@ -68,13 +65,15 @@ body {
 }
 
 .strategicMap {
-    width:100%;
+    width:1180px;
+    height:623px;
     border-style: solid;
     border-image-source: url('/strategicBorder.png');
     border-image-slice: 30 0 0 0;
     border-image-repeat: round;
-    border-image-width: 10px 12px 0 8.5px;
+    border-image-width: 10px 10px 0 10.5px;
     border-image-outset: 10px;
+    padding:0;
 }
 
 .btn-enabled {

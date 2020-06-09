@@ -106,7 +106,7 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
 
     });
 
-    it('GameBoard has good rules for border',()=>{
+    it('GameBoard has good rules for border and size',()=>{
         // find #GameBoard index
         let bodyIndex=null;
         indexSheet.forEach((el, index )=>{
@@ -117,7 +117,7 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (indexSheet[bodyIndex].style['border-image-slice']).to.equal('30 25 34 25');
         expect (indexSheet[bodyIndex].style['border-image-repeat']).to.equal('round');
         expect (indexSheet[bodyIndex].style['border-image-width']).to.equal('15px');
-        expect (indexSheet[bodyIndex].style['border-image-outset']).to.equal('15px');
+        expect (indexSheet[bodyIndex].style['border-image-outset']).to.equal('13px');
         expect (indexSheet[bodyIndex].style['position']).to.equal('absolute');
         expect (indexSheet[bodyIndex].style['top']).to.equal('18px');
         expect (indexSheet[bodyIndex].style['left']).to.equal('58px');
@@ -129,7 +129,10 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (indexSheet[bodyIndex].style['border-image-source']).to.equal("url('/strategicBorder.png')");
         expect (indexSheet[bodyIndex].style['border-image-slice']).to.equal('30 0 0 0');
         expect (indexSheet[bodyIndex].style['border-image-repeat']).to.equal('round');
-        expect (indexSheet[bodyIndex].style['border-image-width']).to.equal('10px 12px 0 8.5px');
+        expect (indexSheet[bodyIndex].style['border-image-width']).to.equal('10px 10px 0 10.5px');
         expect (indexSheet[bodyIndex].style['border-image-outset']).to.equal('10px');
+        expect (indexSheet[bodyIndex].style['padding']).to.equal('0');
+        expect (indexSheet[bodyIndex].style['width']).to.equal('1180px');
+        expect (indexSheet[bodyIndex].style['height']).to.equal('623px');
     });
 });
