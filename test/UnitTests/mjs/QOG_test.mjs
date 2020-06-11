@@ -165,6 +165,11 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(imgs[1].src).to.equal('http://localhost/patrol1.png');
         expect(imgs[1].getAttribute("draggable")).to.equal('true');
         expect(imgs[1].ondragstart).to.equal(QOG.prototype.dragStartHandler);
+        let coords=QOG.prototype.zones['Siwa'].Element.coords;
+        coords=coords.split(',');
+        console.log(coords);
+        expect(imgs[1].style.top).to.equal(Number(coords[1])+5+"px");
+        expect(imgs[1].style.left).to.equal(Number(coords[0])+5+"px");
         globalThis.document = globalThis.window = undefined;
     });
 

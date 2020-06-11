@@ -1,10 +1,11 @@
-'use strict'
+import chai from 'chai';
+const expect = chai.expect;
 
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
+import jsdom from 'jsdom';
+const {JSDOM} = jsdom;
 
-const chai = require('chai');
-var expect = chai.expect;
+import zone from '../../../src/Client/mjs/zone.mjs';
+import unit from '../../../src/Client/mjs/unit.mjs';
 
 describe ('[Game Board] contains the good html',()=>{
     let document;
@@ -44,5 +45,36 @@ describe ('[gameBoard] load resources',()=>{
 
     it('is possible to load css',()=>{
         expect(()=>{JSDOM.fromFile("src/Client/css/index.css",{pretendToBeVisual: true })}).to.not.throw();
+    });
+
+    // il faut ajouter tout les tests sur les AREA commepar exemple :
+    it('Possible to load all zones and create links',async ()=>{
+        let document;
+        return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
+            document=dom.window.document;
+            let zones=[];
+            const map= document.getElementsByName('gameBoardMap');
+            const gameZones = map[0].areas;
+            for(let area=0; area< gameZones.length;area++) {
+                zones[gameZones[area].id]= new zone (gameZones[area],gameZones[area].id)
+            };
+            expect(Object.keys(zones).length).to.equal(map[0].areas.length);
+            expect(()=>{
+                for (let areaZone in zones ) {
+                    if(zones[areaZone].Element.dataset.links) {
+                        let sourceZone=zones[areaZone].Element;
+                        sourceZone=sourceZone.dataset.links.split(';');
+                        for (let i=0;i<sourceZone.length;i++) {
+                            const name = sourceZone[i].split(':')[0];
+                            const cost = sourceZone[i].split(':')[1];
+                            zones[areaZone].linkTo(zones[name],cost);
+                        };
+                        
+                    };
+                };
+            }).to.not.throw();
+            
+        });
+        
     });
 });

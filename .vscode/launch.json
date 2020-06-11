@@ -10,7 +10,7 @@
             "name": "Mocha Tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
-                "-f ${file}",
+                "f ${file}",
             ],
             "internalConsoleOptions": "openOnSessionStart",
             "skipFiles": [
@@ -20,10 +20,10 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Protrator Tests",
-            "program": "C:/Users/az02658-dev/AppData/Roaming/npm/node_modules/protractor/bin/protractor",
+            "name": "All Tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
-                "${workspaceFolder}/protractor.conf.js"
+                "--config", "${workspaceFolder}\\test\\.mocharc.json"
             ],
             "internalConsoleOptions": "openOnSessionStart",
             "skipFiles": [

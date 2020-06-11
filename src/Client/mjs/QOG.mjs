@@ -39,7 +39,7 @@ export default class QOG {
             QOG.prototype.zones[areaZone].Element.ondrop = QOG.prototype.dropHandler;
             if(QOG.prototype.zones[areaZone].Element.dataset.links) {
                 let sourceZone=QOG.prototype.zones[areaZone].Element;
-                sourceZone=sourceZone.dataset.links.split(',');
+                sourceZone=sourceZone.dataset.links.split(';');
                 for (let i=0;i<sourceZone.length;i++) {
                     const name = sourceZone[i].split(':')[0];
                     const cost = sourceZone[i].split(':')[1];
@@ -65,9 +65,11 @@ export default class QOG {
             image.className = "unit";
             image.src=currentUnit.images['recto'];
             image.name = currentUnit.name;
-            let top = originTop + 457 + 10;
+            let zoneCoords = QOG.prototype.zones[key].Element.coords;
+            zoneCoords = zoneCoords.split(',');
+            let left =Number(zoneCoords[0])+5;
+            let top = Number(zoneCoords[1])+5;
             image.style.top = top.toString()+'px';
-            let left = originLeft + 685 + 7;
             image.style.left= left.toString()+'px';
             image.draggable = "true";
             image.ondragstart = QOG.prototype.dragStartHandler;
