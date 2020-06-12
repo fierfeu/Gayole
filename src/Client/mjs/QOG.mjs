@@ -149,8 +149,8 @@ export default class QOG {
         const unit2move = QOG.prototype.units[event.dataTransfer.getData('UnitName')];
         if (fromZone.moveTo(Zone,unit2move)) {
             const img2move = document.getElementsByName(unit2move.name)[0];
-            img2move.style.left = Number(Zone.Element.coords.split(',')[0])+9+"px";
-            img2move.style.top = Number (Zone.Element.coords.split(',')[1])+63+"px";
+            img2move.style.left = Number(Zone.Element.coords.split(',')[0])+5+"px";
+            img2move.style.top = Number (Zone.Element.coords.split(',')[1])+5+"px";
         }
         
 

@@ -134,5 +134,6 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (indexSheet[bodyIndex].style['padding']).to.equal('0');
         expect (indexSheet[bodyIndex].style['width']).to.equal('1180px');
         expect (indexSheet[bodyIndex].style['height']).to.equal('623px');
+        expect (indexSheet[bodyIndex].style['position']).to.equal('relative'); // to be sure that isthe nearest ancestor of units
     });
 });

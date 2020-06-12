@@ -65,6 +65,7 @@ body {
 }
 
 .strategicMap {
+    position:relative;
     width:1180px;
     height:623px;
     border-style: solid;

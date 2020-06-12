@@ -264,8 +264,8 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
         expect(ev.preventDefault.called).to.be.true;
         expect(QOG.prototype.zones['Siwa'].units[0]).to.be.undefined;
         expect(QOG.prototype.zones['Cross1'].units['1st Patrol']).to.equal(QOG.prototype.units['1st Patrol']);
-        expect(patrolImg.style.top).to.be.equal('163px');
-        expect(patrolImg.style.left).to.be.equal('109px');
+        expect(patrolImg.style.top).to.be.equal('105px');
+        expect(patrolImg.style.left).to.be.equal('105px');
         ev.preventDefault=undefined;
     });
 });

@@ -72,7 +72,7 @@ describe ('[gameBoard] load resources',()=>{
                         
                     };
                 };
-            }).to.not.throw();
+            }).to.not.throw(); //we're abble to read all areas dta-links attribute.
             
         });
         
