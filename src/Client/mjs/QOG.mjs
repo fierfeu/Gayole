@@ -4,6 +4,10 @@ import unit from './unit.mjs';
 import zone from './zone.mjs';
 import scenario from './scenario.mjs';
 
+const parserDef =[["name"],["LRDG","Axis"],["roundNb","returnZone"]];
+const OPPONENT = 1;
+const VICOND =2;
+const parserOpponentDef = ["units","detachments","patrols","localisations"];
 var jsonhttp,boardRequest;
 
 export default class QOG {
@@ -23,7 +27,7 @@ export default class QOG {
         const url = "/QOG_boardGame.html";
         boardRequest.open("GET", url);
         boardRequest.send();
-        
+        QOG.prototype.units=[];
     }
 
     initZones () {
@@ -79,7 +83,7 @@ export default class QOG {
     }
 
     initBoardGame () {
-        if((this.status >= 200 || this.status < 300) && (this.responseText != null)) 
+        if((this.status >= 200 && this.status < 300) && (this.responseText != null)) 
         {
             // the following code is for explanatory stuff only
             document.getElementById('strategicMap').onmousemove = (event) =>{
@@ -91,7 +95,8 @@ export default class QOG {
             QOG.prototype.initZones();
 
             const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
-            QOG.prototype.initScenario(QOG.prototype.chooseScenario(ScenariiListe));
+            QOG.prototype.chooseScenario(ScenariiListe);
+            
 
             // for test only phase
             document.getElementById("strategicMap").onmousemove = (event) => {
@@ -102,18 +107,65 @@ export default class QOG {
 
     chooseScenario(liste) {
         if(!liste || !Array.isArray(liste)) throw 'ERROR QOG.chooseScenario needs a scenario list array as input';
-        this.scenario = new scenario(liste);
-        return this.scenario.select();
+        window.currentScenario = new scenario(liste,false,QOG.prototype.initScenario);
+        window.currentScenario.select();
+        
     }
 
-    initScenario (jsonInit) {
-            QOG.prototype.units=[];
-            if(jsonInit.units) for (let ScenarUnit=0; ScenarUnit<jsonInit.units.length; ScenarUnit++){ 
-                QOG.prototype.units[jsonInit.units[ScenarUnit].name]= new unit(jsonInit.units[ScenarUnit].images,
-                    jsonInit.units[ScenarUnit].name,
-                    jsonInit.units[ScenarUnit].description);    
-            };
-            if(jsonInit.zones) QOG.prototype.placeUnits(jsonInit.zones);
+    scenarioParser (data) {
+        if(!data) throw ('ERROR no scenario data to parse : no scenario initiated');
+        if(!(typeof(data)==='object')) throw ('ERROR badly formated scenario data to parse: no scenario initiated');
+        
+        if(!data.hasOwnProperty('description')) throw ('ERROR badly formated object : keys are missing: no scenario description Object');
+        if(!data.hasOwnProperty('conditions')) throw ('ERROR badly formated object : keys are missing: no vitory conditions defined');
+        currentScenario.opponent=[];
+        currentScenario.opponent[0]=2;
+        currentScenario.opponent[1] = parserDef[OPPONENT][0];
+        currentScenario.opponent[2] = parserDef[OPPONENT][1];
+        if(!data.hasOwnProperty(currentScenario.opponent[1])) throw ('ERROR badly formated object : keys are missing: no opponent name for side: '+currentScenario.opponent[1]);
+        if(!data.hasOwnProperty(currentScenario.opponent[2])) throw ('ERROR badly formated object : keys are missing: no opponent name for side: '+currentScenario.opponent[2]);
+        
+        if(!data.description.hasOwnProperty('name')) throw ('ERROR badly formated object : keys are missing: no scenario name in description');
+        currentScenario.description = data.description;
+        for (let i=0;i<parserDef[VICOND].length;i++) {
+            if(!data.conditions.hasOwnProperty(parserDef[VICOND][i])) throw ('ERROR badly formated object : keys are missing: no '+ parserDef[VICOND][i]+' in victory conditions');
+        }
+        currentScenario.conditions = data.conditions;
+
+        for (let i=1;i<=currentScenario.opponent[0];i++) {
+            currentScenario.opponent[i]=[parserDef[OPPONENT][i-1],data[parserDef[OPPONENT][i-1]]];
+            for (let j=0; j< parserOpponentDef.length;j++) {
+                if(!currentScenario.opponent[i][1].hasOwnProperty(parserOpponentDef[j])) 
+                    throw ('ERROR badly formated object : keys are missing: no '+parserOpponentDef[j]+' definition for opponent: '+currentScenario.opponent[i][0]);
+            }
+        };
+    }
+
+    initScenario (data) {
+            
+            QOG.prototype.scenarioParser(data);
+            if(!currentScenario.opponent) throw ('ERROR parsing false');
+            for (let i=1;i<=currentScenario.opponent[0];i++) {
+                for (let j=0;j< parserOpponentDef.length;j++) {
+                    if(parserOpponentDef[j]!== 'localisations' && currentScenario.opponent[i][1][parserOpponentDef[j]].Nb !== 0) {
+                        let Nb = currentScenario.opponent[i][1][parserOpponentDef[j]].Nb;
+                        let unitsArray = currentScenario.opponent[i][1][parserOpponentDef[j]].unitsDesc;
+                        for (let u=0; u< Nb; u++) {
+                            QOG.prototype.units[unitsArray[u].name] = new unit(unitsArray[u].images,
+                                unitsArray[u].name,
+                                unitsArray[u].description);
+                        }
+
+                    } 
+                    if (parserOpponentDef[j] === 'localisations'){
+                        if (currentScenario.opponent[i][1][parserOpponentDef[j]].zones) {
+                            let localisations = currentScenario.opponent[i][1][parserOpponentDef[j]].zones;
+                            QOG.prototype.placeUnits(localisations);
+                        }
+                    }
+
+                }
+            }
     }
 
      dragStartHandler(event) {
@@ -135,10 +187,10 @@ export default class QOG {
 
      dragOverHandler(event) {
         event.preventDefault();
-        const fromZone = QOG.prototype.zones[event.dataTransfer.getData('fromZone')];
+        /*const fromZone = QOG.prototype.zones[event.dataTransfer.getData('fromZone')];
         if (fromZone.moveAllowedTo(QOG.prototype.zones[event.target.id]))
             event.dataTransfer.dropEffect="move";
-        else event.dataTransfer.dropEffect="none";
+        else event.dataTransfer.dropEffect="none";*/
      }
 
      dropHandler(event) {

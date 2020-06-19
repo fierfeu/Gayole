@@ -4,12 +4,12 @@ export default class scenario {
         if(Array.isArray(scenariiListe)) {
             this.scenarii= scenariiListe;
             if(inputInterface && typeof(inputInterface)!='function') this.selectInterface = inputInterface;
-            if(loader && typeof(inputInterface)=='function' )this.loader = loader;
+            if(loader)this.loader = loader;
         } else throw ('BAD liste of scenarii provided');
     }
 
     select () {
-        return this.loadData(this.showSelectInterface ());
+        this.loadData(this.showSelectInterface ());
     }
 
     showSelectInterface () {
@@ -20,13 +20,27 @@ export default class scenario {
         }
     }
 
-    loadData () {
-        return this.data = {
-            "units":[
-                {"images":{"recto":"/patrol1.png"},
-                "name":"1st Patrol",
-                "description":"my first patrol in game"}],
-            "zones":{"Siwa":"1st Patrol"}
-            };
+    loadData (url) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = this.respParse;
+        xhttp.open("GET", url);
+        xhttp.send();
+        
+    }
+
+    respParse () {
+        if((this.status >= 200 && this.status < 300) && (this.responseText != null)) 
+        {
+            let data = JSON.parse(this.responseText);
+            if (data) {
+                if(!currentScenario) throw ('ERROR need of a global scenario tostore data');
+                if (currentScenario.loader) currentScenario.loader(data);
+                else currentScenario.data = data;
+            }
+            else throw("ERROR bad JSON");
+        } else if (this.status = 404) 
+        {
+            throw ('ERROR bad File URL or FILE unavailable');
+        }
     }
 }

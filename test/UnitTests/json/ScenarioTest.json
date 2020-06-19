@@ -1,6 +1,27 @@
 {
-    "units":[
-        {"images":{"recto":"/patrol1.png"},
-        "name":"1st Patrol",
-        "description":"my first patrol in game"}]
+    "description":{
+        "name":"testName",
+        "long":"longue description", 
+        "short":"short desc"
+    },
+    "LRDG":{"units": {
+        "Nb":1,
+        "unitsDesc":[
+            {"images":{"recto":"/patrol1.png"},
+            "name":"1st Patrol",
+            "description":"my first patrol in game"}]
+        },
+        "detachments":"test",
+        "patrols":"test",
+        "localisations":{
+            "zones" : {"Siwa":"1st Patrol"}
+        }
+    },
+    "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{}},
+    "conditions":{
+        "roundNb": 1,
+        "returnZone" :["Siwa"],
+        "victoryTest":"()=>{return true}"
+    }
+
 }

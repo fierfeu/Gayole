@@ -1,7 +1,65 @@
 {
-"units":[
-    {"images":{"recto":"/patrol1.png"},
-    "name":"1st Patrol",
-    "description":"my first patrol in game"}],
-"zones":{"Siwa":"1st Patrol"}
+    "description": {
+        "name": "default",
+        "long":"longue description of the defaultscenario",
+        "short":"short description"
+    },
+    "LRDG":{
+        "units":{
+            "Nb": 0,
+            "unitsDesc":[
+                
+            ]
+        },
+        "detachments" : {
+            "Nb":0
+        },
+        "patrols": {
+            "Nb": 1,
+            "patrolComposition" : [],
+            "unitsDesc": [{"images":{"recto":"/patrol1.png"},
+                "name":"1st Patrol",
+                "description":"my first patrol in game"
+            }]
+        },
+        "localisations" : { 
+            "zones" : {
+                "Siwa":"1st Patrol"}
+        }     
+    },
+    "Axis" : {
+        "units":{
+            "Nb": 0,
+            "unitsDesc":
+                {"images":{"recto":"/patrol1.png"},
+                "name":"1st Patrol",
+                "description":"my first patrol in game"
+            }
+        },
+        "detachments" : {
+            "Nb":0
+        },
+        "patrols" : {
+            "Nb":0
+        },
+        "localisations" : {
+            "zones" : {},
+            "zoneType" : {
+                "random": true,
+                "units" : []
+            },
+            "multiple" : [
+                {
+                    "terrain" : "city",
+                    "random":true,
+                    "units": []
+                }
+            ]
+        }
+    },
+    "conditions": {
+        "roundNb":3,
+        "returnZone":["Siwa"],
+        "victoryTest":"()=>{return true}"
+    }
 }
