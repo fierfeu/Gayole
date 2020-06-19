@@ -8,7 +8,10 @@ const {JSDOM} = jsdom;
 
 const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
 
+sinon.restore();
+
 describe ('[Scenario CLass] is instanciable',()=>{
+    
     it('is possible to create a scenario instance with a scenarii Liste', ()=>{
         let loader = ()=>{};
         expect(() =>{new scenario()}).to.throw('No liste of scenarii provided');

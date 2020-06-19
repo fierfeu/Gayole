@@ -43,7 +43,6 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(mockedSelect.verify()).to.true;
         expect (window.currentScenario.scenarii).to.equal(scenarList);
 
-        
         globalThis.document = globalThis.alert = globalThis.window = undefined
     });
 
