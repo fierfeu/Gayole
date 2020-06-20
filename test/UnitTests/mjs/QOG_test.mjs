@@ -35,7 +35,8 @@ describe ('[main QOG MJS] init functions work well',()=>{
         window = new JSDOM('',{url:'http://localhost/'}).window;
         globalThis.window = window;
          globalThis.document = globalThis.window.document;
-        let mockedSelect = sinon.mock(scenario.prototype).expects('select').once();
+        let sandBox = sinon.createSandbox();
+        let mockedSelect = sandBox.mock(scenario.prototype).expects('select').once();
     
         expect(()=>{QOG.prototype.chooseScenario()}).to.throw();
         expect(()=>{QOG.prototype.chooseScenario("scenarList")}).to.throw(); 
