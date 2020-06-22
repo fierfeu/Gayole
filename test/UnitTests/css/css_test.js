@@ -75,7 +75,7 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (indexSheet[bodyIndex].style['position']).to.equal("absolute");
         expect (indexSheet[bodyIndex].style['width']).to.equal("30px");
         expect (indexSheet[bodyIndex].style['height']).to.equal("30px");
-        expect (indexSheet[bodyIndex].style['box-shadow']).to.equal("2px 2px darkGoldenRod");
+        expect (indexSheet[bodyIndex].style['box-shadow']).to.equal("1px 1px GoldenRod");
     });
 
     it('MainMenu rules are well coded',()=>{

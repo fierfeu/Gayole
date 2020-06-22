@@ -29,12 +29,12 @@
     },
     "Axis" : {
         "units":{
-            "Nb": 0,
+            "Nb": 1,
             "unitsDesc":
-                {"images":{"recto":"/patrol1.png"},
-                "name":"1st Patrol",
-                "description":"my first patrol in game"
-            }
+                [{"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_1.png"},
+                "name":"Axis1",
+                "description":"Unité italienne de force 1"
+            }]
         },
         "detachments" : {
             "Nb":0
@@ -43,7 +43,10 @@
             "Nb":0
         },
         "localisations" : {
-            "zones" : {},
+            "zones" : {
+                "Jagahbub":"Axis1",
+                "FortMaddalena":"Axis1"
+            },
             "zoneType" : {
                 "random": true,
                 "units" : []

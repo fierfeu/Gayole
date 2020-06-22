@@ -10,8 +10,6 @@ const sitePagesConf ={
     '/index.html':'src/Client/html/index.html',
     '/QOG_boardGame.html':'src/Client/html/boardGame.html',
     '/index.css' : 'src/Client/css/index.css',
-    '/QuiOseGagneFE.png' : 'src/Client/images/QuiOseGagneFE.png',
-    '/QOGMap1.jpg' : 'src/Client/images/QOGMap1.jpg',
     '/QOG_Head.js' : 'src/Client/js/QOG_Head.js',
     '/QOG.mjs' : 'src/Client/mjs/QOG.mjs',
     '/eventStorageInterface.mjs' : 'src/Client/mjs/eventStorageInterface.mjs',
@@ -23,10 +21,13 @@ const sitePagesConf ={
     '/eventStorageInterface.mjs':'src/Client/mjs/eventStorageInterface.mjs',
     '/eventManager.mjs':'src/Client/mjs/eventManager.mjs',
     '/scenario_default.json':'src/Client/json/scenario_default.json',
+    '/QuiOseGagneFE.png' : 'src/Client/images/QuiOseGagneFE.png',
     '/Hamburger_QOG_icon.png' : 'src/Client/images/Hamburger_QOG_icon.png',
     '/strategicMap.png' : 'src/Client/images/QOGMap.png',
     '/strategicBorder.png':'src/Client/images/strategicBorder.png',
     '/patrol1.png':'src/Client/images/patrol1.png',
+    '/Axis-FC.png':'src/Client/images/Axis-FC.png',
+    '/Axis_It_1.png':'src/Client/images/Axis_It_1.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };
