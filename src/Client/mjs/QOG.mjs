@@ -75,8 +75,11 @@ export default class QOG {
             let top = Number(zoneCoords[1])+5;
             image.style.top = top.toString()+'px';
             image.style.left= left.toString()+'px';
-            image.draggable = "true";
-            image.ondragstart = QOG.prototype.dragStartHandler;
+            image.draggable=false;
+            if (currentUnit.draggable) {
+                image.draggable = "true";
+                image.ondragstart = QOG.prototype.dragStartHandler;
+            }
             boardDiv.appendChild(image);
         };
 
@@ -153,7 +156,8 @@ export default class QOG {
                         for (let u=0; u< Nb; u++) {
                             QOG.prototype.units[unitsArray[u].name] = new unit(unitsArray[u].images,
                                 unitsArray[u].name,
-                                unitsArray[u].description);
+                                unitsArray[u].description,
+                                unitsArray[u].values);
                         }
 
                     } 

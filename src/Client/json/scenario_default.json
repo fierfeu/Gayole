@@ -19,7 +19,8 @@
             "patrolComposition" : [],
             "unitsDesc": [{"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol",
-                "description":"my first patrol in game"
+                "description":"my first patrol in game",
+                "values":{"draggable":true}
             }]
         },
         "localisations" : { 
@@ -33,7 +34,8 @@
             "unitsDesc":
                 [{"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_1.png"},
                 "name":"Axis1",
-                "description":"Unité italienne de force 1"
+                "description":"Unité italienne de force 1",
+                "values":{"draggable":false}
             }]
         },
         "detachments" : {

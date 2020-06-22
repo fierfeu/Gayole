@@ -123,7 +123,8 @@ describe ('[main QOG MJS] init functions work well',()=>{
         QOG.prototype.units['1st Patrol'] = new unit (
             unitDesc.images,
             unitDesc.name,
-            unitDesc.description
+            unitDesc.description,
+            {"draggable":true}
         );
         QOG.prototype.zones=[];
         const area = document.getElementById('Siwa');
