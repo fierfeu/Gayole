@@ -60,7 +60,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect (QOG.prototype.zones['Siwa'] instanceof zone).to.be.true;
         expect (QOG.prototype.zones['Siwa'].moveAllowedTo(QOG.prototype.zones['Cross1'])).to.be.equal('1');
         expect (QOG.prototype.zones['Cross1'].moveAllowedTo(QOG.prototype.zones['Siwa'])).to.be.equal('1');
-        expect (QOG.prototype.zones['Cross1'].Element.ondragover).to.be.equal(QOG.prototype.dragOverHandler);
+        expect (QOG.prototype.zones['Cross1'].Element.ondragover).to.be.equal(QOG.prototype.dragoverHandler);
         expect (QOG.prototype.zones['Cross1'].Element.ondrop).to.be.equal(QOG.prototype.dropHandler);
         globalThis.window = undefined;
     });
@@ -127,11 +127,15 @@ describe ('[main QOG MJS] init functions work well',()=>{
             {"draggable":true}
         );
         QOG.prototype.zones=[];
+        // initZones Simulation
         const area = document.getElementById('Siwa');
         QOG.prototype.zones['Siwa'] = new zone (area,'Siwa');
+        QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        
         expect(()=>{QOG.prototype.placeUnits()}).to.throw('ERROR needs of a json description');
-        expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc)}).to.not.throw();
+        expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,false)}).to.not.throw();
         expect(QOG.prototype.zones['Siwa'].units['1st Patrol']).to.equal(QOG.prototype.units['1st Patrol']);
+        expect(QOG.prototype.zones['Siwa'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
         const imgs = document.getElementById('strategicMap').getElementsByTagName('img');
         expect (imgs.length).to.equal(2);
         expect(imgs[1].src).to.equal('http://localhost/patrol1.png');
@@ -141,10 +145,45 @@ describe ('[main QOG MJS] init functions work well',()=>{
         coords=coords.split(',');
         expect(imgs[1].style.top).to.equal(Number(coords[1])+5+"px");
         expect(imgs[1].style.left).to.equal(Number(coords[0])+5+"px");
+
+        // verify for Axis opponent that we can desallow drag&drop when an axis unit is in the zone
+        QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        QOG.prototype.placeUnits(jsonZoneDesc,true); 
+        expect(QOG.prototype.zones['Siwa'].Element.ondragover).to.be.null;
+
         globalThis.document = globalThis.window = undefined;
     });
 
-    it('is possible tout initiate a scenario and all units with QOG',()=>{
+    it('is possible to initiate ramdomly define units for a given ground type',()=>{
+        const boardHTML = "<div id='strategicMap' class='strategicMap'>"+
+                        "<map name='gameBoardMap'><area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>"+
+                        "<area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>"+
+                        "</map><img src='/strategicMap.png' style='width:1100px;'usemap='#gameBoardMap'></div>";
+        
+        const jsonDesc ={"town":["random",
+                {"name":"1st Patrol"},
+                {"name":"Axis1"}
+            ]};
+        
+        window = new JSDOM(boardHTML,{url:'http://localhost/'}).window;
+        globalThis.window = window;
+        globalThis.document = globalThis.window.document;
+        QOG.prototype.units = [];    
+        QOG.prototype.zones= [];
+        const area = document.getElementById('Siwa');
+        QOG.prototype.zones['townSiwa'] = new zone (area,'townSiwa',{"ground":"town"});
+        QOG.prototype.zones['townSiwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        QOG.prototype.zones['Siwa'] = new zone (area,'Siwa',{"ground":"town"});
+        QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        
+        expect(()=>{QOG.prototype.randomizeUnit()}).to.throw();
+        expect(()=>{QOG.prototype.randomizeUnit(jsonDesc)}).to.not.throw();
+        //expect(Object.keys(QOG.prototype.zones['townSiwa'].units).length).to.equal(1);
+        //expect(QOG.prototype.zones['townSiwa'].units[0].name).to.be.oneOf(["1st Patrol","Axis1"])
+        //expect(Object.keys(QOG.prototype.zones['Siwa'].units).length).to.equal(0);
+    });
+
+    it('is possible to initiate a scenario and all units with QOG',()=>{
         const dataObject = JSON.parse(fs.readFileSync('./test/UnitTests/json/ScenarioTest.json','utf8'));
         const boardHTML = "<div id='strategicMap' class='strategicMap'>"+
             "<map name='gameBoardMap'><area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>"+
@@ -425,16 +464,17 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
         expect(ev.dataTransfer.getData('fromZone')).to.equal("Siwa");
     });
 
-    it('dragOver & drop handlers stop propagation and give info on movement availability',()=>{
+    it('dragover stop propagation to allow drag & drop',()=>{
         ev.target=document.getElementsByTagName('img')[0];
         QOG.prototype.dragStartHandler(ev);
         ev.target=document.getElementsByTagName('area')[0];
         ev.preventDefault = sinon.spy();
-        QOG.prototype.dragOverHandler(ev);
+        QOG.prototype.dropHandler(ev);
         expect(ev.preventDefault.called).to.be.true;
         
         ev.preventDefault=undefined;
     });
+
 
     it('drop handler move unit in the good place',()=>{
         const patrolImg = document.getElementsByTagName('img')[0];

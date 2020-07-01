@@ -39,7 +39,7 @@ export default class QOG {
         };
         
         for (let areaZone in QOG.prototype.zones ) {
-            QOG.prototype.zones[areaZone].Element.ondragover = QOG.prototype.dragOverHandler;
+            QOG.prototype.zones[areaZone].Element.ondragover=QOG.prototype.dragoverHandler;
             QOG.prototype.zones[areaZone].Element.ondrop = QOG.prototype.dropHandler;
             if(QOG.prototype.zones[areaZone].Element.dataset.links) {
                 let sourceZone=QOG.prototype.zones[areaZone].Element;
@@ -55,20 +55,40 @@ export default class QOG {
 
     }
 
-    placeUnits (jsonDesc) {
+    randomizeUnit(description) {
+        if(!description) throw "ERROR no json description to randomize unit for zones";
+    };
+
+    placeUnits (jsonDesc, IADrived) {
         if(!jsonDesc) throw 'ERROR needs of a json description';
         if((jsonDesc instanceof String)||(typeof jsonDesc === 'string')) throw "ERROR : PlaceUnits => description can't be a string";
         let boardDiv = document.getElementById('strategicMap');
+        let id=0;
         for (let key in jsonDesc) {
-            if (!QOG.prototype.zones[key]) throw 'ERROR bad zone in json';
+            if (!QOG.prototype.zones[key]) {
+                switch (key) {
+                    case oasis:
+                    case village:
+                    case town:
+                    case fort :
+                    case airport:
+                        if(jsonDesc[key][0]==='random') {
+                            const rand = round(MATH.rand()*jsonDesc[key].length)+1;
+                        }
+                        break;
+                    default :throw 'ERROR bad zone in json';
+                }
+            };
             QOG.prototype.zones[key].attach(QOG.prototype.units[jsonDesc[key]]);
+            if (IADrived)
+                QOG.prototype.zones[key].Element.ondragover = "";
             let currentUnit = QOG.prototype.units[jsonDesc[key]];
-            let originLeft=document.getElementById('strategicMap').offsetLeft;
-            let originTop=document.getElementById('strategicMap').offsetTop;
             let image = document.createElement('img');
             image.className = "unit";
             image.src=currentUnit.images['recto'];
             image.name = currentUnit.name;
+            image.id=image.name.replace(/\s+/g, '')+id;
+            id++;
             let zoneCoords = QOG.prototype.zones[key].Element.coords;
             zoneCoords = zoneCoords.split(',');
             let left =Number(zoneCoords[0])+5;
@@ -79,6 +99,7 @@ export default class QOG {
             if (currentUnit.draggable) {
                 image.draggable = "true";
                 image.ondragstart = QOG.prototype.dragStartHandler;
+                image.ondragend = QOG.prototype.dragEndHandler;
             }
             boardDiv.appendChild(image);
         };
@@ -164,7 +185,7 @@ export default class QOG {
                     if (parserOpponentDef[j] === 'localisations'){
                         if (currentScenario.opponent[i][1][parserOpponentDef[j]].zones) {
                             let localisations = currentScenario.opponent[i][1][parserOpponentDef[j]].zones;
-                            QOG.prototype.placeUnits(localisations);
+                            QOG.prototype.placeUnits(localisations,true);
                         }
                     }
 
@@ -186,20 +207,21 @@ export default class QOG {
             };
         };
         event.dataTransfer.setData("fromZone",fromZone);  
+        console.log("start"+event.dataTransfer.getData("fromZone"));
         event.target.classList.add('dragged');   
      }   
 
-     dragOverHandler(event) {
+     dragEndHandler (event) {
+        event.target.classList.remove('dragged');
+     }
+
+     dragoverHandler (event) {
         event.preventDefault();
-        /*const fromZone = QOG.prototype.zones[event.dataTransfer.getData('fromZone')];
-        if (fromZone.moveAllowedTo(QOG.prototype.zones[event.target.id]))
-            event.dataTransfer.dropEffect="move";
-        else event.dataTransfer.dropEffect="none";*/
      }
 
      dropHandler(event) {
-        
         event.preventDefault();
+        
         const Zone = QOG.prototype.zones[event.target.id];
         const fromZone = QOG.prototype.zones[event.dataTransfer.getData('fromZone')];
         const unit2move = QOG.prototype.units[event.dataTransfer.getData('UnitName')];
