@@ -47,7 +47,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         globalThis.document = globalThis.alert = globalThis.window = undefined
     });
 
-    it('is possible to initiate, on client side, the game zones with global',()=>{
+    it('is possible to initiate, on client side, the game zones',()=>{
         const HTML = "<div id='strategicMap' class='strategicMap'>"+
                         "<map name='gameBoardMap'><area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>"+
                         "<area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>"+
@@ -160,27 +160,39 @@ describe ('[main QOG MJS] init functions work well',()=>{
                         "<area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>"+
                         "</map><img src='/strategicMap.png' style='width:1100px;'usemap='#gameBoardMap'></div>";
         
-        const jsonDesc ={"town":["random",
+        const jsonDesc =["random",
                 {"name":"1st Patrol"},
                 {"name":"Axis1"}
-            ]};
-        
+            ];
+        const unitDesc = {"images":{"recto":"/patrol1.png"},
+        "name":"1st Patrol","description":"my first patrol in game"}; 
+
         window = new JSDOM(boardHTML,{url:'http://localhost/'}).window;
         globalThis.window = window;
         globalThis.document = globalThis.window.document;
         QOG.prototype.units = [];    
+        QOG.prototype.units['1st Patrol'] = new unit (
+            unitDesc.images,
+            unitDesc.name,
+            unitDesc.description,
+            {"draggable":true}
+        );
+        QOG.prototype.units['Axis1'] = new unit (
+            unitDesc.images,
+            'Axis1',
+            unitDesc.description,
+            {"draggable":false}
+        );
         QOG.prototype.zones= [];
         const area = document.getElementById('Siwa');
-        QOG.prototype.zones['townSiwa'] = new zone (area,'townSiwa',{"ground":"town"});
-        QOG.prototype.zones['townSiwa'].Element.ondragover=QOG.prototype.dragoverHandler;
-        QOG.prototype.zones['Siwa'] = new zone (area,'Siwa',{"ground":"town"});
-        QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        QOG.prototype.zones['townSiwa'] = new zone (area,'townSiwa',{"ground":"town"});    
         
         expect(()=>{QOG.prototype.randomizeUnit()}).to.throw();
-        expect(()=>{QOG.prototype.randomizeUnit(jsonDesc)}).to.not.throw();
-        //expect(Object.keys(QOG.prototype.zones['townSiwa'].units).length).to.equal(1);
-        //expect(QOG.prototype.zones['townSiwa'].units[0].name).to.be.oneOf(["1st Patrol","Axis1"])
-        //expect(Object.keys(QOG.prototype.zones['Siwa'].units).length).to.equal(0);
+        expect(()=>{QOG.prototype.randomizeUnit(QOG.prototype.zones['townSiwa'],jsonDesc)}).to.not.throw();
+        expect(Object.keys(QOG.prototype.zones['townSiwa'].units).length).to.equal(1);
+        console.log(Object.keys(QOG.prototype.zones['townSiwa'].units));
+        expect(Object.keys(QOG.prototype.zones['townSiwa'].units)[0]).to.be.oneOf(["1st Patrol","Axis1"])
+        
     });
 
     it('is possible to initiate a scenario and all units with QOG',()=>{

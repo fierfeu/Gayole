@@ -55,8 +55,11 @@ export default class QOG {
 
     }
 
-    randomizeUnit(description) {
+    randomizeUnit(zone,description) {
         if(!description) throw "ERROR no json description to randomize unit for zones";
+        const range = description.length -2;
+        const rand = Math.round(Math.random()*range)+1;
+        zone.attach(QOG.prototype.units[description[rand].name]);
     };
 
     placeUnits (jsonDesc, IADrived) {
@@ -207,7 +210,6 @@ export default class QOG {
             };
         };
         event.dataTransfer.setData("fromZone",fromZone);  
-        console.log("start"+event.dataTransfer.getData("fromZone"));
         event.target.classList.add('dragged');   
      }   
 
