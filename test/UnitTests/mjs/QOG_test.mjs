@@ -24,7 +24,11 @@ const HTML =    `<body>
 
                         </div>
                         <div id='strategicMap'>
-                            
+                            <map name='gameBoardMap'>
+                                <area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>
+                                <area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>
+                            </map>
+                            <img src='/strategicMap.png' style='width:1100px;'usemap='#gameBoardMap'>
                         </div>
                     </div>      
                 </body>`;
@@ -48,11 +52,6 @@ describe ('[main QOG MJS] init functions work well',()=>{
     });
 
     it('is possible to initiate, on client side, the game zones',()=>{
-        const HTML = "<div id='strategicMap' class='strategicMap'>"+
-                        "<map name='gameBoardMap'><area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>"+
-                        "<area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>"+
-                        "</map><img src='/strategicMap.png' style='width:1100px;'usemap='#gameBoardMap'></div>";
-
         window = new JSDOM(HTML,{url:'http://localhost/'}).window;
         globalThis.window = window;
         globalThis.document = globalThis.window.document;
@@ -62,7 +61,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect (QOG.prototype.zones['Cross1'].moveAllowedTo(QOG.prototype.zones['Siwa'])).to.be.equal('1');
         expect (QOG.prototype.zones['Cross1'].Element.ondragover).to.be.equal(QOG.prototype.dragoverHandler);
         expect (QOG.prototype.zones['Cross1'].Element.ondrop).to.be.equal(QOG.prototype.dropHandler);
-        globalThis.window = undefined;
+        globalThis.window = globalThis.document = undefined;
     });
 
 
@@ -107,16 +106,59 @@ describe ('[main QOG MJS] init functions work well',()=>{
         )).to.equal('http://localhost/strategicMap.png');
     });
 
-    it('is possible to place units on board',()=>{
-        const boardHTML = "<div id='strategicMap' class='strategicMap'>"+
-                        "<map name='gameBoardMap'><area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>"+
-                        "<area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>"+
-                        "</map><img src='/strategicMap.png' style='width:1100px;'usemap='#gameBoardMap'></div>";
+    it("there's a function to place pieces on board",() =>{
+        let unit2place = new unit(
+            {"recto":"/patrol1.png"},
+            "1st Patrol",
+            "description",
+            {"value":true}
+        );
+        let window = new JSDOM(HTML,{url:'http://localhost/'}).window;
+        globalThis.document = window.document;
+        const area = document.getElementById('Siwa');
+        let zone2use = new zone (area,'Siwa');
+
+        expect(()=>{QOG.prototype.placeAPiece()}).to.throw("ERROR - QOG.placeAPiece : no unit declared");
+        expect(()=>{QOG.prototype.placeAPiece("blabla")}).to.throw("ERROR - QOG.placeAPiece : no unit declared");
+        expect(()=>{QOG.prototype.placeAPiece(unit2place)}).to.throw("ERROR - QOG.PlaceAPiece : No zone declared");
+        expect(()=>{QOG.prototype.placeAPiece(unit2place,"blabla")}).to.throw("ERROR - QOG.PlaceAPiece : No zone declared");
+        expect(()=>{QOG.prototype.placeAPiece(unit2place,zone2use)}).to.not.throw();
+
+        expect(document.getElementsByTagName('img').length).to.equal(2);
+        let thePiece = document.getElementsByTagName('img')[1];
+        expect(thePiece.name).to.equal("1st Patrol");
+        expect(thePiece.src).to.equal("http://localhost/patrol1.png");
+        expect(thePiece.getAttribute("draggable")).to.equal('false');
         
+        unit2place = new unit(
+            {"recto":"/patrol1.png"},
+            "1st Patrol",
+            "description",
+            {"draggable":true}
+        );
+        QOG.prototype.placeAPiece(unit2place,zone2use);
+        expect(document.getElementsByTagName('img').length).to.equal(3);
+        let Piece2 = document.getElementsByTagName('img')[2];
+        expect(Piece2.name).to.equal("1st Patrol");
+        expect(Piece2.src).to.equal("http://localhost/patrol1.png");
+        expect(Piece2.getAttribute("draggable")).to.equal('true');
+        expect(Piece2.ondragstart).to.equal(QOG.prototype.dragStartHandler);
+        expect (thePiece.id).to.not.equal(Piece2.id);
+        let coords=zone2use.Element.coords;
+        coords=coords.split(',');
+        let left =Number(coords[0])+5;
+        let top = Number(coords[1])+5;
+        expect(Piece2.style.top).to.equal(top+"px");
+        expect(Piece2.style.left).to.equal(left+"px");
+
+        globalThis.document = undefined;
+    })
+
+    it('is possible to place units on board',()=>{
         const jsonZoneDesc ={"Siwa":"1st Patrol"};
         const unitDesc = {"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol","description":"my first patrol in game"}; 
-        window = new JSDOM(boardHTML,{url:'http://localhost/'}).window;
+        window = new JSDOM(HTML,{url:'http://localhost/'}).window;
         globalThis.window = window;
         globalThis.document = globalThis.window.document;
         QOG.prototype.units = [];
@@ -138,7 +180,6 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(QOG.prototype.zones['Siwa'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
         const imgs = document.getElementById('strategicMap').getElementsByTagName('img');
         expect (imgs.length).to.equal(2);
-        expect(imgs[1].src).to.equal('http://localhost/patrol1.png');
         expect(imgs[1].getAttribute("draggable")).to.equal('true');
         expect(imgs[1].ondragstart).to.equal(QOG.prototype.dragStartHandler);
         let coords=QOG.prototype.zones['Siwa'].Element.coords;
@@ -155,11 +196,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
     });
 
     it('is possible to initiate ramdomly define units for a given ground type',()=>{
-        const boardHTML = "<div id='strategicMap' class='strategicMap'>"+
-                        "<map name='gameBoardMap'><area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>"+
-                        "<area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>"+
-                        "</map><img src='/strategicMap.png' style='width:1100px;'usemap='#gameBoardMap'></div>";
-        
+      
         const jsonDesc =["random",
                 {"name":"1st Patrol"},
                 {"name":"Axis1"}
@@ -167,7 +204,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         const unitDesc = {"images":{"recto":"/patrol1.png"},
         "name":"1st Patrol","description":"my first patrol in game"}; 
 
-        window = new JSDOM(boardHTML,{url:'http://localhost/'}).window;
+        window = new JSDOM(HTML,{url:'http://localhost/'}).window;
         globalThis.window = window;
         globalThis.document = globalThis.window.document;
         QOG.prototype.units = [];    
@@ -197,11 +234,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
 
     it('is possible to initiate a scenario and all units with QOG',()=>{
         const dataObject = JSON.parse(fs.readFileSync('./test/UnitTests/json/ScenarioTest.json','utf8'));
-        const boardHTML = "<div id='strategicMap' class='strategicMap'>"+
-            "<map name='gameBoardMap'><area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>"+
-            "<area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>"+
-            "</map><img src='/strategicMap.png' style='width:1100px;'usemap='#gameBoardMap'></div>";
-        window = new JSDOM(boardHTML,{url:'http://localhost/'}).window;
+        window = new JSDOM(HTML,{url:'http://localhost/'}).window;
         globalThis.currentScenario = new scenario(scenarList);
         globalThis.document = window.document;
         QOG.prototype.units=[];

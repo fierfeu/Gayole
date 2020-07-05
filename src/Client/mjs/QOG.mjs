@@ -55,11 +55,37 @@ export default class QOG {
 
     }
 
+    placeAPiece (unit4piece,where2place) {
+        if(!unit4piece || !(unit4piece instanceof unit)) throw ("ERROR - QOG.placeAPiece : no unit declared");
+        if(!where2place || !(where2place instanceof zone)) throw("ERROR - QOG.PlaceAPiece : No zone declared");
+
+        let piece = document.createElement('img');
+        piece.className = "unit";
+        piece.src=unit4piece.images['recto'];
+        piece.name = unit4piece.name;
+
+        piece.draggable=false;
+        if (unit4piece.draggable) {
+            piece.draggable = "true";
+            piece.ondragstart = QOG.prototype.dragStartHandler;
+            piece.ondragend = QOG.prototype.dragEndHandler;
+        }
+
+        piece.id=unit4piece.name.replace(/\s+/g, '') + Date.now();
+
+        let coords = where2place.Element.coords.split(',');
+        piece.style.left = (parseInt(coords[0])+5)+'px';
+        piece.style.top = (parseInt(coords[1])+5)+'px';
+
+        document.getElementById('strategicMap').append(piece);
+    }
+
     randomizeUnit(zone,description) {
         if(!description) throw "ERROR no json description to randomize unit for zones";
         const range = description.length -2;
         const rand = Math.round(Math.random()*range)+1;
         zone.attach(QOG.prototype.units[description[rand].name]);
+        QOG.prototype.placeAPiece(QOG.prototype.units[description[rand].name],zone);
     };
 
     placeUnits (jsonDesc, IADrived) {
@@ -85,26 +111,8 @@ export default class QOG {
             QOG.prototype.zones[key].attach(QOG.prototype.units[jsonDesc[key]]);
             if (IADrived)
                 QOG.prototype.zones[key].Element.ondragover = "";
-            let currentUnit = QOG.prototype.units[jsonDesc[key]];
-            let image = document.createElement('img');
-            image.className = "unit";
-            image.src=currentUnit.images['recto'];
-            image.name = currentUnit.name;
-            image.id=image.name.replace(/\s+/g, '')+id;
-            id++;
-            let zoneCoords = QOG.prototype.zones[key].Element.coords;
-            zoneCoords = zoneCoords.split(',');
-            let left =Number(zoneCoords[0])+5;
-            let top = Number(zoneCoords[1])+5;
-            image.style.top = top.toString()+'px';
-            image.style.left= left.toString()+'px';
-            image.draggable=false;
-            if (currentUnit.draggable) {
-                image.draggable = "true";
-                image.ondragstart = QOG.prototype.dragStartHandler;
-                image.ondragend = QOG.prototype.dragEndHandler;
-            }
-            boardDiv.appendChild(image);
+
+            QOG.prototype.placeAPiece(QOG.prototype.units[jsonDesc[key]],QOG.prototype.zones[key]);
         };
 
     }
