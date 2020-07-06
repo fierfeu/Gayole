@@ -92,28 +92,24 @@ export default class QOG {
         if(!jsonDesc) throw 'ERROR needs of a json description';
         if((jsonDesc instanceof String)||(typeof jsonDesc === 'string')) throw "ERROR : PlaceUnits => description can't be a string";
         let boardDiv = document.getElementById('strategicMap');
-        let id=0;
-        for (let key in jsonDesc) {
-            if (!QOG.prototype.zones[key]) {
-                switch (key) {
-                    case oasis:
-                    case village:
-                    case town:
-                    case fort :
-                    case airport:
-                        if(jsonDesc[key][0]==='random') {
+        for (let type in jsonDesc) {
+                switch (type) {
+                    case "town":
+                        if(jsonDesc.town[0]==='random') {
                             const rand = round(MATH.rand()*jsonDesc[key].length)+1;
                         }
                         break;
-                    default :throw 'ERROR bad zone in json';
+                    case "zones" :
+                        for (let key in jsonDesc.zones) {
+                            QOG.prototype.zones[key].attach(QOG.prototype.units[jsonDesc.zones[key]]);
+                            if (IADrived)
+                                QOG.prototype.zones[key].Element.ondragover = "";
+                            QOG.prototype.placeAPiece(QOG.prototype.units[jsonDesc.zones[key]],QOG.prototype.zones[key]);
+                        }
+                        break;
+                    default : throw 'ERROR bad localisation in scenario json';
                 }
             };
-            QOG.prototype.zones[key].attach(QOG.prototype.units[jsonDesc[key]]);
-            if (IADrived)
-                QOG.prototype.zones[key].Element.ondragover = "";
-
-            QOG.prototype.placeAPiece(QOG.prototype.units[jsonDesc[key]],QOG.prototype.zones[key]);
-        };
 
     }
 
@@ -124,6 +120,8 @@ export default class QOG {
             document.getElementById('strategicMap').onmousemove = (event) =>{
                 document.getElementById('dialogZone').innerHTML= "<p>top : "+event.offsetX+ "left :"+event.offsetY+"</p>";
             };
+            // end of explo
+
             document.getElementById('gameBoard').innerHTML = this.responseText;
             document.getElementById('gameBoard').style.display="block";
 
@@ -132,10 +130,6 @@ export default class QOG {
             const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
             QOG.prototype.chooseScenario(ScenariiListe);
             
-
-            // for test only phase
-            document.getElementById("strategicMap").onmousemove = (event) => {
-            document.getElementById("dialogZone").innerHTML="left : "+event.clientX+" top : "+event.clientY};
         }
         
     }
@@ -194,10 +188,7 @@ export default class QOG {
 
                     } 
                     if (parserOpponentDef[j] === 'localisations'){
-                        if (currentScenario.opponent[i][1][parserOpponentDef[j]].zones) {
-                            let localisations = currentScenario.opponent[i][1][parserOpponentDef[j]].zones;
-                            QOG.prototype.placeUnits(localisations,true);
-                        }
+                        QOG.prototype.placeUnits(currentScenario.opponent[i][1][parserOpponentDef[j]],true);
                     }
 
                 }

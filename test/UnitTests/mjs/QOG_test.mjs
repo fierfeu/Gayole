@@ -155,7 +155,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
     })
 
     it('is possible to place units on board',()=>{
-        const jsonZoneDesc ={"Siwa":"1st Patrol"};
+        const jsonZoneDesc ={"zones":{"Siwa":"1st Patrol"}};
         const unitDesc = {"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol","description":"my first patrol in game"}; 
         window = new JSDOM(HTML,{url:'http://localhost/'}).window;
@@ -182,10 +182,6 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect (imgs.length).to.equal(2);
         expect(imgs[1].getAttribute("draggable")).to.equal('true');
         expect(imgs[1].ondragstart).to.equal(QOG.prototype.dragStartHandler);
-        let coords=QOG.prototype.zones['Siwa'].Element.coords;
-        coords=coords.split(',');
-        expect(imgs[1].style.top).to.equal(Number(coords[1])+5+"px");
-        expect(imgs[1].style.left).to.equal(Number(coords[0])+5+"px");
 
         // verify for Axis opponent that we can desallow drag&drop when an axis unit is in the zone
         QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
@@ -238,7 +234,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         globalThis.currentScenario = new scenario(scenarList);
         globalThis.document = window.document;
         QOG.prototype.units=[];
-        let mockedPlaceUnits = sinon.mock(QOG.prototype).expects('placeUnits').once().withArgs({"Siwa":"1st Patrol"});
+        let mockedPlaceUnits = sinon.mock(QOG.prototype).expects('placeUnits').twice();
 
         expect(()=>{QOG.prototype.initScenario(dataObject);}).to.not.throw();
         expect(QOG.prototype.units['1st Patrol']).to.exist;
@@ -268,7 +264,7 @@ describe('[main QOG MJS] scenario parser works well',()=>{
             "short":"short desc"
         },
         "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":{"Siwa":"test"}},
-        "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":""},
+        "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{"town":["random","test1","test2"]}},
         "conditions":{
             "roundNb": 1,
             "returnZone" :["Siwa"],
@@ -335,8 +331,7 @@ describe('[main QOG MJS] scenario parser works well',()=>{
         expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: no returnZone in victory conditions');
         // conditions.testis not mandatory
         QOG.prototype.scenarioParser(goodData);
-        let scenar = currentScenario;
-        expect(scenar.hasOwnProperty('conditions')).to.true;
+        expect(currentScenario.hasOwnProperty('conditions')).to.true;
         //expect(scenar).to.have.key("conditions");
         expect(currentScenario.conditions.roundNb).to.equal(1);
         expect(currentScenario.conditions.returnZone).to.deep.equal(['Siwa']);
@@ -441,13 +436,12 @@ describe('[main QOG MJS] scenario parser works well',()=>{
         };
         expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: no localisations definition for opponent: LRDG');
         QOG.prototype.scenarioParser(goodData);
-        let scenar = currentScenario;
         expect(currentScenario.hasOwnProperty('opponent')).to.true;
         //expect(QOG.prototype.scenario).to.have.key('opponent');
-        expect(scenar.opponent[0]).to.equal(2);
-        expect(scenar.opponent[1][0]).to.equal('LRDG');
-        expect(scenar.opponent[2][0]).to.equal('Axis');
-        let LRDG = scenar.opponent[1][1];
+        expect(currentScenario.opponent[0]).to.equal(2);
+        expect(currentScenario.opponent[1][0]).to.equal('LRDG');
+        expect(currentScenario.opponent[2][0]).to.equal('Axis');
+        let LRDG = currentScenario.opponent[1][1];
         expect(LRDG.hasOwnProperty('units')).to.true;
         expect(LRDG.units).to.equal('test');
         expect(LRDG.hasOwnProperty('detachments')).to.true;
@@ -458,6 +452,14 @@ describe('[main QOG MJS] scenario parser works well',()=>{
         expect(LRDG.localisations.hasOwnProperty('Siwa')).to.true;
         expect(LRDG.localisations.Siwa).to.equal('test');
     });
+
+    it('is possible to place pieces for a given ground type',()=>{
+        QOG.prototype.scenarioParser(goodData);
+        let Axis = currentScenario.opponent[2][1];
+        expect(Axis.localisations.hasOwnProperty('town')).to.true;
+        expect(Array.isArray(Axis.localisations.town)).to.true;
+        expect(Axis.localisations.town[0]).to.equal('random');
+    })
 
 });
 
