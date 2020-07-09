@@ -26,7 +26,7 @@ const HTML =    `<body>
                         <div id='strategicMap'>
                             <map name='gameBoardMap'>
                                 <area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'>
-                                <area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>
+                                <area shape='rect' id='Cross1' data-ground="desert" data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>
                             </map>
                             <img src='/strategicMap.png' style='width:1100px;'usemap='#gameBoardMap'>
                         </div>
@@ -51,7 +51,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         globalThis.document = globalThis.alert = globalThis.window = undefined
     });
 
-    it('is possible to initiate, on client side, the game zones',()=>{
+    it('is possible to initiate the game zones with all datas',()=>{
         window = new JSDOM(HTML,{url:'http://localhost/'}).window;
         globalThis.window = window;
         globalThis.document = globalThis.window.document;
@@ -61,6 +61,8 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect (QOG.prototype.zones['Cross1'].moveAllowedTo(QOG.prototype.zones['Siwa'])).to.be.equal('1');
         expect (QOG.prototype.zones['Cross1'].Element.ondragover).to.be.equal(QOG.prototype.dragoverHandler);
         expect (QOG.prototype.zones['Cross1'].Element.ondrop).to.be.equal(QOG.prototype.dropHandler);
+        expect(QOG.prototype.zones['Cross1'].hasOwnProperty('ground')).to.true;
+        expect(QOG.prototype.zones['Cross1'].ground).to.equal('desert');
         globalThis.window = globalThis.document = undefined;
     });
 
@@ -154,7 +156,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         globalThis.document = undefined;
     })
 
-    it('is possible to place units on board',()=>{
+    it('is possible to place units on board with a zone definition',()=>{
         const jsonZoneDesc ={"zones":{"Siwa":"1st Patrol"}};
         const unitDesc = {"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol","description":"my first patrol in game"}; 
@@ -191,6 +193,32 @@ describe ('[main QOG MJS] init functions work well',()=>{
         globalThis.document = globalThis.window = undefined;
     });
 
+    it('is possible to place units randomly for a given type of ground',()=>{
+        const jsonZoneDesc ={"town":["random",{"name":"1st Patrol"}]};
+        const unitDesc = {"images":{"recto":"/patrol1.png"},
+                "name":"1st Patrol","description":"my first patrol in game"}; 
+        window = new JSDOM(HTML,{url:'http://localhost/'}).window;
+        globalThis.document = window.document;
+        QOG.prototype.units = [];
+        QOG.prototype.units['1st Patrol'] = new unit (
+            unitDesc.images,
+            unitDesc.name,
+            unitDesc.description,
+            {"draggable":false}
+        );
+        QOG.prototype.zones=[];
+        // initZones Simulation
+        const area = document.getElementById('Siwa');
+        QOG.prototype.zones['Siwa'] = new zone (area,'Siwa');
+        QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        QOG.prototype.zones['Siwa'].ground="town";
+
+        expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,true)}).to.not.throw();
+        expect(QOG.prototype.zones['Siwa'].units['1st Patrol']).to.exist;
+        expect(QOG.prototype.zones['Siwa'].Element.ondragover).to.be.null;
+
+    });
+
     it('is possible to initiate ramdomly define units for a given ground type',()=>{
       
         const jsonDesc =["random",
@@ -223,7 +251,6 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(()=>{QOG.prototype.randomizeUnit()}).to.throw();
         expect(()=>{QOG.prototype.randomizeUnit(QOG.prototype.zones['townSiwa'],jsonDesc)}).to.not.throw();
         expect(Object.keys(QOG.prototype.zones['townSiwa'].units).length).to.equal(1);
-        console.log(Object.keys(QOG.prototype.zones['townSiwa'].units));
         expect(Object.keys(QOG.prototype.zones['townSiwa'].units)[0]).to.be.oneOf(["1st Patrol","Axis1"])
         
     });

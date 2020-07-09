@@ -51,6 +51,8 @@ export default class QOG {
                 };
                 
             };
+            if(QOG.prototype.zones[areaZone].Element.dataset.hasOwnProperty('ground'))
+            QOG.prototype.zones[areaZone].ground = QOG.prototype.zones[areaZone].Element.dataset.ground;
         };
 
     }
@@ -84,6 +86,7 @@ export default class QOG {
         if(!description) throw "ERROR no json description to randomize unit for zones";
         const range = description.length -2;
         const rand = Math.round(Math.random()*range)+1;
+        console.log(description[rand].name + " rand =" + rand);
         zone.attach(QOG.prototype.units[description[rand].name]);
         QOG.prototype.placeAPiece(QOG.prototype.units[description[rand].name],zone);
     };
@@ -91,12 +94,17 @@ export default class QOG {
     placeUnits (jsonDesc, IADrived) {
         if(!jsonDesc) throw 'ERROR needs of a json description';
         if((jsonDesc instanceof String)||(typeof jsonDesc === 'string')) throw "ERROR : PlaceUnits => description can't be a string";
-        let boardDiv = document.getElementById('strategicMap');
+        
         for (let type in jsonDesc) {
                 switch (type) {
                     case "town":
                         if(jsonDesc.town[0]==='random') {
-                            const rand = round(MATH.rand()*jsonDesc[key].length)+1;
+                            for(const zoneName in QOG.prototype.zones) {
+                               if (QOG.prototype.zones[zoneName].ground === 'town') 
+                                QOG.prototype.randomizeUnit(QOG.prototype.zones[zoneName],jsonDesc.town);
+                                if (IADrived)
+                                    QOG.prototype.zones[zoneName].Element.ondragover = "";
+                            }
                         }
                         break;
                     case "zones" :

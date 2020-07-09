@@ -40,7 +40,7 @@
                 },
                 {"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_1.png"},
                 "name":"German St2",
-                "description":"",
+                "description":"bla bla",
                 "values":{"draggable":false,"nameFC":"German Force"}
                 }
             ]
@@ -54,12 +54,12 @@
         "localisations" : {
             "zones" : {
                 "Jagahbub":"Italian St1",
-                "Msus":"Italian St1"
+                "MSus":"Italian St1"
             },
             "town" : [
                 "random",
-                "Italian St1",
-                "German St2"
+                {"name":"Italian St1"},
+                {"name":"German St2"}
             ]
         }
     },
