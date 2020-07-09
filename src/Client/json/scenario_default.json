@@ -6,9 +6,18 @@
     },
     "LRDG":{
         "units":{
-            "Nb": 0,
+            "Nb": 2,
             "unitsDesc":[
-                
+                {"images":{"recto":"/LRDG-T2A-recto.png","verso":"/LRDG-T2A-verso.png"},
+                "name":"LRDGT2A",
+                "description":"unit Australienne T2-A",
+                "values":{"draggable":true}
+                },
+                {"images":{"recto":"/LRDG-T2B-recto.png","verso":"/LRDG-T2B-verso.png"},
+                "name":"LRDGT2B",
+                "description":"unit Australienne T2-B",
+                "values":{"draggable":true}
+                }
             ]
         },
         "detachments" : {
@@ -30,7 +39,7 @@
     },
     "Axis" : {
         "units":{
-            "Nb": 2,
+            "Nb": 6,
             "unitsDesc":
             [
                 {"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_1.png"},
@@ -38,10 +47,30 @@
                 "description":"Unité italienne de force 1",
                 "values":{"draggable":false,"nameFC":"Italian Force"}
                 },
-                {"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_1.png"},
+                {"images":{"recto":"/Axis-FC.png","verso":"/Axis_German_2.png"},
                 "name":"German St2",
                 "description":"bla bla",
                 "values":{"draggable":false,"nameFC":"German Force"}
+                },
+                {"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_2.png"},
+                "name":"Italian St2",
+                "description":"bla bla",
+                "values":{"draggable":false,"nameFC":"Italian Force"}
+                },
+                {"images":{"recto":"/Axis-FC.png","verso":"/Axis_Ger_mob_2.png"},
+                "name":"German mobile St2",
+                "description":"bla bla",
+                "values":{"draggable":false,"nameFC":"German Force"}
+                },
+                {"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_mob_2.png"},
+                "name":"Italian mobile St2",
+                "description":"Unité italienne mobile de force 2",
+                "values":{"draggable":false,"nameFC":"Italian Force"}
+                },
+                {"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_2_vet.png"},
+                "name":"Italian St2 Veteran",
+                "description":"Unité italienne de force 2 expérimentée",
+                "values":{"draggable":false,"nameFC":"Italian Force"}
                 }
             ]
         },
@@ -54,17 +83,21 @@
         "localisations" : {
             "zones" : {
                 "Jagahbub":"Italian St1",
-                "MSus":"Italian St1"
+                "MSus":"German St2",
+                "Benghazi":"Italian mobile St2",
+                "Barça":"German mobile St2"
             },
             "town" : [
                 "random",
                 {"name":"Italian St1"},
-                {"name":"German St2"}
+                {"name":"German St2"},
+                {"name":"Italian St2"},
+                {"name":"Italian St2 Veteran"}
             ]
         }
     },
     "conditions": {
-        "roundNb":3,
+        "roundNb":6,
         "returnZone":["Siwa"],
         "victoryTest":"()=>{return true}"
     }
