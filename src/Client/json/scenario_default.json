@@ -30,7 +30,7 @@
     },
     "Axis" : {
         "units":{
-            "Nb": 1,
+            "Nb": 2,
             "unitsDesc":
             [
                 {"images":{"recto":"/Axis-FC.png","verso":"/Axis_It_1.png"},
