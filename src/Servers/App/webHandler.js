@@ -28,6 +28,15 @@ const sitePagesConf ={
     '/patrol1.png':'src/Client/images/patrol1.png',
     '/Axis-FC.png':'src/Client/images/Axis-FC.png',
     '/Axis_It_1.png':'src/Client/images/Axis_It_1.png',
+    '/LRDG-T2A-recto.png':'src/Client/images/LRDG-T2A-recto.png',
+    '/LRDG-T2A-verso.png':'src/Client/images/LRDG-T2A-verso.png',
+    '/LRDG-T2B-recto.png':'src/Client/images/LRDG-T2B-recto.png',
+    '/LRDG-T2B-verso.png':'src/Client/images/LRDG-T2B-verso.png',
+    '/Axis_German_2.png':'src/Client/images/Axis_German_2.png',
+    '/Axis_It_2.png':'src/Client/images/Axis_It_2.png',
+    '/Axis_Ger_mob_2.png':'src/Client/images/Axis_Ger_mob_2.png',
+    '/Axis_It_mob_2.png':'src/Client/images/Axis_It_mob_2.png',
+    '/Axis_It_2_vet.png':'src/Client/images/Axis_It_2_vet.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };
