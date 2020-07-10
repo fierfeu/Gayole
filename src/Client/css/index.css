@@ -4,6 +4,54 @@ body {
     background-size: cover;
 }
 
+.mark {
+    position:relative;
+    left:600px;
+
+}
+
+.alarm {  
+    width : 56px;
+    height : 55px;
+    border-radius : 6px;
+    border : solid 3px olive;
+    margin: 0 20px 10px 20px;
+    background: url('/AlarmBackground.png') no-repeat;
+    background-position: -113px 0;
+}
+
+.turnNB {
+    margin: 0 30px 10px 20px;
+    margin-bottom: 10px;
+    width : 59px;
+    height : 55px;
+    border-radius : 6px;
+    border : solid 3px olive;
+    background-color:Bisque;
+    font-size: 45px;
+    text-align: center;
+    background-image: url('/chrono.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60%;
+}
+
+.turnNB > span {
+    
+    padding-top: 5px;
+}
+
+.PA {
+    width : 59px;
+    height : 55px;
+    border-radius : 6px;
+    margin: 0 20px 10px 20px;
+    border : solid 3px olive;
+    background-color:Bisque;
+    font-size: 45px;
+    text-align: center;
+}
+
 .unit {
     position:absolute;
     width:30px;
@@ -59,10 +107,10 @@ body {
 
 .dialogZone {
     height : 80px;
-    
     display:flex;
     flex-direction: row;
     align-items: center;
+    justify-content: flex-end;
 }
 
 .strategicMap {
