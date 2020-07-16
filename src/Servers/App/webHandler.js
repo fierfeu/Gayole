@@ -37,6 +37,8 @@ const sitePagesConf ={
     '/Axis_Ger_mob_2.png':'src/Client/images/Axis_Ger_mob_2.png',
     '/Axis_It_mob_2.png':'src/Client/images/Axis_It_mob_2.png',
     '/Axis_It_2_vet.png':'src/Client/images/Axis_It_2_vet.png',
+    '/AlarmBackground.png':"src/Client/images/AlarmBackground.png",
+    '/chrono.png':'src/Client/images/chrono.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };
