@@ -5,7 +5,7 @@
       "js",
       "mjs"
     ],
-    "spec":["test/UnitTests/mjs/class_scenario_test.mjs","test/UnitTests","test/E2E/setUp.js",
+    "spec":["test/UnitTests","test/E2E/setUp.js",
       "test/E2E/e2e-canary.js","test/E2E/MainPage-test.js","test/E2E/gameQOG-test.js"],
     "recursive": true,
     "full-trace": true

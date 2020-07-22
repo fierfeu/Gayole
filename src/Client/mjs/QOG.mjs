@@ -86,7 +86,6 @@ export default class QOG {
         if(!description) throw "ERROR no json description to randomize unit for zones";
         const range = description.length -2;
         const rand = Math.round(Math.random()*range)+1;
-        console.log(description[rand].name + " rand =" + rand);
         zone.attach(QOG.prototype.units[description[rand].name]);
         QOG.prototype.placeAPiece(QOG.prototype.units[description[rand].name],zone);
     };
