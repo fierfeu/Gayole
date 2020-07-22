@@ -187,8 +187,12 @@ describe ('[main QOG MJS] init functions work well',()=>{
 
         // verify for Axis opponent that we can desallow drag&drop when an axis unit is in the zone
         QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        const cross = document.getElementById('Cross1');
+        QOG.prototype.zones['Cross1'] = new zone (cross,'Cross1');
+        QOG.prototype.zones['Cross1'].Element.ondragover=QOG.prototype.dragoverHandler;
         QOG.prototype.placeUnits(jsonZoneDesc,true); 
         expect(QOG.prototype.zones['Siwa'].Element.ondragover).to.be.null;
+        expect(QOG.prototype.zones['Cross1'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
 
         globalThis.document = globalThis.window = undefined;
     });

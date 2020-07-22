@@ -40,6 +40,7 @@ export default class QOG {
         
         for (let areaZone in QOG.prototype.zones ) {
             QOG.prototype.zones[areaZone].Element.ondragover=QOG.prototype.dragoverHandler;
+            console.log(areaZone);
             QOG.prototype.zones[areaZone].Element.ondrop = QOG.prototype.dropHandler;
             if(QOG.prototype.zones[areaZone].Element.dataset.links) {
                 let sourceZone=QOG.prototype.zones[areaZone].Element;
@@ -100,10 +101,12 @@ export default class QOG {
                     case "town":
                         if(jsonDesc.town[0]==='random') {
                             for(const zoneName in QOG.prototype.zones) {
-                               if (QOG.prototype.zones[zoneName].ground === 'town') 
+                               if (QOG.prototype.zones[zoneName].ground === 'town') {
                                 QOG.prototype.randomizeUnit(QOG.prototype.zones[zoneName],jsonDesc.town);
                                 if (IADrived)
                                     QOG.prototype.zones[zoneName].Element.ondragover = "";
+                                console.log(zoneName);
+                                }
                             }
                         }
                         break;
@@ -112,6 +115,7 @@ export default class QOG {
                             QOG.prototype.zones[key].attach(QOG.prototype.units[jsonDesc.zones[key]]);
                             if (IADrived)
                                 QOG.prototype.zones[key].Element.ondragover = "";
+                            console.log(key);
                             QOG.prototype.placeAPiece(QOG.prototype.units[jsonDesc.zones[key]],QOG.prototype.zones[key]);
                         }
                         break;
