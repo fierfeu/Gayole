@@ -79,7 +79,6 @@ describe ('[Game] game Manager manage external ressources loading', ()=>{
         let opts={'url':'/ScenarioTest.json'};
         var request = [];
         XMLHttpRequest.onCreate = (XHR) => {
-            console.log('enter');
             request.push(XHR);
         }
         

@@ -16,7 +16,6 @@ export default class Game {
             return new Promise((resolve,reject)=>{ 
                 loadRequest.open('GET', opts.url);
                 loadRequest.onload = function () {
-                    console.log('xhr onload event called');
                     if (this.status >= 200 && this.status < 300) {
                         resolve(loadRequest.response);
                     } else {
