@@ -15,9 +15,7 @@ var window;
 const scenarList =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
 
 const QOGString = QOG.toString();
-const scenarioString = scenario.toString();
-const ZONEString = zone.toString();
-const unitString = unit.toString();
+const EMPTYHTML = "<body><div id='gameBoard'></div></body>"
 const HTML =    `<body>
                     <div id='gameBoard'>
                         <div id='dialogZone'>
@@ -32,6 +30,41 @@ const HTML =    `<body>
                         </div>
                     </div>      
                 </body>`;
+
+const board =  `<div id='dialogZone' class='dialogZone'></div>
+                <div id='strategicMap' class='strategicMap'>
+                    <script ></script>
+                    <map name='gameBoardMap'>
+                        <area shape='rect' id='Siwa' coords='685,457,726,500' title='Siwa'>
+                    </map>
+                    <img src='/strategicMap.png' style='width:1100px;'>
+                </div>`;
+
+describe('[QOG for gameManager] QOG prototype content good gameManager Interface', ()=>{
+    it('has boards function',()=>{
+        expect(QOG.prototype.boards).to.exist;
+        expect(typeof QOG.prototype.boards).to.equal('function');
+    });
+
+    it('has setUp function',()=>{
+        expect(QOG.prototype.setUp).to.exist;
+        expect(typeof QOG.prototype.setUp).to.equal('function');
+    })
+
+    it('boards function initiate boards for Qui Ose Gagne',async ()=>{
+        globalThis.document = new JSDOM(EMPTYHTML).window.document;
+        globalThis.gameManager={};
+        gameManager.loadExternalRessources = (opts) => {return new Promise((resolve)=>{resolve(board)}) };
+        
+        await QOG.prototype.boards();
+        expect(document.getElementById('strategicMap')).to.exist;
+        expect (document.getElementsByName('gameBoardMap')).to.exist;
+        expect(document.getElementsByName('gameBoardMap')[0].areas.length).to.equal(1);
+        expect(QOG.prototype.zones['Siwa']).to.exist;
+
+        globalThis.document=globalThis.gameManager=undefined;
+    });
+});
 
 describe ('[main QOG MJS] init functions work well',()=>{
 
@@ -64,48 +97,6 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(QOG.prototype.zones['Cross1'].hasOwnProperty('ground')).to.true;
         expect(QOG.prototype.zones['Cross1'].ground).to.equal('desert');
         globalThis.window = globalThis.document = undefined;
-    });
-
-
-    // the next functions are used as callback functions for xhr onload event  
-    
-    it('is possible tout initiate boardGame for QOG',()=>{
-        const context = 'var boardRequest = {"status":200,"responseText":"'+
-            "<div id='dialogZone' class='dialogZone'></div>"+
-            "<div id='strategicMap' class='strategicMap'>"+
-                "<map name='gameBoardMap'><area shape='rect' id='Siwa' data-links='Cross1:1' coords='685,457,726,500'alt='Siwa'>"+
-                "<area shape='rect' id='Cross1' data-links='Siwa:1' coords='674,386,714,426' title='Crossing zone'>"+
-                "</map>"+
-                "<img src='/strategicMap.png' usemap='#gameBoardMap'>"+
-            "</div>"+
-            '"}';
-        
-        window = new JSDOM(HTML,{url:'http://localhost/',runScripts: 'dangerously'}).window;
-        window.alert = window.console.log.bind(window.console);
-        window.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
-        expect(()=>{window.eval(
-            QOGString+";"+
-            ZONEString+"\n"+
-            scenarioString+"\n"+
-            unitString+"\n"+
-            context+";"+
-            "QOG.prototype.initBoardGame.call(boardRequest);"
-        )}).to.not.throw();
-        expect(window.eval("document.getElementById('gameBoard').style.display")).to.equal('block');
-        expect(window.eval(
-            "document.getElementById('gameBoard').getElementsByTagName('div')[1]")).to.exist;
-        expect(window.eval(
-            "document.getElementById('gameBoard').getElementsByTagName('div')[0].id")).to.equal('dialogZone');
-        expect(window.eval(
-            "document.getElementById('gameBoard').getElementsByTagName('div')[1].id")).to.equal('strategicMap');
-        expect(window.eval(
-            "const stratMap = document.getElementById('gameBoard').getElementsByTagName('div')[1];"+
-            "stratMap.getElementsByTagName('img');"
-        )).to.exist;
-        expect(window.eval(
-            "const stratMap = document.getElementById('gameBoard').getElementsByTagName('div')[1];"+
-            "stratMap.getElementsByTagName('img')[0].src;"
-        )).to.equal('http://localhost/strategicMap.png');
     });
 
     it("there's a function to place pieces on board",() =>{
@@ -494,23 +485,6 @@ describe('[main QOG MJS] scenario parser works well',()=>{
 
 });
 
-describe('[main QOG MJS] Create function works well',()=>{
-    it('create function throw errors when bad usage',()=>{
-        const eventInterfaceString = "class eventStorageInterface {constructor (context,storage){this.context=context;this.storage=storage}}";
-        window = new JSDOM(HTML,{url:'http://localhost/'}).window;
-        window.alert = window.console.log.bind(window.console);
-        window.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
-        globalThis.window = window;
-        globalThis.document = window.document;
-        globalThis.alert = window.alert;
-        globalThis.XMLHttpRequest = window.XMLHttpRequest;
-
-        expect (()=>{QOG.prototype.create()}).to.not.throw();
-        expect (()=>{QOG.prototype.create('fierfeu')}).to.not.throw();
-
-        globalThis.window = globalThis.document = globalThis.alert = globalThis.XMLHttpRequest= undefined;
-    });
-});
 
 describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     let ev ={dataTransfer:{}};

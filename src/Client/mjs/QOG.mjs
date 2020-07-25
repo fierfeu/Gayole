@@ -15,20 +15,20 @@ export default class QOG {
         throw ('ERROR QOG is not instanciable');
     }
 
-    create (user) {
-        this.myEventStorageInterface = new eventStorageInterface(window,'localStorage');
-        window.localStorage.setItem('gameLaunched','QOG');
-        if(user) {
-            window.localStorage.setItem('user','user');
-        }
-        if (!XMLHttpRequest) throw "ERROR you can't play Gayole with your current browser : sorry";
-        const boardRequest = new XMLHttpRequest();
-        boardRequest.onload = this.initBoardGame;
-        const url = "/QOG_boardGame.html";
-        boardRequest.open("GET", url);
-        boardRequest.send();
-        QOG.prototype.units=[];
+    boards () {
+        gameManager.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
+            document.getElementById('gameBoard').innerHTML = data;
+            document.getElementById('gameBoard').style.display="block";
+            QOG.prototype.initZones();
+        })
     }
+
+    setUp() {
+        QOG.prototype.units=[];
+        const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
+        QOG.prototype.chooseScenario(ScenariiListe);
+    }
+
 
     initZones () {
         QOG.prototype.zones=[];
@@ -87,7 +87,6 @@ export default class QOG {
         if(!description) throw "ERROR no json description to randomize unit for zones";
         const range = description.length -2;
         const rand = Math.round(Math.random()*range)+1;
-        console.log(description[rand].name + " rand =" + rand);
         zone.attach(QOG.prototype.units[description[rand].name]);
         QOG.prototype.placeAPiece(QOG.prototype.units[description[rand].name],zone);
     };
@@ -125,7 +124,7 @@ export default class QOG {
 
     }
 
-    initBoardGame () {
+/*    initBoardGame () {
         if((this.status >= 200 && this.status < 300) && (this.responseText != null)) 
         {
             // the following code is for explanatory stuff only
@@ -144,7 +143,7 @@ export default class QOG {
             
         }
         
-    }
+    }*/
 
     chooseScenario(liste) {
         if(!liste || !Array.isArray(liste)) throw 'ERROR QOG.chooseScenario needs a scenario list array as input';
