@@ -8,6 +8,27 @@ export default class Game {
         this.currentGame = {};
     }
 
+    loadExternalRessources (opts) {
+        if(!opts) throw('ERROR no ressource descriptor provided');
+        if (XMLHttpRequest) {
+            var loadRequest = new XMLHttpRequest();
+            
+            return new Promise((resolve,reject)=>{ 
+                loadRequest.open('GET', opts.url);
+                loadRequest.onload = function () {
+                    console.log('xhr onload event called');
+                    if (this.status >= 200 && this.status < 300) {
+                        resolve(loadRequest.response);
+                    } else {
+                        reject('ERROR');
+                    }
+                }
+                loadRequest.send();
+            });
+        }
+        else console.log('no XMLHttpRequest');
+    }
+
     getSequence () {
         return this.#sequence;
     }
@@ -19,6 +40,8 @@ export default class Game {
             gameInterface.prototype[this.#sequence[0]].call(this);
             
         if(!gameInterface.prototype[this.#sequence[1]]) throw ('ERROR BAD Game interface in '+ gameInterface.name+' : '+this.#sequence[1]+' not available');
+        if (!(typeof gameInterface.prototype[this.#sequence[1]] === 'function')) throw ('ERROR BAD Game interface in '+ gameInterface.name+' : '+this.#sequence[0]+' is not a function');
+            gameInterface.prototype[this.#sequence[1]].call(this);
 
         if(gameInterface.prototype.getGameName) this.currentGame.name= gameInterface.prototype.getGameName();
 

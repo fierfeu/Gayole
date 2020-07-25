@@ -490,7 +490,7 @@ describe('[main QOG MJS] scenario parser works well',()=>{
 
 });
 
-describe('[main QOG MJS] Create function works well',()=>{
+/*describe('[main QOG MJS] Create function works well',()=>{
     it('create function throw errors when bad usage',()=>{
         const eventInterfaceString = "class eventStorageInterface {constructor (context,storage){this.context=context;this.storage=storage}}";
         window = new JSDOM(HTML,{url:'http://localhost/'}).window;
@@ -500,13 +500,15 @@ describe('[main QOG MJS] Create function works well',()=>{
         globalThis.document = window.document;
         globalThis.alert = window.alert;
         globalThis.XMLHttpRequest = window.XMLHttpRequest;
+        
 
         expect (()=>{QOG.prototype.create()}).to.not.throw();
+        globalThis.gameManager=undefined;
         expect (()=>{QOG.prototype.create('fierfeu')}).to.not.throw();
 
         globalThis.window = globalThis.document = globalThis.alert = globalThis.XMLHttpRequest= undefined;
     });
-});
+});*/
 
 describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     let ev ={dataTransfer:{}};

@@ -4,10 +4,11 @@ import chai from 'chai';
 const expect = chai.expect;
 import jsdom from 'jsdom';
 const {JSDOM} = jsdom;
+import sinon from 'sinon';
+
+const HTML = "<!doctype html><html><body></body></html>";
 
 describe('[Game] game creation tests',()=>{
-
-    const HTML = "<!doctype html><html><body></body></html>";
 
     it('is possible to instanciate one and only one game manager',()=>{
         globalThis.gameManager = undefined;
@@ -68,3 +69,42 @@ describe('[Game] game creation tests',()=>{
         globalThis.gameManager = undefined;
     });
 });
+
+describe ('[Game] game Manager manage external ressources loading', ()=>{
+    it('manage xhr loading with promise',async ()=>{
+        const window= new JSDOM(HTML,{url:'http://localhost'}).window;
+        window.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
+        globalThis.window=window;
+        globalThis.XMLHttpRequest = window.XMLHttpRequest;
+        let opts={'url':'/ScenarioTest.json'};
+        var request = [];
+        XMLHttpRequest.onCreate = (XHR) => {
+            console.log('enter');
+            request.push(XHR);
+        }
+        
+        new Game();
+        var result;
+
+        expect(()=>{ gameManager.loadExternalRessources()}).to.throw('ERROR no ressource descriptor provided');
+        expect(()=>{ gameManager.loadExternalRessources(opts)}).to.not.throw();
+        expect(request.length).to.equal(1);
+        request.pop();
+
+        gameManager.loadExternalRessources(opts).then((data)=>{
+            expect(request[0].url).to.equal('/ScenarioTest.json');
+            expect(data).to.equal("test2");
+        });
+        request[0].respond(200,{ "Content-Type": "text/html" },"test2");
+        request.pop();
+
+        gameManager.loadExternalRessources(opts).then(()=>{expect.fail()}).catch((data)=>{
+            expect(data).to.equal("ERROR");
+        });
+        request[0].respond(404,{ "Content-Type": "text/html" },"ERROR");
+
+        XMLHttpRequest.restore();
+        globalThis.window = undefined;
+        
+    })
+})

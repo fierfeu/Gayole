@@ -3,6 +3,7 @@ import eventStorageInterface from './eventStorageInterface.mjs';
 import unit from './unit.mjs';
 import zone from './zone.mjs';
 import scenario from './scenario.mjs';
+import Game from './game.mjs';
 
 const parserDef =[["name"],["LRDG","Axis"],["roundNb","returnZone"]];
 const OPPONENT = 1;
@@ -15,10 +16,26 @@ export default class QOG {
         throw ('ERROR QOG is not instanciable');
     }
 
+    boards () {
+        console.log('QOG.prototype.boards was called');
+        gameManager.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
+            document.getElementById('gameBoard').innerHTML = data;
+            document.getElementById('gameBoard').style.display="block";
+            QOG.prototype.initZones();
+        })
+    }
+
+    setUp() {
+        console.log('QOG.prototype.setUp was called');
+        QOG.prototype.units=[];
+        const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
+        QOG.prototype.chooseScenario(ScenariiListe);
+    }
+
     create (user) {
-        this.myEventStorageInterface = new eventStorageInterface(window,'localStorage');
+        //this.myEventStorageInterface = new eventStorageInterface(window,'localStorage');
         window.localStorage.setItem('gameLaunched','QOG');
-        if(user) {
+        /*if(user) {
             window.localStorage.setItem('user','user');
         }
         if (!XMLHttpRequest) throw "ERROR you can't play Gayole with your current browser : sorry";
@@ -26,8 +43,10 @@ export default class QOG {
         boardRequest.onload = this.initBoardGame;
         const url = "/QOG_boardGame.html";
         boardRequest.open("GET", url);
-        boardRequest.send();
-        QOG.prototype.units=[];
+        boardRequest.send();*/
+        new Game();
+        gameManager.create(QOG);
+        //QOG.prototype.units=[];
     }
 
     initZones () {
