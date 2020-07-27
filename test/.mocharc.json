@@ -5,8 +5,26 @@
       "js",
       "mjs"
     ],
-    "spec":["test/UnitTests","test/E2E/setUp.js",
-      "test/E2E/e2e-canary.js","test/E2E/MainPage-test.js","test/E2E/gameQOG-test.js"],
+    "spec":[
+      "test/UnitTests/canary_test.js",
+      "test/UnitTests/App",
+      "test/UnitTests/HTML/jsdom-canary_test.js",
+      "test/UnitTests/HTML/mainMenu_test.js",
+      "test/UnitTests/HTML/game_board_test.mjs",
+      "test/UnitTests/css/css_test.js",
+      "test/UnitTests/js/QOGHead_test.js",
+      "test/UnitTests/mjs/class_scenario_test.mjs",
+      "test/UnitTests/mjs/class_unit_test.mjs",
+      "test/UnitTests/mjs/class_zone_test.mjs",
+      "test/UnitTests/mjs/Class_Menu_test.mjs",
+      "test/UnitTests/mjs/eventManager_test.mjs",
+      "test/UnitTests/mjs/Module_Interfaces_test.mjs",
+      "test/UnitTests/mjs/game_test.mjs",
+      "test/UnitTests/mjs/QOG_test.mjs",
+      "test/E2E/setUp.js",
+      "test/E2E/e2e-canary.js",
+      "test/E2E/MainPage-test.js",
+      "test/E2E/gameQOG-test.js"],
     "recursive": true,
     "full-trace": true
   }
