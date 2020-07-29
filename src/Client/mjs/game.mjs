@@ -6,6 +6,7 @@ export default class Game {
         globalThis.gameManager = this;
         this.#sequence =['boards','setUp','run']
         this.currentGame = {};
+        this.currentScenario=[];
     }
 
     loadExternalRessources (opts) {
