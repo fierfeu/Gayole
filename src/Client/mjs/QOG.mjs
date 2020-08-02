@@ -16,22 +16,23 @@ export default class QOG {
     }
 
     boards () {
-        gameManager.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
+        this.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
             document.getElementById('gameBoard').innerHTML = data;
             document.getElementById('gameBoard').style.display="block";
-            QOG.prototype.initZones();
-        })
+            QOG.prototype.initZones(this);
+        }).catch((err)=>{console.log(err)});
     }
 
     setUp() {
-        QOG.prototype.units=[];
-        const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
-        QOG.prototype.chooseScenario(ScenariiListe);
+        const scenarioURL="/scenario_default.json";
+        this.loadExternalRessources(scenarioURL).then ((data)=>{
+            //QOG.prototype.scenarioParser(JSON.parse(data));
+        }).catch((err)=>{console.log(err)});
     }
 
 
-    initZones () {
-        QOG.prototype.zones=[];
+    initZones (gameManager) {
+        QOG.prototype.zones={};
         const map= document.getElementsByName('gameBoardMap');
         const gameZones = map[0].areas;
         for(let area=0; area< gameZones.length;area++) {
@@ -40,7 +41,6 @@ export default class QOG {
         
         for (let areaZone in QOG.prototype.zones ) {
             QOG.prototype.zones[areaZone].Element.ondragover=QOG.prototype.dragoverHandler;
-            console.log(areaZone);
             QOG.prototype.zones[areaZone].Element.ondrop = QOG.prototype.dropHandler;
             if(QOG.prototype.zones[areaZone].Element.dataset.links) {
                 let sourceZone=QOG.prototype.zones[areaZone].Element;
@@ -55,7 +55,7 @@ export default class QOG {
             if(QOG.prototype.zones[areaZone].Element.dataset.hasOwnProperty('ground'))
             QOG.prototype.zones[areaZone].ground = QOG.prototype.zones[areaZone].Element.dataset.ground;
         };
-
+        if (gameManager) gameManager.zones = QOG.prototype.zones;
     }
 
     placeAPiece (unit4piece,where2place) {
@@ -104,7 +104,6 @@ export default class QOG {
                                 QOG.prototype.randomizeUnit(QOG.prototype.zones[zoneName],jsonDesc.town);
                                 if (IADrived)
                                     QOG.prototype.zones[zoneName].Element.ondragover = "";
-                                console.log(zoneName);
                                 }
                             }
                         }
@@ -114,7 +113,6 @@ export default class QOG {
                             QOG.prototype.zones[key].attach(QOG.prototype.units[jsonDesc.zones[key]]);
                             if (IADrived)
                                 QOG.prototype.zones[key].Element.ondragover = "";
-                            console.log(key);
                             QOG.prototype.placeAPiece(QOG.prototype.units[jsonDesc.zones[key]],QOG.prototype.zones[key]);
                         }
                         break;
@@ -124,26 +122,6 @@ export default class QOG {
 
     }
 
-/*    initBoardGame () {
-        if((this.status >= 200 && this.status < 300) && (this.responseText != null)) 
-        {
-            // the following code is for explanatory stuff only
-            document.getElementById('strategicMap').onmousemove = (event) =>{
-                document.getElementById('dialogZone').innerHTML= "<p>top : "+event.offsetX+ "left :"+event.offsetY+"</p>";
-            };
-            // end of explo
-
-            document.getElementById('gameBoard').innerHTML = this.responseText;
-            document.getElementById('gameBoard').style.display="block";
-
-            QOG.prototype.initZones();
-
-            const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
-            QOG.prototype.chooseScenario(ScenariiListe);
-            
-        }
-        
-    }*/
 
     chooseScenario(liste) {
         if(!liste || !Array.isArray(liste)) throw 'ERROR QOG.chooseScenario needs a scenario list array as input';

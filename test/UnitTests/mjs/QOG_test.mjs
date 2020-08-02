@@ -40,7 +40,28 @@ const board =  `<div id='dialogZone' class='dialogZone'></div>
                     <img src='/strategicMap.png' style='width:1100px;'>
                 </div>`;
 
+const SCENAR = `{
+                    "description":{
+                        "name":"testName",
+                        "long":"longue description",
+                        "short":"short desc"
+                    },
+                    "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":{"Siwa":"test"}},
+                    "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{"town":["random","test1","test2"]}},
+                    "conditions":{
+                        "roundNb": 1,
+                        "returnZone" :["Siwa"],
+                        "victoryTest":"()=>{return true}"
+                    }
+                }`;
+
 describe('[QOG for gameManager] QOG prototype content good gameManager Interface', ()=>{
+    const sandbox = sinon.createSandbox();
+
+    after(()=>{
+        sandbox.restore();
+    })
+
     it('has boards function',()=>{
         expect(QOG.prototype.boards).to.exist;
         expect(typeof QOG.prototype.boards).to.equal('function');
@@ -53,20 +74,36 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
 
     it('boards function initiate boards for Qui Ose Gagne',async ()=>{
         globalThis.document = new JSDOM(EMPTYHTML).window.document;
-        globalThis.gameManager={};
+        let gameManager={};
         gameManager.loadExternalRessources = (opts) => {return new Promise((resolve)=>{resolve(board)}) };
+        let initZonesSpy = sandbox.spy(QOG.prototype,"initZones");
         
-        await QOG.prototype.boards();
+        await QOG.prototype.boards.call(gameManager);
         expect(document.getElementById('strategicMap')).to.exist;
         expect (document.getElementsByName('gameBoardMap')).to.exist;
         expect(document.getElementsByName('gameBoardMap')[0].areas.length).to.equal(1);
-        expect(QOG.prototype.zones['Siwa']).to.exist;
+        expect(initZonesSpy.calledOnceWith(gameManager)).to.true;
 
-        globalThis.document=globalThis.gameManager=undefined;
+        globalThis.document=undefined;
+        initZonesSpy.restore();
+    });
+
+    it('setUp function initiate scenario data and pieces for the game QOG',()=>{
+        globalThis.document = new JSDOM(HTML).window.document;
+        let gameManager = {};
+        gameManager.zones={};
+        gameManager.zones['Siwa'] = new zone (document.getElementById('Siwa'),'Siwa');
+        gameManager.loadExternalRessources = (opts) => {return new Promise((resolve)=>{resolve(SCENAR)}) };
+        const parserSpy = sandbox.spy(QOG.prototype,"scenarioParser");
+
+        expect (async () => { await QOG.prototype.setUp.call(gameManager)}).to.not.throw();
+        //expect (parserSpy.calledOnce).to.true;
+
+        globalThis.document=undefined;
     });
 });
 
-describe ('[main QOG MJS] init functions work well',()=>{
+describe ('[QOG] init functions work well',()=>{
 
     it('chooseScenario authorize to select a scenario and return his name to build url to json file',()=>{
         window = new JSDOM('',{url:'http://localhost/'}).window;
@@ -98,6 +135,13 @@ describe ('[main QOG MJS] init functions work well',()=>{
         expect(QOG.prototype.zones['Cross1'].ground).to.equal('desert');
         globalThis.window = globalThis.document = undefined;
     });
+
+    it ('ispossible to load Zones data in a given object if provided as a parameter',()=>{
+        globalThis.document =new JSDOM(HTML).window.document;
+        let gameManager={};
+        expect (()=>{QOG.prototype.initZones(gameManager)}).to.not.throw();
+        expect (gameManager.zones['Siwa']).to.exist;
+    })
 
     it("there's a function to place pieces on board",() =>{
         let unit2place = new unit(
@@ -267,7 +311,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
         globalThis.document=undefined;
     });
 
-    it('is not possible to instanciate a new QOG object',()=>{
+    it('is not possible to instanciate any QOG object',()=>{
         const eventInterfaceString = "class eventStorageInterface {constructor (context,storage){this.context=context;this.storage=storage}}";
         window = new JSDOM(HTML,{url:'http://localhost/',runScripts: 'dangerously'}).window;
         expect(()=>{window.eval(
@@ -278,7 +322,7 @@ describe ('[main QOG MJS] init functions work well',()=>{
     });
 });
 
-describe('[main QOG MJS] scenario parser works well',()=>{
+describe('[QOG] scenario parser works well',()=>{
     const goodData = {
         "description":{
             "name":"testName",
