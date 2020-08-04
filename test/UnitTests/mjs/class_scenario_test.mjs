@@ -7,14 +7,37 @@ import jsdom from 'jsdom';
 const {JSDOM} = jsdom;
 
 const ScenariiListe =[["Default Scenario","This is the first scenario to learn how to play","/scenario_default.json"]];
-
+const SCENAR = {
+    "description":{
+        "name":"testName",
+        "long":"longue description",
+        "short":"short desc"
+    },
+    "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":{"Siwa":"test"}},
+    "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{"town":["random","test1","test2"]}},
+    "conditions":{
+        "roundNb": 1,
+        "returnZone" :["Siwa"],
+        "victoryTest":"()=>{return true}"
+    }
+}
 sinon.restore();
 
 describe ('[Scenario CLass] is instanciable',()=>{
     
+    it ('is possible to create a new instance with no param',()=>{
+        sinon.spy (scenario.prototype,"addScenarioData");
+        
+        expect (()=>{new scenario()}).to.not.throw();
+        let current = new scenario();
+        current.select();
+        expect(scenario.prototype.addScenarioData.calledOnce).to.true;
+        
+        scenario.prototype.addScenarioData.restore();
+    });
+    
     it('is possible to create a scenario instance with a scenarii Liste', ()=>{
         let loader = ()=>{};
-        expect(() =>{new scenario()}).to.throw('No liste of scenarii provided');
         expect(() =>{new scenario('somethingwrong')}).to.throw('BAD liste of scenarii provided');
         expect(() =>{new scenario(ScenariiListe)}).to.not.throw();
         let scenar = new scenario(ScenariiListe);
@@ -105,5 +128,13 @@ describe('[scenario Class] allow to select a scenario and load content',()=>{
         currentScenario.loader.restore();
         globalThis.XMLHttpRequest= undefined;
         globalThis.currentScenario=undefined;
+    });
+
+    it ('is possible to add data to a scenario instance',()=>{
+        let current = new scenario();
+
+        current.addScenarioData({"opponents":"test","localisation":"test2"});
+        expect (current.opponents).to.equal('test');
+        expect (current.localisation).to.equal('test2');
     });
 });

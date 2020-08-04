@@ -40,6 +40,7 @@ const sitePagesConf ={
     '/Axis_It_2_vet.png':'src/Client/images/Axis_It_2_vet.png',
     '/AlarmBackground.png':"src/Client/images/AlarmBackground.png",
     '/chrono.png':'src/Client/images/chrono.png',
+    '/PA.png':'src/Client/images/PA.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };

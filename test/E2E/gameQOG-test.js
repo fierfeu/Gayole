@@ -22,10 +22,10 @@ describe('[QOG Game user Tests]',()=>{
         it('Game creation button behavior verification',async ()=>{
             const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.tagName('button'));
             await buttons[0].click();
-            await browser.wait(until.alertIsPresent());
-            let alert = await browser.switchTo().alert();
-            expect(await alert.getText()).to.equal(alertText);
-            await alert.accept();
+            //await browser.wait(until.alertIsPresent());
+            //let alert = await browser.switchTo().alert();
+            //expect(await alert.getText()).to.equal(alertText);
+            //await alert.accept();
             const gameLaunched = await browser.executeScript("return window.localStorage.getItem('gameLaunched');");
             expect(gameLaunched).to.equal('QOG');
         });
@@ -43,8 +43,8 @@ describe('[QOG Game user Tests]',()=>{
         it('unit drag and drop',async ()=>{
             const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.tagName('button'));
             await buttons[0].click();
-            await browser.wait(until.alertIsPresent());
-            await browser.switchTo().alert().accept();
+            //await browser.wait(until.alertIsPresent());
+            //await browser.switchTo().alert().accept();
             
             await browser.wait(until.elementLocated(By.css('.unit')),4000);
             
