@@ -17,7 +17,7 @@ body {
     border : solid 3px olive;
     margin: 0 20px 10px 20px;
     background: url('/AlarmBackground.png') no-repeat;
-    background-position: -113px 0;
+    background-position: 0 0;
 }
 
 .turnNB {
@@ -32,12 +32,11 @@ body {
     text-align: center;
     background-image: url('/chrono.png');
     background-repeat: no-repeat;
-    background-position: center;
-    background-size: 60%;
+    background-position: bottom right;
+    background-size: 35%;
 }
 
 .turnNB > span {
-    
     padding-top: 5px;
 }
 
@@ -50,6 +49,10 @@ body {
     background-color:Bisque;
     font-size: 45px;
     text-align: center;
+    background-image: url('/PA.png');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-size: 35%;
 }
 
 .unit {

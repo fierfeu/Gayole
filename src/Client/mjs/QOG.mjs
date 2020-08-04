@@ -1,14 +1,13 @@
 import eventStorageInterface from './eventStorageInterface.mjs';
-//import eventManager from './eventManager.mjs';
 import unit from './unit.mjs';
 import zone from './zone.mjs';
+import Scenario from './scenario.mjs';
 import scenario from './scenario.mjs';
 
 const parserDef =[["name"],["LRDG","Axis"],["roundNb","returnZone"]];
 const OPPONENT = 1;
 const VICOND =2;
 const parserOpponentDef = ["units","detachments","patrols","localisations"];
-var jsonhttp,boardRequest;
 
 export default class QOG {
     constructor () {
@@ -20,13 +19,18 @@ export default class QOG {
             document.getElementById('gameBoard').innerHTML = data;
             document.getElementById('gameBoard').style.display="block";
             QOG.prototype.initZones(this);
-        }).catch((err)=>{console.log(err)});
+        }).catch((err)=>{
+            throw err;
+        });
     }
 
     setUp() {
         const scenarioURL="/scenario_default.json";
-        this.loadExternalRessources(scenarioURL).then ((data)=>{
-            //QOG.prototype.scenarioParser(JSON.parse(data));
+        this.loadExternalRessources({'url':scenarioURL}).then ((data)=>{
+            QOG.prototype.scenarioParser(JSON.parse(data),this);
+            QOG.prototype.initScenario.call(this,this.currentScenario);
+            let turn = document.getElementById('turn').getElementsByTagName('span')[0];
+            turn.innerHTML = this.currentScenario.conditions.roundNb;
         }).catch((err)=>{console.log(err)});
     }
 
@@ -58,7 +62,7 @@ export default class QOG {
         if (gameManager) gameManager.zones = QOG.prototype.zones;
     }
 
-    placeAPiece (unit4piece,where2place) {
+    placeAPiece (unit4piece,where2place,) {
         if(!unit4piece || !(unit4piece instanceof unit)) throw ("ERROR - QOG.placeAPiece : no unit declared");
         if(!where2place || !(where2place instanceof zone)) throw("ERROR - QOG.PlaceAPiece : No zone declared");
 
@@ -83,37 +87,37 @@ export default class QOG {
         document.getElementById('strategicMap').append(piece);
     }
 
-    randomizeUnit(zone,description) {
+    randomizeUnit(zone,description,manager) {
         if(!description) throw "ERROR no json description to randomize unit for zones";
         const range = description.length -2;
         const rand = Math.round(Math.random()*range)+1;
-        zone.attach(QOG.prototype.units[description[rand].name]);
-        QOG.prototype.placeAPiece(QOG.prototype.units[description[rand].name],zone);
+        zone.attach(manager.units[description[rand].name]);
+        QOG.prototype.placeAPiece(manager.units[description[rand].name],zone);
     };
 
-    placeUnits (jsonDesc, IADrived) {
+    placeUnits (jsonDesc, IADrived,manager) {
         if(!jsonDesc) throw 'ERROR needs of a json description';
         if((jsonDesc instanceof String)||(typeof jsonDesc === 'string')) throw "ERROR : PlaceUnits => description can't be a string";
-        
+        if (!manager && (typeof manager != 'object')) throw 'ERROR placeUnits needs an objetc to store units';
         for (let type in jsonDesc) {
                 switch (type) {
                     case "town":
                         if(jsonDesc.town[0]==='random') {
-                            for(const zoneName in QOG.prototype.zones) {
-                               if (QOG.prototype.zones[zoneName].ground === 'town') {
-                                QOG.prototype.randomizeUnit(QOG.prototype.zones[zoneName],jsonDesc.town);
+                            for(const zoneName in manager.zones) {
+                               if (manager.zones[zoneName].ground === 'town') {
+                                QOG.prototype.randomizeUnit(manager.zones[zoneName],jsonDesc.town,manager);
                                 if (IADrived)
-                                    QOG.prototype.zones[zoneName].Element.ondragover = "";
+                                    manager.zones[zoneName].Element.ondragover = "";
                                 }
                             }
                         }
                         break;
                     case "zones" :
                         for (let key in jsonDesc.zones) {
-                            QOG.prototype.zones[key].attach(QOG.prototype.units[jsonDesc.zones[key]]);
+                            manager.zones[key].attach(manager.units[jsonDesc.zones[key]]);
                             if (IADrived)
-                                QOG.prototype.zones[key].Element.ondragover = "";
-                            QOG.prototype.placeAPiece(QOG.prototype.units[jsonDesc.zones[key]],QOG.prototype.zones[key]);
+                                manager.zones[key].Element.ondragover = "";
+                            QOG.prototype.placeAPiece(manager.units[jsonDesc.zones[key]],manager.zones[key]);
                         }
                         break;
                     default : throw 'ERROR bad localisation in scenario json';
@@ -122,20 +126,13 @@ export default class QOG {
 
     }
 
-
-    chooseScenario(liste) {
-        if(!liste || !Array.isArray(liste)) throw 'ERROR QOG.chooseScenario needs a scenario list array as input';
-        window.currentScenario = new scenario(liste,false,QOG.prototype.initScenario);
-        window.currentScenario.select();
-        
-    }
-
-    scenarioParser (data) {
+    scenarioParser (data,manager) {
         if(!data) throw ('ERROR no scenario data to parse : no scenario initiated');
         if(!(typeof(data)==='object')) throw ('ERROR badly formated scenario data to parse: no scenario initiated');
         
         if(!data.hasOwnProperty('description')) throw ('ERROR badly formated object : keys are missing: no scenario description Object');
         if(!data.hasOwnProperty('conditions')) throw ('ERROR badly formated object : keys are missing: no vitory conditions defined');
+        let currentScenario={};
         currentScenario.opponent=[];
         currentScenario.opponent[0]=2;
         currentScenario.opponent[1] = parserDef[OPPONENT][0];
@@ -157,11 +154,17 @@ export default class QOG {
                     throw ('ERROR badly formated object : keys are missing: no '+parserOpponentDef[j]+' definition for opponent: '+currentScenario.opponent[i][0]);
             }
         };
+        console.log(currentScenario);
+        if(manager) {
+            manager.currentScenario = new scenario();
+            manager.currentScenario.addScenarioData(currentScenario);
+        } else {
+            return currentScenario;
+        }
     }
 
-    initScenario (data) {
-            
-            QOG.prototype.scenarioParser(data);
+    initScenario (currentScenario) {
+            this.units ={};
             if(!currentScenario.opponent) throw ('ERROR parsing false');
             for (let i=1;i<=currentScenario.opponent[0];i++) {
                 for (let j=0;j< parserOpponentDef.length;j++) {
@@ -169,15 +172,16 @@ export default class QOG {
                         let Nb = currentScenario.opponent[i][1][parserOpponentDef[j]].Nb;
                         let unitsArray = currentScenario.opponent[i][1][parserOpponentDef[j]].unitsDesc;
                         for (let u=0; u< Nb; u++) {
-                            QOG.prototype.units[unitsArray[u].name] = new unit(unitsArray[u].images,
+                            this.units[unitsArray[u].name] = new unit(unitsArray[u].images,
                                 unitsArray[u].name,
                                 unitsArray[u].description,
                                 unitsArray[u].values);
                         }
-
+                    
                     } 
                     if (parserOpponentDef[j] === 'localisations'){
-                        QOG.prototype.placeUnits(currentScenario.opponent[i][1][parserOpponentDef[j]],true);
+                        QOG.prototype.placeUnits(currentScenario.opponent[i][1][parserOpponentDef[j]]
+                            ,true,this);
                     }
 
                 }
@@ -190,8 +194,8 @@ export default class QOG {
         event.dataTransfer.setData("UnitName", event.target.name);
         event.dataTransfer.setData("NbUnits",1);// pour le moment depent si c'et un unit, un detachment ou une patrouille
         let fromZone;
-        for (let [ZoneName,Zone] of Object.entries(QOG.prototype.zones)) {
-            const unit2move = QOG.prototype.units[event.target.name];
+        for (let [ZoneName,Zone] of Object.entries(gameManager.zones)) {
+            const unit2move = gameManager.units[event.target.name];
             if (Zone.isInZone(unit2move)) { 
                 fromZone = ZoneName;
                 break;
@@ -212,9 +216,9 @@ export default class QOG {
      dropHandler(event) {
         event.preventDefault();
         
-        const Zone = QOG.prototype.zones[event.target.id];
-        const fromZone = QOG.prototype.zones[event.dataTransfer.getData('fromZone')];
-        const unit2move = QOG.prototype.units[event.dataTransfer.getData('UnitName')];
+        const Zone = gameManager.zones[event.target.id];
+        const fromZone = gameManager.zones[event.dataTransfer.getData('fromZone')];
+        const unit2move = gameManager.units[event.dataTransfer.getData('UnitName')];
         if (fromZone.moveTo(Zone,unit2move)) {
             const img2move = document.getElementsByName(unit2move.name)[0];
             img2move.style.left = Number(Zone.Element.coords.split(',')[0])+5+"px";

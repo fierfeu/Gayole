@@ -19,7 +19,7 @@ const EMPTYHTML = "<body><div id='gameBoard'></div></body>"
 const HTML =    `<body>
                     <div id='gameBoard'>
                         <div id='dialogZone'>
-
+                            <div Id='turn' class="turnNB warLetters"><span style="display:block;">16</span></div>
                         </div>
                         <div id='strategicMap'>
                             <map name='gameBoardMap'>
@@ -46,7 +46,14 @@ const SCENAR = `{
                         "long":"longue description",
                         "short":"short desc"
                     },
-                    "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":{"Siwa":"test"}},
+                    "LRDG":{"units":{"Nb":1,
+                        "unitsDesc":[
+                            {"images":{"recto":"/LRDG-T2A-recto.png","verso":"/LRDG-T2A-verso.png"},
+                            "name":"LRDGT2A",
+                            "description":"unit Australienne T2-A",
+                            "values":{"draggable":true}
+                            }]
+                            },"detachments":"test","patrols":"test","localisations":{"zones":{"Siwa":"LRDGT2A"}}},
                     "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{"town":["random","test1","test2"]}},
                     "conditions":{
                         "roundNb": 1,
@@ -75,7 +82,9 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
     it('boards function initiate boards for Qui Ose Gagne',async ()=>{
         globalThis.document = new JSDOM(EMPTYHTML).window.document;
         let gameManager={};
-        gameManager.loadExternalRessources = (opts) => {return new Promise((resolve)=>{resolve(board)}) };
+        gameManager.loadExternalRessources = (opts) => {
+            gameManager.load=true;
+            return new Promise((resolve)=>{resolve(board)}) };
         let initZonesSpy = sandbox.spy(QOG.prototype,"initZones");
         
         await QOG.prototype.boards.call(gameManager);
@@ -88,38 +97,35 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
         initZonesSpy.restore();
     });
 
-    it('setUp function initiate scenario data and pieces for the game QOG',()=>{
+    it('setUp function initiate scenario data and pieces for the game QOG',async  ()=>{
         globalThis.document = new JSDOM(HTML).window.document;
         let gameManager = {};
         gameManager.zones={};
         gameManager.zones['Siwa'] = new zone (document.getElementById('Siwa'),'Siwa');
         gameManager.loadExternalRessources = (opts) => {return new Promise((resolve)=>{resolve(SCENAR)}) };
         const parserSpy = sandbox.spy(QOG.prototype,"scenarioParser");
+        const initScenarSpy = sandbox.spy(QOG.prototype,"initScenario");
 
-        expect (async () => { await QOG.prototype.setUp.call(gameManager)}).to.not.throw();
-        //expect (parserSpy.calledOnce).to.true;
+        await QOG.prototype.setUp.call(gameManager);
+        expect (parserSpy.calledOnceWith(JSON.parse(SCENAR),gameManager)).to.true;
+        expect(gameManager.currentScenario).to.exist;
+        expect(gameManager.currentScenario instanceof scenario).to.true;
+        expect(gameManager.currentScenario.opponent[0]).to.equal(2);
+        expect(gameManager.currentScenario.opponent[1][0]).to.equal('LRDG');
+        expect (initScenarSpy.calledOnceWith(gameManager.currentScenario)).to.true;
+        expect(gameManager.units).to.exist;
+        expect(gameManager.units["LRDGT2A"]).to.exist;
+        expect(gameManager.units["LRDGT2A"] instanceof unit).to.true;
+        expect(gameManager.units["LRDGT2A"].name).to.equal("LRDGT2A");
+        expect(gameManager.zones["Siwa"].units["LRDGT2A"]).to.exist;
+        expect(gameManager.zones["Siwa"].units["LRDGT2A"]).to.equal(gameManager.units["LRDGT2A"])
+        expect(document.getElementById('turn').getElementsByTagName('span')[0].innerHTML).to.equal('1');
 
         globalThis.document=undefined;
     });
 });
 
 describe ('[QOG] init functions work well',()=>{
-
-    it('chooseScenario authorize to select a scenario and return his name to build url to json file',()=>{
-        window = new JSDOM('',{url:'http://localhost/'}).window;
-        globalThis.window = window;
-         globalThis.document = globalThis.window.document;
-        let sandBox = sinon.createSandbox();
-        let mockedSelect = sandBox.mock(scenario.prototype).expects('select').once();
-    
-        expect(()=>{QOG.prototype.chooseScenario()}).to.throw();
-        expect(()=>{QOG.prototype.chooseScenario("scenarList")}).to.throw(); 
-        expect(()=>{QOG.prototype.chooseScenario(scenarList)}).to.not.throw();
-        expect(mockedSelect.verify()).to.true;
-        expect (window.currentScenario.scenarii).to.equal(scenarList);
-
-        globalThis.document = globalThis.alert = globalThis.window = undefined
-    });
 
     it('is possible to initiate the game zones with all datas',()=>{
         window = new JSDOM(HTML,{url:'http://localhost/'}).window;
@@ -141,6 +147,7 @@ describe ('[QOG] init functions work well',()=>{
         let gameManager={};
         expect (()=>{QOG.prototype.initZones(gameManager)}).to.not.throw();
         expect (gameManager.zones['Siwa']).to.exist;
+        expect (QOG.prototype.zones['Siwa'] instanceof zone).to.be.true;
     })
 
     it("there's a function to place pieces on board",() =>{
@@ -195,39 +202,38 @@ describe ('[QOG] init functions work well',()=>{
         const jsonZoneDesc ={"zones":{"Siwa":"1st Patrol"}};
         const unitDesc = {"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol","description":"my first patrol in game"}; 
-        window = new JSDOM(HTML,{url:'http://localhost/'}).window;
-        globalThis.window = window;
-        globalThis.document = globalThis.window.document;
-        QOG.prototype.units = [];
-        QOG.prototype.units['1st Patrol'] = new unit (
+        globalThis.document = new JSDOM(HTML,{url:'http://localhost/'}).window.document;
+        let gameManager = {"units":{},"zones":{}};
+        gameManager.units['1st Patrol'] = new unit (
             unitDesc.images,
             unitDesc.name,
             unitDesc.description,
             {"draggable":true}
         );
-        QOG.prototype.zones=[];
+        gameManager.zones={};
         // initZones Simulation
         const area = document.getElementById('Siwa');
-        QOG.prototype.zones['Siwa'] = new zone (area,'Siwa');
-        QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        gameManager.zones['Siwa'] = new zone (area,'Siwa');
+        gameManager.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
         
         expect(()=>{QOG.prototype.placeUnits()}).to.throw('ERROR needs of a json description');
-        expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,false)}).to.not.throw();
-        expect(QOG.prototype.zones['Siwa'].units['1st Patrol']).to.equal(QOG.prototype.units['1st Patrol']);
-        expect(QOG.prototype.zones['Siwa'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
+        expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,false)}).to.throw('ERROR placeUnits needs an objetc to store units');
+        expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,false,gameManager)}).to.not.throw();
+        expect(gameManager.zones['Siwa'].units['1st Patrol']).to.equal(gameManager.units['1st Patrol']);
+        expect(gameManager.zones['Siwa'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
         const imgs = document.getElementById('strategicMap').getElementsByTagName('img');
         expect (imgs.length).to.equal(2);
         expect(imgs[1].getAttribute("draggable")).to.equal('true');
         expect(imgs[1].ondragstart).to.equal(QOG.prototype.dragStartHandler);
 
         // verify for Axis opponent that we can desallow drag&drop when an axis unit is in the zone
-        QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        gameManager.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
         const cross = document.getElementById('Cross1');
-        QOG.prototype.zones['Cross1'] = new zone (cross,'Cross1');
-        QOG.prototype.zones['Cross1'].Element.ondragover=QOG.prototype.dragoverHandler;
-        QOG.prototype.placeUnits(jsonZoneDesc,true); 
-        expect(QOG.prototype.zones['Siwa'].Element.ondragover).to.be.null;
-        expect(QOG.prototype.zones['Cross1'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
+        gameManager.zones['Cross1'] = new zone (cross,'Cross1');
+        gameManager.zones['Cross1'].Element.ondragover=QOG.prototype.dragoverHandler;
+        QOG.prototype.placeUnits(jsonZoneDesc,true, gameManager); 
+        expect(gameManager.zones['Siwa'].Element.ondragover).to.be.null;
+        expect(gameManager.zones['Cross1'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
 
         globalThis.document = globalThis.window = undefined;
     });
@@ -236,25 +242,24 @@ describe ('[QOG] init functions work well',()=>{
         const jsonZoneDesc ={"town":["random",{"name":"1st Patrol"}]};
         const unitDesc = {"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol","description":"my first patrol in game"}; 
-        window = new JSDOM(HTML,{url:'http://localhost/'}).window;
-        globalThis.document = window.document;
-        QOG.prototype.units = [];
-        QOG.prototype.units['1st Patrol'] = new unit (
+        globalThis.document = new JSDOM(HTML,{url:'http://localhost/'}).window.document;
+        let gameManager = {"units":{},"zones":{}}
+        gameManager.units['1st Patrol'] = new unit (
             unitDesc.images,
             unitDesc.name,
             unitDesc.description,
             {"draggable":false}
         );
-        QOG.prototype.zones=[];
+        gameManager.zones=[];
         // initZones Simulation
         const area = document.getElementById('Siwa');
-        QOG.prototype.zones['Siwa'] = new zone (area,'Siwa');
-        QOG.prototype.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
-        QOG.prototype.zones['Siwa'].ground="town";
+        gameManager.zones['Siwa'] = new zone (area,'Siwa');
+        gameManager.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        gameManager.zones['Siwa'].ground="town";
 
-        expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,true)}).to.not.throw();
-        expect(QOG.prototype.zones['Siwa'].units['1st Patrol']).to.exist;
-        expect(QOG.prototype.zones['Siwa'].Element.ondragover).to.be.null;
+        expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,true,gameManager)}).to.not.throw();
+        expect(gameManager.zones['Siwa'].units['1st Patrol']).to.exist;
+        expect(gameManager.zones['Siwa'].Element.ondragover).to.be.null;
 
     });
 
@@ -288,7 +293,7 @@ describe ('[QOG] init functions work well',()=>{
         QOG.prototype.zones['townSiwa'] = new zone (area,'townSiwa',{"ground":"town"});    
         
         expect(()=>{QOG.prototype.randomizeUnit()}).to.throw();
-        expect(()=>{QOG.prototype.randomizeUnit(QOG.prototype.zones['townSiwa'],jsonDesc)}).to.not.throw();
+        expect(()=>{QOG.prototype.randomizeUnit(QOG.prototype.zones['townSiwa'],jsonDesc, QOG.prototype)}).to.not.throw();
         expect(Object.keys(QOG.prototype.zones['townSiwa'].units).length).to.equal(1);
         expect(Object.keys(QOG.prototype.zones['townSiwa'].units)[0]).to.be.oneOf(["1st Patrol","Axis1"])
         
@@ -302,7 +307,8 @@ describe ('[QOG] init functions work well',()=>{
         QOG.prototype.units=[];
         let mockedPlaceUnits = sinon.mock(QOG.prototype).expects('placeUnits').twice();
 
-        expect(()=>{QOG.prototype.initScenario(dataObject);}).to.not.throw();
+        let currentScenario = QOG.prototype.scenarioParser(dataObject);
+        expect(()=>{QOG.prototype.initScenario(currentScenario);}).to.not.throw();
         expect(QOG.prototype.units['1st Patrol']).to.exist;
         expect(QOG.prototype.units['1st Patrol'].images['recto']).to.equal("/patrol1.png");
         expect(mockedPlaceUnits.verify()).to.true;
@@ -338,14 +344,6 @@ describe('[QOG] scenario parser works well',()=>{
         }
     };
 
-    beforeEach(()=>{
-        globalThis.currentScenario = new scenario(scenarList);
-    });
-
-    afterEach (()=>{
-        globalThis.currentScenario = undefined;
-    });
-
     it('is possible to call scenario parser with data object',()=>{
         
         const data={"value":"toVerify"};
@@ -353,6 +351,8 @@ describe('[QOG] scenario parser works well',()=>{
         expect (()=>{QOG.prototype.scenarioParser("whatEverExceptGood")}).to.throw('ERROR badly formated scenario data to parse: no scenario initiated');
         expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: ');
         expect (()=>{QOG.prototype.scenarioParser(goodData)}).to.not.throw();
+        let current = QOG.prototype.scenarioParser(goodData);
+        expect (current.opponent[0]).equal(2);
         
     });
     // at first level of keys a good scenario descriptor file must contains : a description zone, a victoryconditions zone and 2 opponents zones: (LRDG & Axis)
@@ -363,7 +363,7 @@ describe('[QOG] scenario parser works well',()=>{
         data = {"description":"test","conditions":"test","LRDG":"test","Axis":"test"};
         expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: no scenario name in description');
         // no ERROR for long and short as they are not yet mandatory
-        QOG.prototype.scenarioParser(goodData);
+        const currentScenario = QOG.prototype.scenarioParser(goodData);
         expect(currentScenario.description.name).to.equal("testName");
         expect(currentScenario.description.long).to.equal("longue description");
         expect(currentScenario.description.short).to.equal("short desc");
@@ -396,7 +396,7 @@ describe('[QOG] scenario parser works well',()=>{
         };
         expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: no returnZone in victory conditions');
         // conditions.testis not mandatory
-        QOG.prototype.scenarioParser(goodData);
+        let currentScenario = QOG.prototype.scenarioParser(goodData);
         expect(currentScenario.hasOwnProperty('conditions')).to.true;
         //expect(scenar).to.have.key("conditions");
         expect(currentScenario.conditions.roundNb).to.equal(1);
@@ -501,7 +501,7 @@ describe('[QOG] scenario parser works well',()=>{
             "Axis":{"units":"test","detachments":"test"}
         };
         expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: no localisations definition for opponent: LRDG');
-        QOG.prototype.scenarioParser(goodData);
+        let currentScenario = QOG.prototype.scenarioParser(goodData);
         expect(currentScenario.hasOwnProperty('opponent')).to.true;
         //expect(QOG.prototype.scenario).to.have.key('opponent');
         expect(currentScenario.opponent[0]).to.equal(2);
@@ -520,7 +520,7 @@ describe('[QOG] scenario parser works well',()=>{
     });
 
     it('is possible to place pieces for a given ground type',()=>{
-        QOG.prototype.scenarioParser(goodData);
+        let currentScenario = QOG.prototype.scenarioParser(goodData);
         let Axis = currentScenario.opponent[2][1];
         expect(Axis.localisations.hasOwnProperty('town')).to.true;
         expect(Array.isArray(Axis.localisations.town)).to.true;
@@ -538,19 +538,23 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
             {pretendToBeVisual:true}).window.document;
         const scenario = {"units":[{"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol","description":"my first patrol in game"}]};
-        QOG.prototype.units = [];
-        QOG.prototype.units['1st Patrol'] = new unit (
+        globalThis.gameManager = {"units":{},"zones":{}};
+        gameManager.units['1st Patrol'] = new unit (
             scenario.units[0].images,
             scenario.units[0].name,
             scenario.units[0].description );
-        QOG.prototype.zones=[];
-        QOG.prototype.zones['Siwa'] = new zone(document.getElementsByTagName('area')[0],'Siwa');
-        QOG.prototype.zones['Cross1']= new zone(document.getElementsByTagName('area')[0],'Cross1');
-        QOG.prototype.zones['Siwa'].linkTo(QOG.prototype.zones['Cross1'],1);
-        QOG.prototype.zones['Cross1'].linkTo(QOG.prototype.zones['Siwa'],1);
-        QOG.prototype.zones['Siwa'].attach(QOG.prototype.units['1st Patrol']);
+        gameManager.zones=[];
+        gameManager.zones['Siwa'] = new zone(document.getElementsByTagName('area')[0],'Siwa');
+        gameManager.zones['Cross1']= new zone(document.getElementsByTagName('area')[0],'Cross1');
+        gameManager.zones['Siwa'].linkTo(gameManager.zones['Cross1'],1);
+        gameManager.zones['Cross1'].linkTo(gameManager.zones['Siwa'],1);
+        gameManager.zones['Siwa'].attach(gameManager.units['1st Patrol']);
         ev.dataTransfer.setData = (key,value) => { ev.dataTransfer[key]=value};
         ev.dataTransfer.getData = (key) => {return ev.dataTransfer[key]};
+    });
+
+    afterEach (()=>{
+        globalThis.document=globalThis.gameManager =undefined;
     });
 
     it('unit image dragstart event store good data',()=>{
@@ -580,8 +584,8 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
         ev.target = document.getElementsByTagName('area')[0];
         QOG.prototype.dropHandler(ev);
         expect(ev.preventDefault.called).to.be.true;
-        expect(QOG.prototype.zones['Siwa'].units[0]).to.be.undefined;
-        expect(QOG.prototype.zones['Cross1'].units['1st Patrol']).to.equal(QOG.prototype.units['1st Patrol']);
+        expect(gameManager.zones['Siwa'].units[0]).to.be.undefined;
+        expect(gameManager.zones['Cross1'].units['1st Patrol']).to.equal(gameManager.units['1st Patrol']);
         expect(patrolImg.style.top).to.be.equal('105px');
         expect(patrolImg.style.left).to.be.equal('105px');
         ev.preventDefault=undefined;

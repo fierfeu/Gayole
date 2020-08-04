@@ -1,7 +1,8 @@
 export default class scenario {
     constructor (scenariiListe,inputInterface,loader) {
-        if (!scenariiListe) throw ('No liste of scenarii provided');
-        if(Array.isArray(scenariiListe)) {
+        if (!scenariiListe) {
+            this.select = this.addScenarioData;
+        } else if(Array.isArray(scenariiListe)) {
             this.scenarii= scenariiListe;
             if(inputInterface && typeof(inputInterface)!='function') this.selectInterface = inputInterface;
             if(loader)this.loader = loader;
@@ -10,6 +11,14 @@ export default class scenario {
 
     select () {
         this.loadData(this.showSelectInterface ());
+    }
+
+    addScenarioData(data) {
+        if (data) {
+            for (let subData in data) {
+                this[subData]=data[subData];
+            }
+        }
     }
 
     showSelectInterface () {
