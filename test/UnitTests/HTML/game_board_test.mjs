@@ -32,22 +32,24 @@ describe ('[Game Board] contains the good html',()=>{
     });
 });
 
+class CustomResourceLoader extends jsdom.ResourceLoader {
+    fetch(url, options) {
+        const file = url.split('/').pop();
+        const ext = file.split('.').pop();
+        url = "file://C:/Users/Public/DevPublique/Gayole/src/Client/"+ext+"/"+ file;
+        return super.fetch(url, options);
+    }
+  }
+
 describe ('[gameBoard] load resources',()=>{
-    class CustomResourceLoader extends jsdom.ResourceLoader {
-        fetch(url, options) {
-            const file = url.split('/').pop();
-            const ext = file.split('.').pop();
-            url = "file://C:/Users/Public/DevPublique/Gayole/src/Client/"+ext+"/"+ file;
-            return super.fetch(url, options);
-        }
-      }
+
     const myResourceLoader = new CustomResourceLoader();
 
     it('is possible to load css',()=>{
         expect(()=>{JSDOM.fromFile("src/Client/css/index.css",{pretendToBeVisual: true })}).to.not.throw();
     });
 
-    // il faut ajouter tout les tests sur les AREA commepar exemple :
+    // il faudrait ajouter tout les tests sur les AREA comme par exemple :
     it('Possible to load all zones and create links',async ()=>{
         let document;
         return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
@@ -78,3 +80,17 @@ describe ('[gameBoard] load resources',()=>{
         
     });
 });
+
+describe('[DIALOG] html game board definition contain a dialog window',()=>{
+    const myResourceLoader = new CustomResourceLoader();
+
+    it('has a div called "dilaogWindow to be compatible with gameManager',()=>{
+        
+        return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
+            let document=dom.window.document;
+            expect(document.getElementById('dialogWindow')).to.exist;
+            expect(document.getElementById('dialogWindow').classList.contains('strategicMap')).to.true;
+            expect(document.getElementById('dialogWindow').classList.contains('gameBoardHide')).to.true;;
+        });
+    });
+})
