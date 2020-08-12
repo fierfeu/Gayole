@@ -79,5 +79,20 @@ describe('[QOG Game user Tests]',()=>{
 
     });
 
-    
+    describe('Game dialog interface usage',()=>{
+        before (async ()=>{
+            await browser.get( browser.baseUrl); // to put context at the real begining
+            const mainMenu = await browser.findElement(By.css('#mainMenu'));
+            await mainMenu.click();
+            const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.tagName('button'));
+            await buttons[0].click();
+            await browser.findElement(By.id('dialogZone'))
+        });
+        it('open a dialog box when over turn number',async ()=>{
+            await browser.actions().move('turn');
+            const dialog= await browser.findElement(By.id('dialogWindow'));
+            expect(dialog).to.exist;
+            expect(await dialog.isDisplayed()).to.true;
+        });
+    });
 });
