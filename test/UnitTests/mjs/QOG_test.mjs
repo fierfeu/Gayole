@@ -529,6 +529,41 @@ describe('[QOG] scenario parser works well',()=>{
 
 });
 
+describe ('[QOG game event] all game board event are initialised',()=>{
+    const board = fs.readFileSync('src/Client/html/boardGame.html');
+    it('turnNb div has mouseOver and mouseOut event managed',()=>{
+        expect(()=>{QOG.prototype.initGameEvent()}).to.throw();
+        globalThis.document = new JSDOM(board).window.document;
+        expect(()=>{QOG.prototype.initGameEvent()}).to.not.throw();
+        const turnId =document.getElementById('turn');
+        expect (turnId.dataset.help).to.equal("This zone gives you the remaining number of turn before historical achievement. You'll loose Victory points while finishing the mission over this time")
+        expect(turnId.onmouseover).to.equal(QOG.prototype.showHelp);
+        expect(turnId.onmouseout).to.equal(QOG.prototype.hideHelp);
+    });
+
+    it('showHelp function show good content',()=>{
+        let ev={};
+        globalThis.document= new JSDOM(board,{pretendToBeVisual:true}).window.document;
+        const turnNB = document.getElementById('turn');
+        const helpWin = document.getElementById('dialogWindow');
+        expect (helpWin.className).to.include('gameBoardHide');
+        ev.currentTarget=turnNB;
+        expect(()=>{QOG.prototype.showHelp(ev)}).to.not.throw();
+        expect (helpWin.className).to.not.include('gameBoardHide');
+        expect (helpWin.innerHTML).to.equal(turnNB.dataset.help);
+        expect (helpWin.style.left).to.equal('950px');
+    });
+
+    it('hideHelp function hide help window and empty window content',()=>{
+        let ev={};
+        globalThis.document= new JSDOM(board,{pretendToBeVisual:true}).window.document;
+        const helpWin = document.getElementById('dialogWindow');
+        helpWin.classList.toggle('gameBoardHide');
+        expect(()=>{QOG.prototype.hideHelp(ev)}).to.not.throw();
+        expect (helpWin.className).to.include('gameBoardHide');
+        expect(helpWin.innerHTML).to.equal('');
+    })
+});
 
 describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     let ev ={dataTransfer:{}};

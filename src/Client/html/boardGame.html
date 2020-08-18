@@ -1,8 +1,17 @@
 <div id='dialogZone' class='dialogZone'>
-        <div class="PA warLetters"><span style="display:block;margin-top:5px">0</span></div>
-        <div class ="alarm"></div>
-        <div id='turn' class="turnNB warLetters"><span style="display:block;">16</span></div>
+    <div class="PA warLetters"
+        data-help="Gives you the number of action points available for this turn">
+        <span style="display:block;margin-top:5px">0</span>
+    </div>
+    <div class ="alarm"
+        data-help="Gives you the current level of awarness/alarm for the Axis forces">
+    </div>
+    <div id='turn' class="turnNB warLetters"
+        data-help="This zone gives you the remaining number of turn before historical achievement. You'll loose Victory points while finishing the mission over this time">
+        <span style="display:block;">0</span>
+    </div>
 </div>
+<div id="dialogWindow" class = "gameBoardHide dialogWindow" width=300 heignt=300 ></div>
 <div id='strategicMap' class='strategicMap'>
     <map name='gameBoardMap'>
         <area shape='rect' coords='392,17,437,63' id='Derna' data-ground='town' data-links='BedaLittoria:0,5;Mechili:1;Gazala:0,5'>
@@ -50,7 +59,4 @@
         <area shape='rect' coords='734,574,780,620' id='Koufra' data-links='Siwa:1;LongCross1:1'>
     </map>
     <img src='/strategicMap.png' style="position:relative;width:100%;height:100%;padding:0;" usemap='#gameBoardMap'>
-</div>
-<div id="dialogWindow" class = "gameBoardHide strategicMap" >
-
 </div>
