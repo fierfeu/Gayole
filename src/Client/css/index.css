@@ -71,6 +71,21 @@ body {
     background-color : rgba(247, 134, 41, 0.7);
 }
 
+.dialogWindow {
+    background-color : rgba(247, 134, 41, 0.7);
+    position:absolute;
+    width:200px;
+    height:auto;
+    top:90px;
+    border-style: solid;
+    border-image-source: url('/strategicBorder.png');
+    border-image-slice: 30 25 34 25;
+    border-image-repeat: round;
+    border-image-width: 10px;
+    border-image-outset: 10px;
+    z-index: 50;
+}
+
 .minifiedMainMenu {
     height : 30px;
     width : 30px;

@@ -89,10 +89,23 @@ describe('[QOG Game user Tests]',()=>{
             await browser.findElement(By.id('dialogZone'))
         });
         it('open a dialog box when over turn number',async ()=>{
-            await browser.actions().move('turn');
+            const turn = await browser.findElement(By.id('turn'));
+            await browser.actions({async:true}).move({origin: turn}).perform();
             const dialog= await browser.findElement(By.id('dialogWindow'));
             expect(dialog).to.exist;
             expect(await dialog.isDisplayed()).to.true;
+            expect(await dialog.getAttribute('class')).to.not.include('gameBoardHide');
         });
+        it('open a dialog window when over unit', async ()=>{
+            const piece = await browser.findElement(By.name('1st Patrol'));
+            await browser.actions({async:true}).move({origin: piece}).perform();
+            const dialog= await browser.findElement(By.id('dialogWindow'));
+            expect(await dialog.isDisplayed()).to.true;
+        });
+        it('hide any dialogWindow when out any unit or game data box as turn',async ()=>{
+            const outOfany = await browser.findElement(By.id('dialogZone'));
+            await browser.actions({async:true}).move({origin: outOfany}).perform();
+            expect( await browser.findElement(By.id('dialogWindow')).isDisplayed()).to.false;
+        })
     });
 });

@@ -84,12 +84,12 @@ describe ('[gameBoard] load resources',()=>{
 describe('[DIALOG] html game board definition contain a dialog window',()=>{
     const myResourceLoader = new CustomResourceLoader();
 
-    it('has a div called "dilaogWindow to be compatible with gameManager',()=>{
+    it('has a div called "dialogWindow to be compatible with gameManager',()=>{
         
         return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
             let document=dom.window.document;
             expect(document.getElementById('dialogWindow')).to.exist;
-            expect(document.getElementById('dialogWindow').classList.contains('strategicMap')).to.true;
+            expect(document.getElementById('dialogWindow').classList.contains('dialogWindow')).to.true;
             expect(document.getElementById('dialogWindow').classList.contains('gameBoardHide')).to.true;;
         });
     });

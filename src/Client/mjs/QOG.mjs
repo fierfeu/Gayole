@@ -31,6 +31,7 @@ export default class QOG {
             QOG.prototype.initScenario.call(this,this.currentScenario);
             let turn = document.getElementById('turn').getElementsByTagName('span')[0];
             turn.innerHTML = this.currentScenario.conditions.roundNb;
+            QOG.prototype.initGameEvent();
         }).catch((err)=>{console.log(err)});
     }
 
@@ -62,6 +63,38 @@ export default class QOG {
         if (gameManager) gameManager.zones = QOG.prototype.zones;
     }
 
+    initGameEvent () {
+        if(!document.getElementById('turn')) throw ('gameboard html not loaded');
+        const helpedData = document.querySelectorAll('[data-help]');
+        for (let i=0;i<helpedData.length;i++ ){
+            helpedData[i].onmouseover = QOG.prototype.showHelp;
+            helpedData[i].onmouseout = QOG.prototype.hideHelp;
+        }
+    }
+
+    showHelp(ev) {
+        if(!ev) throw 'no event object provided';
+        let helpWin = document.getElementById('dialogWindow');
+        if(helpWin.classList.contains('gameBoardHide')) {
+            helpWin.innerHTML=ev.currentTarget.dataset.help;
+            if(ev.currentTarget.style.position != 'absolute'){
+                helpWin.style.left='950px';
+                helpWin.style.top='90px';
+            } else {
+                helpWin.style.left = parseInt(ev.currentTarget.style.left)+60+'px';
+                helpWin.style.top = parseInt(ev.currentTarget.style.top)+60+'px';
+            }
+            
+            helpWin.classList.toggle('gameBoardHide');
+        }
+    }
+
+    hideHelp(ev) {
+        let helpWin = document.getElementById('dialogWindow');
+        helpWin.classList.toggle('gameBoardHide');
+        helpWin.innerHTML='';
+    }
+
     placeAPiece (unit4piece,where2place,) {
         if(!unit4piece || !(unit4piece instanceof unit)) throw ("ERROR - QOG.placeAPiece : no unit declared");
         if(!where2place || !(where2place instanceof zone)) throw("ERROR - QOG.PlaceAPiece : No zone declared");
@@ -81,9 +114,10 @@ export default class QOG {
         piece.id=unit4piece.name.replace(/\s+/g, '') + Date.now();
 
         let coords = where2place.Element.coords.split(',');
+        piece.style.position ='absolute';
         piece.style.left = (parseInt(coords[0])+5)+'px';
         piece.style.top = (parseInt(coords[1])+5)+'px';
-
+        piece.dataset.help = unit4piece.name;
         document.getElementById('strategicMap').append(piece);
     }
 
@@ -154,7 +188,6 @@ export default class QOG {
                     throw ('ERROR badly formated object : keys are missing: no '+parserOpponentDef[j]+' definition for opponent: '+currentScenario.opponent[i][0]);
             }
         };
-        console.log(currentScenario);
         if(manager) {
             manager.currentScenario = new scenario();
             manager.currentScenario.addScenarioData(currentScenario);
