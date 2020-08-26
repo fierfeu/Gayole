@@ -4,7 +4,7 @@ env:
 node_js:
 - node
 addons:
-  chrome: stable
+  chrome: latest
   firefox: latest
 services:
 - xvfb
