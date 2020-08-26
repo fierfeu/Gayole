@@ -2,12 +2,8 @@ import eventStorageInterface from './eventStorageInterface.mjs';
 import unit from './unit.mjs';
 import zone from './zone.mjs';
 import Scenario from './scenario.mjs';
-import scenario from './scenario.mjs';
 
-const parserDef =[["name"],["LRDG","Axis"],["roundNb","returnZone"]];
-const OPPONENT = 1;
-const VICOND =2;
-const parserOpponentDef = ["units","detachments","patrols","localisations"];
+
 
 export default class QOG {
     constructor () {
@@ -160,7 +156,7 @@ export default class QOG {
 
     }
 
-    scenarioParser (data,manager) {
+    /*scenarioParser (data,manager) {
         if(!data) throw ('ERROR no scenario data to parse : no scenario initiated');
         if(!(typeof(data)==='object')) throw ('ERROR badly formated scenario data to parse: no scenario initiated');
         
@@ -194,7 +190,7 @@ export default class QOG {
         } else {
             return currentScenario;
         }
-    }
+    }*/
 
     initScenario (currentScenario) {
             this.units ={};
@@ -263,3 +259,6 @@ export default class QOG {
         
 
 }
+
+import {Parser, parserOpponentDef} from './QOG_Parser.mjs';
+QOG.prototype.scenarioParser = Parser;
