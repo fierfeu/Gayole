@@ -1,5 +1,5 @@
 import unit from '../../../src/Client/mjs/unit.mjs';
-import { unitSet } from '../../../src/Client/mjs/unit.mjs';
+import { unitSet } from '../../../src/Client/mjs/unitSet.mjs';
 
 import chai from 'chai';
 const expect = chai.expect;
