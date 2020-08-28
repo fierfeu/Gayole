@@ -1,8 +1,8 @@
 import unit from './unit.mjs';
 
 export class unitSet extends unit {
-    constructor (images, name, description, units) {
-        super(images, name, description);
+    constructor (images, name, description, units, values) {
+        super(images, name, description,values);
         this.units = new Array();
         if (units) { 
             if(!Array.isArray(units)) throw ('ERROR you must provide a valid array of units to instanciate a set of units');

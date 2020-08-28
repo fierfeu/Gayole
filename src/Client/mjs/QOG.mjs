@@ -93,7 +93,7 @@ export default class QOG {
     }
 
     placeAPiece (unit4piece,where2place,) {
-        if(!unit4piece || !(unit4piece instanceof unit)) throw ("ERROR - QOG.placeAPiece : no unit declared");
+        if(!unit4piece || !(unit4piece instanceof unit||unit4piece instanceof unitSet)) throw ("ERROR - QOG.placeAPiece : no unit declared");
         if(!where2place || !(where2place instanceof zone)) throw("ERROR - QOG.PlaceAPiece : No zone declared");
 
         let piece = document.createElement('img');
@@ -157,42 +157,7 @@ export default class QOG {
 
     }
 
-    /*scenarioParser (data,manager) {
-        if(!data) throw ('ERROR no scenario data to parse : no scenario initiated');
-        if(!(typeof(data)==='object')) throw ('ERROR badly formated scenario data to parse: no scenario initiated');
-        
-        if(!data.hasOwnProperty('description')) throw ('ERROR badly formated object : keys are missing: no scenario description Object');
-        if(!data.hasOwnProperty('conditions')) throw ('ERROR badly formated object : keys are missing: no vitory conditions defined');
-        let currentScenario={};
-        currentScenario.opponent=[];
-        currentScenario.opponent[0]=2;
-        currentScenario.opponent[1] = parserDef[OPPONENT][0];
-        currentScenario.opponent[2] = parserDef[OPPONENT][1];
-        if(!data.hasOwnProperty(currentScenario.opponent[1])) throw ('ERROR badly formated object : keys are missing: no opponent name for side: '+currentScenario.opponent[1]);
-        if(!data.hasOwnProperty(currentScenario.opponent[2])) throw ('ERROR badly formated object : keys are missing: no opponent name for side: '+currentScenario.opponent[2]);
-        
-        if(!data.description.hasOwnProperty('name')) throw ('ERROR badly formated object : keys are missing: no scenario name in description');
-        currentScenario.description = data.description;
-        for (let i=0;i<parserDef[VICOND].length;i++) {
-            if(!data.conditions.hasOwnProperty(parserDef[VICOND][i])) throw ('ERROR badly formated object : keys are missing: no '+ parserDef[VICOND][i]+' in victory conditions');
-        }
-        currentScenario.conditions = data.conditions;
-
-        for (let i=1;i<=currentScenario.opponent[0];i++) {
-            currentScenario.opponent[i]=[parserDef[OPPONENT][i-1],data[parserDef[OPPONENT][i-1]]];
-            for (let j=0; j< parserOpponentDef.length;j++) {
-                if(!currentScenario.opponent[i][1].hasOwnProperty(parserOpponentDef[j])) 
-                    throw ('ERROR badly formated object : keys are missing: no '+parserOpponentDef[j]+' definition for opponent: '+currentScenario.opponent[i][0]);
-            }
-        };
-        if(manager) {
-            manager.currentScenario = new scenario();
-            manager.currentScenario.addScenarioData(currentScenario);
-        } else {
-            return currentScenario;
-        }
-    }*/
-
+    
     initScenario (currentScenario) {
             this.units ={};
             if(!currentScenario.opponent) throw ('ERROR parsing false');
@@ -230,27 +195,13 @@ export default class QOG {
                                         patrols[p].images,
                                         patrols[p].name,
                                         patrols[p].description,
-                                        patrols[p].units
+                                        patrols[p].units,
+                                        patrols[p].values
                                     );
                                 }
                             }
                             break;
                     }
-                    /*if(currentScenario.opponent[i][1][parserOpponentDef[j]].Nb !== 0) {
-                        let Nb = currentScenario.opponent[i][1][parserOpponentDef[j]].Nb;
-                        let unitsArray = currentScenario.opponent[i][1][parserOpponentDef[j]].unitsDesc;
-                        for (let u=0; u< Nb; u++) {
-                            this.units[unitsArray[u].name] = new unit(unitsArray[u].images,
-                                unitsArray[u].name,
-                                unitsArray[u].description,
-                                unitsArray[u].values);
-                        }
-                    
-                    } 
-                    if (parserOpponentDef[j] === 'localisations'){
-                        QOG.prototype.placeUnits(currentScenario.opponent[i][1][parserOpponentDef[j]]
-                            ,true,this);
-                    }*/
 
                 }
             }
