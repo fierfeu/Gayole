@@ -15,7 +15,7 @@ before_script:
 - npm install -g npm@latest
 - npm install
 - npm audit fix
-- npm install -g chromedriver --chromedriver-force-download --detect_chromedriver_version
+- npm install chromedriver --chromedriver-force-download --detect_chromedriver_version
 - npm install -g mocha@latest
 - npm install -g c8@latest
 - sleep 3
