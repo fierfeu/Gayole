@@ -1,5 +1,6 @@
 import eventStorageInterface from './eventStorageInterface.mjs';
 import unit from './unit.mjs';
+import {unitSet} from './unitSet.mjs';
 import zone from './zone.mjs';
 import Scenario from './scenario.mjs';
 
@@ -195,9 +196,47 @@ export default class QOG {
     initScenario (currentScenario) {
             this.units ={};
             if(!currentScenario.opponent) throw ('ERROR parsing false');
-            for (let i=1;i<=currentScenario.opponent[0];i++) {
+            const NbOpponents = currentScenario.opponent[0];
+            for (let i=1;i<=NbOpponents;i++) {
                 for (let j=0;j< parserOpponentDef.length;j++) {
-                    if(parserOpponentDef[j]!== 'localisations' && currentScenario.opponent[i][1][parserOpponentDef[j]].Nb !== 0) {
+                    switch(parserOpponentDef[j]) {
+                        case 'localisations' :
+                            QOG.prototype.placeUnits(currentScenario.opponent[i][1][parserOpponentDef[j]]
+                                ,true,this);
+                            break;
+                        case 'units' : 
+                            if(currentScenario.opponent[i][1][parserOpponentDef[j]].Nb !== 0) {
+                                let Nb = currentScenario.opponent[i][1][parserOpponentDef[j]].Nb;
+                                let unitsArray = currentScenario.opponent[i][1][parserOpponentDef[j]].unitsDesc;
+                                for (let u=0; u< Nb; u++) {
+                                    this.units[unitsArray[u].name] = new unit(unitsArray[u].images,
+                                        unitsArray[u].name,
+                                        unitsArray[u].description,
+                                        unitsArray[u].values);
+                                }
+                            
+                            }
+                            break;
+                        case 'patrols':
+                            if(currentScenario.opponent[i][1][parserOpponentDef[j]].Nb !== 0) {
+                                let NbOfPatrols = currentScenario.opponent[i][1][parserOpponentDef[j]].Nb;
+                                let patrols = currentScenario.opponent[i][1][parserOpponentDef[j]].unitsDesc;
+                                for (let p=0;p<NbOfPatrols;p++) {
+                                    patrols[p].units=[];
+                                    patrols[p].patrolComposition.forEach((id)=>{
+                                        patrols[p].units.push(this.units[id]);
+                                    })
+                                    this.units[patrols[p].name] = new unitSet (
+                                        patrols[p].images,
+                                        patrols[p].name,
+                                        patrols[p].description,
+                                        patrols[p].units
+                                    );
+                                }
+                            }
+                            break;
+                    }
+                    /*if(currentScenario.opponent[i][1][parserOpponentDef[j]].Nb !== 0) {
                         let Nb = currentScenario.opponent[i][1][parserOpponentDef[j]].Nb;
                         let unitsArray = currentScenario.opponent[i][1][parserOpponentDef[j]].unitsDesc;
                         for (let u=0; u< Nb; u++) {
@@ -211,7 +250,7 @@ export default class QOG {
                     if (parserOpponentDef[j] === 'localisations'){
                         QOG.prototype.placeUnits(currentScenario.opponent[i][1][parserOpponentDef[j]]
                             ,true,this);
-                    }
+                    }*/
 
                 }
             }

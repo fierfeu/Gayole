@@ -17,6 +17,7 @@ const sitePagesConf ={
     '/eventManager.mjs' : 'src/Client/mjs/eventManager.mjs',
     '/menu.mjs' : 'src/Client/mjs/menu.mjs',
     '/unit.mjs' : 'src/Client/mjs/unit.mjs',
+    '/unitSet.mjs':'src/Client/mjs/unitSet.mjs',
     '/zone.mjs' : 'src/Client/mjs/zone.mjs',
     '/game.mjs' : 'src/Client/mjs/game.mjs',
     '/scenario.mjs' : 'src/Client/mjs/scenario.mjs',

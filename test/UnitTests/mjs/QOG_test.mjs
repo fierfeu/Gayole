@@ -1,5 +1,6 @@
 import QOG from '../../../src/Client/mjs/QOG.mjs';
 import unit from '../../../src/Client/mjs/unit.mjs';
+import {unitSet} from '../../../src/Client/mjs/unitSet.mjs';
 import zone from '../../../src/Client/mjs/zone.mjs';
 import scenario from '../../../src/Client/mjs/scenario.mjs';
 
@@ -309,10 +310,15 @@ describe ('[QOG] init functions work well',()=>{
 
         let currentScenario = QOG.prototype.scenarioParser(dataObject);
         expect(()=>{QOG.prototype.initScenario(currentScenario);}).to.not.throw();
-        expect(QOG.prototype.units['1st Patrol']).to.exist;
-        expect(QOG.prototype.units['1st Patrol'].images['recto']).to.equal("/patrol1.png");
         expect(mockedPlaceUnits.verify()).to.true;
-
+        expect(QOG.prototype.units['LRDGT2A']).to.exist;
+        expect(QOG.prototype.units['LRDGT2A'].images['recto']).to.equal("/LRDG-T2A-recto.png");
+        expect(QOG.prototype.units['1st Patrol']).to.exist;
+        const patrol = QOG.prototype.units['1st Patrol'];
+        expect(patrol.images['recto']).to.equal("/patrol1.png");
+        expect(patrol instanceof unitSet).to.true;
+        expect(patrol.units["LRDGT2B"]).to.exist;
+        
         globalThis.currentScenario=undefined;
         globalThis.document=undefined;
     });
@@ -530,8 +536,10 @@ describe('[QOG] scenario parser works well',()=>{
 });
 
 describe ('[QOG game event] all game board event are initialised',()=>{
+    
     const board = fs.readFileSync('src/Client/html/boardGame.html');
     it('turnNb div has mouseOver and mouseOut event managed',()=>{
+        globalThis.document=undefined;
         expect(()=>{QOG.prototype.initGameEvent()}).to.throw();
         globalThis.document = new JSDOM(board).window.document;
         expect(()=>{QOG.prototype.initGameEvent()}).to.not.throw();

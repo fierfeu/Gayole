@@ -5,14 +5,29 @@
         "short":"short desc"
     },
     "LRDG":{"units": {
-        "Nb":1,
+        "Nb":2,
         "unitsDesc":[
-            {"images":{"recto":"/patrol1.png"},
-            "name":"1st Patrol",
-            "description":"my first patrol in game"}]
+            {"images":{"recto":"/LRDG-T2A-recto.png","verso":"/LRDG-T2A-verso.png"},
+            "name":"LRDGT2A",
+            "description":"unit Australienne T2-A",
+            "values":{"draggable":true}
+            },
+            {"images":{"recto":"/LRDG-T2B-recto.png","verso":"/LRDG-T2B-verso.png"},
+            "name":"LRDGT2B",
+            "description":"unit Australienne T2-B",
+            "values":{"draggable":true}
+            }
+        ]
         },
         "detachments":"test",
-        "patrols":"test",
+        "patrols":{
+            "Nb":1,
+            "unitsDesc":[
+                {"images":{"recto":"/patrol1.png"},
+                "name":"1st Patrol",
+                "description":"my first patrol in game",
+                "patrolComposition" : ["LRDGT2A","LRDGT2B"]}]
+        },
         "localisations":{
             "zones" : {"Siwa":"1st Patrol"}
         }
