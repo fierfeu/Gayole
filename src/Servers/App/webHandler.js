@@ -11,6 +11,7 @@ const sitePagesConf ={
     '/QOG_boardGame.html':'src/Client/html/boardGame.html',
     '/index.css' : 'src/Client/css/index.css',
     '/QOG_Head.js' : 'src/Client/js/QOG_Head.js',
+    '/QOG_Parser.mjs': 'src/Client/mjs/QOG_Parser.mjs',
     '/QOG.mjs' : 'src/Client/mjs/QOG.mjs',
     '/eventStorageInterface.mjs' : 'src/Client/mjs/eventStorageInterface.mjs',
     '/eventManager.mjs' : 'src/Client/mjs/eventManager.mjs',
