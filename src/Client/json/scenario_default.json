@@ -25,11 +25,11 @@
         },
         "patrols": {
             "Nb": 1,
-            "patrolComposition" : [],
             "unitsDesc": [{"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol",
                 "description":"my first patrol in game",
-                "values":{"draggable":true}
+                "values":{"draggable":true},
+                "patrolComposition" : ["LRDGT2A","LRDGT2B"]
             }]
         },
         "localisations" : { 
