@@ -54,6 +54,10 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         expect (cssFile).to.include ('#gameBoard');
     })
 
+    it('index.css declare rules for units',()=>{
+        expect(cssFile).to.include('.description');
+    })
+
     it('body rules are well coded',()=>{
         let bodyIndex=null;
         indexSheet.forEach((el, index )=>{

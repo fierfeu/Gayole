@@ -42,6 +42,15 @@ describe ('[Module unit] is instaciable with objetc of images, a name and a desc
     });
 });
 
+describe('[Module Unit] has functions to manage units data',()=>{
+    it('is possible to acces to HTML description of a unit',()=>{
+        const gooddescription = '<div class="description"><span>myUnit<span><hr><span>unit for test only<span><div>'
+        const goodUnit = new unit([],'myUnit','unit for test only');
+        expect(()=>{goodUnit.getDescription()}).to.not.throw();
+        expect(goodUnit.getDescription()).equal(gooddescription);
+    });
+})
+
 describe('[Module Unit] allow to add action to a instance of unit',()=>{
     it('is possible to add actions to a instance of unit',()=>{
         let goodImages=[];
@@ -64,7 +73,7 @@ describe('[Module Unit] allow to add action to a instance of unit',()=>{
 });
 
 describe('[Module unit] unitSet definition',()=>{
-    it('is possible to insatanciate some unitSet wich must be instanceof unit too',()=>{
+    it('is possible to instanciate some unitSet wich must be instanceof unit too',()=>{
         let myUnitSet;
         expect (()=>{new unitSet();}).to.throw();
         const images=[];

@@ -131,6 +131,11 @@ body {
     justify-content: flex-end;
 }
 
+.description {
+    text-align: center;
+    font-family:mainMenuTitleFont;
+}
+
 .strategicMap {
     position:relative;
     width:1180px;

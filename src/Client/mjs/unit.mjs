@@ -21,5 +21,13 @@ export default class unit {
     getActions() {
 
     }
+
+    getDescription () {
+        if(!this.HTMLDescription) {
+            this.HTMLDescription = '<div class="description"><span>'+this.name+'<span><hr><span>'+
+                this.description+'<span><div>';
+        }
+        return this.HTMLDescription;
+    }
 }
 
