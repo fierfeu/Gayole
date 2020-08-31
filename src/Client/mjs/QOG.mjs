@@ -64,8 +64,8 @@ export default class QOG {
         if(!document.getElementById('turn')) throw ('gameboard html not loaded');
         const helpedData = document.querySelectorAll('[data-help]');
         for (let i=0;i<helpedData.length;i++ ){
-            helpedData[i].onmouseover = QOG.prototype.showHelp;
-            helpedData[i].onmouseout = QOG.prototype.hideHelp;
+            helpedData[i].addEventListener('mouseover',QOG.prototype.showHelp,true);
+            helpedData[i].addEventListener('mouseout',QOG.prototype.hideHelp,true);
         }
     }
 
@@ -82,13 +82,13 @@ export default class QOG {
                 helpWin.style.top = parseInt(ev.currentTarget.style.top)+60+'px';
             }
             
-            helpWin.classList.toggle('gameBoardHide');
-        }
+            helpWin.classList.remove('gameBoardHide');
+        };
     }
 
     hideHelp(ev) {
         let helpWin = document.getElementById('dialogWindow');
-        helpWin.classList.toggle('gameBoardHide');
+        helpWin.classList.add('gameBoardHide');
         helpWin.innerHTML='';
     }
 
@@ -208,6 +208,9 @@ export default class QOG {
     }
 
      dragStartHandler(event) {
+        event.target.removeEventListener('mouseover',QOG.prototype.showHelp,true);
+        event.target.removeEventListener('mouseout',QOG.prototype.hideHelp,true);
+        document.getElementById('dialogWindow').classList.toggle('gameBoardHide');
         event.dataTransfer.effectAllowed = "move";
         event.dataTransfer.setData("img",event.target);
         event.dataTransfer.setData("UnitName", event.target.name);
@@ -225,7 +228,10 @@ export default class QOG {
      }   
 
      dragEndHandler (event) {
+        event.preventDefault();
         event.target.classList.remove('dragged');
+        event.target.addEventListener('mouseover',QOG.prototype.showHelp,true);
+        event.target.addEventListener('mouseout',QOG.prototype.hideHelp,true);
      }
 
      dragoverHandler (event) {
