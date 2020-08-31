@@ -114,7 +114,7 @@ export default class QOG {
         piece.style.position ='absolute';
         piece.style.left = (parseInt(coords[0])+5)+'px';
         piece.style.top = (parseInt(coords[1])+5)+'px';
-        piece.dataset.help = unit4piece.name;
+        piece.dataset.help = unit4piece.getDescription();
         document.getElementById('strategicMap').append(piece);
     }
 
