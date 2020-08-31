@@ -210,7 +210,7 @@ export default class QOG {
      dragStartHandler(event) {
         event.target.removeEventListener('mouseover',QOG.prototype.showHelp,true);
         event.target.removeEventListener('mouseout',QOG.prototype.hideHelp,true);
-        document.getElementById('dialogWindow').classList.toggle('gameBoardHide');
+        document.getElementById('dialogWindow').classList.remove('gameBoardHide');
         event.dataTransfer.effectAllowed = "move";
         event.dataTransfer.setData("img",event.target);
         event.dataTransfer.setData("UnitName", event.target.name);
