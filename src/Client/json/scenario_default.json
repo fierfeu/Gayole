@@ -27,7 +27,7 @@
             "Nb": 1,
             "unitsDesc": [{"images":{"recto":"/patrol1.png"},
                 "name":"1st Patrol",
-                "description":"my first patrol in game",
+                "description":"Patrol includes :<br><img src=\"/LRDG-T2A-recto.png\">LRDGT 2A<br><img src=\"/LRDG-T2B-recto.png\">LRDGT 2B",
                 "values":{"draggable":true},
                 "patrolComposition" : ["LRDGT2A","LRDGT2B"]
             }]

@@ -136,6 +136,11 @@ body {
     font-family:mainMenuTitleFont;
 }
 
+.description img {
+    width : 30px;
+    height : 30px;
+}
+
 .strategicMap {
     position:relative;
     width:1180px;
