@@ -622,6 +622,14 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
         expect(ev.dataTransfer.getData('fromZone')).to.equal("Siwa");
     });
 
+    //#34 bug
+    it('dragstart hide dialog window',()=>{
+        ev.target=document.getElementsByTagName('img')[0];
+        QOG.prototype.dragStartHandler(ev);
+        const diag = document.getElementById('dialogWindow');
+        expect(diag.classList.contains('gameBoardHide')).to.true;
+    })
+
     it('dragover stop propagation to allow drag & drop',()=>{
         ev.target=document.getElementsByTagName('img')[0];
         QOG.prototype.dragStartHandler(ev);
