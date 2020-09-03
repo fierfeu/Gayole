@@ -124,6 +124,24 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
 
         globalThis.document=undefined;
     });
+
+    it('existe a run function which init first turn',()=>{
+        expect(QOG.prototype.run).to.exist;
+        expect(()=>{QOG.prototype.run()}).to.throw();
+
+        globalThis.document = new JSDOM(HTML).window.document;
+        let gameManager = {};
+        gameManager.units = {};
+        gameManager.zones = {};
+        gameManager.currentScenario ={'conditions' :{'turnNB' : 99999}};
+
+        expect(()=>{QOG.prototype.run(gameManager)}).to.throw();
+        expect(()=>{QOG.prototype.run.call(gameManager)}).to.not.throw();
+        expect(gameManager.turnLeft).to.equal(gameManager.currentScenario.conditions.turnNB);
+        expect(document.getElementById('turn').getElementsByTagName('span')[0].innerHTML).to.equal(gameManager.turnLeft.toString());
+
+        globalThis.document = undefined;
+    })
 });
 
 describe ('[QOG] init functions work well',()=>{

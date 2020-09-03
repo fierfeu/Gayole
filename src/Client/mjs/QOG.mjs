@@ -32,6 +32,11 @@ export default class QOG {
         }).catch((err)=>{console.log(err)});
     }
 
+    run() {
+        if(!this.units || !this.zones || !this.currentScenario) throw 'ERROR no data to let game running';
+        this.turnLeft = this.currentScenario.conditions.turnNB;
+        document.getElementById('turn').getElementsByTagName('span')[0].innerHTML=this.turnLeft;
+    }
 
     initZones (gameManager) {
         QOG.prototype.zones={};
