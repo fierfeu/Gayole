@@ -1,10 +1,6 @@
-import eventStorageInterface from './eventStorageInterface.mjs';
 import unit from './unit.mjs';
 import {unitSet} from './unitSet.mjs';
 import zone from './zone.mjs';
-import Scenario from './scenario.mjs';
-
-
 
 export default class QOG {
     constructor () {
@@ -30,6 +26,16 @@ export default class QOG {
             turn.innerHTML = this.currentScenario.conditions.roundNb;
             QOG.prototype.initGameEvent();
         }).catch((err)=>{console.log(err)});
+    }
+
+    didacticiel () {
+        if(!this.currentScenario) throw 'ERROR no Scenario declared';
+        if(this.currentScenario.didacticiel.used) {
+            this.didacticiel=true;
+        }
+        else {
+            this.didacticiel=undefined;
+        }
     }
 
     run() {
