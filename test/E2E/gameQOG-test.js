@@ -26,6 +26,7 @@ describe('[QOG Game user Tests]',()=>{
             //let alert = await browser.switchTo().alert();
             //expect(await alert.getText()).to.equal(alertText);
             //await alert.accept();
+            let board = await browser.wait(until.elementLocated(By.css('#strategicMap')),10000);
             const gameLaunched = await browser.executeScript("return window.localStorage.getItem('gameLaunched');");
             expect(gameLaunched).to.equal('QOG');
         });
