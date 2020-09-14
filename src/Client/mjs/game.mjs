@@ -1,6 +1,5 @@
 export default class Game {
     #sequence
-    #eventStorageInterface
     constructor () {
         if(globalThis.gameManager) throw('ERROR gameManager singleton allready created');
         globalThis.gameManager = this;
@@ -43,7 +42,7 @@ export default class Game {
             
         if(gameInterface.prototype.getGameName) this.currentGame.name= gameInterface.prototype.getGameName();
 
-        if (window) window.localStorage.setItem('gameLaunched','QOG');
+        if (window.localStorage) window.localStorage.setItem('gameLaunched','QOG');
     }
 
 
