@@ -1,6 +1,6 @@
 import QOG from '../../../src/Client/mjs/QOG.mjs';
 import chai from 'chai';
-import Didacticiel from '../../../src/Client/mjs/didacticiel.mjs'
+import Didacticiel from '../../../src/Client/mjs/Didacticiel.mjs'
 const expect = chai.expect;
 
 describe ('[QOG DIDACTIC] didacticiel phase work well',()=>{
