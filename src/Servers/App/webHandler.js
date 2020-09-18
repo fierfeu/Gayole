@@ -21,6 +21,7 @@ const sitePagesConf ={
     '/zone.mjs' : 'src/Client/mjs/zone.mjs',
     '/game.mjs' : 'src/Client/mjs/game.mjs',
     '/scenario.mjs' : 'src/Client/mjs/scenario.mjs',
+    '/Didacticiel.mjs':'src/Client/mjs/Didacticiel.mjs',
     '/eventStorageInterface.mjs':'src/Client/mjs/eventStorageInterface.mjs',
     '/eventManager.mjs':'src/Client/mjs/eventManager.mjs',
     '/scenario_default.json':'src/Client/json/scenario_default.json',

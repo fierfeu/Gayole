@@ -23,7 +23,8 @@ export default class QOG {
             QOG.prototype.scenarioParser(JSON.parse(data),this);
             QOG.prototype.initScenario.call(this,this.currentScenario);
             let turn = document.getElementById('turn').getElementsByTagName('span')[0];
-            turn.innerHTML = this.currentScenario.conditions.roundNb;
+            turn.innerHTML = this.currentScenario.conditions.turnNb;
+            this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
             QOG.prototype.initGameEvent();
         }).catch((err)=>{console.log(err)});
     }
@@ -31,17 +32,20 @@ export default class QOG {
     didacticiel () {
         if(!this.currentScenario) throw 'ERROR no Scenario declared';
         if(this.currentScenario.didacticiel.used) {
-            this.didacticiel=true;
+            this.didacticiel= new Didacticiel(this.currentScenario.didacticiel.file);
         }
-        else {
-            this.didacticiel=undefined;
-        }
+
     }
 
     run() {
-        if(!this.units || !this.zones || !this.currentScenario) throw 'ERROR no data to let game running';
-        this.turnLeft = this.currentScenario.conditions.turnNB;
-        document.getElementById('turn').getElementsByTagName('span')[0].innerHTML=this.turnLeft;
+        if(!this.units instanceof Object) throw 'ERROR no units to let game running'
+        if(!this.zones instanceof Object) throw 'ERROR no zones to let game running'
+        if(!this.hasOwnProperty('currentScenario')) throw 'ERROR no scenario to let game running';
+        window.localStorage.setItem('gameLaunched',this.currentGame.name);
+    }
+
+    getGameName () {
+        return 'QOG';
     }
 
     initZones (gameManager) {
@@ -268,4 +272,5 @@ export default class QOG {
 }
 
 import {Parser, parserOpponentDef} from './QOG_Parser.mjs';
+import Didacticiel from './Didacticiel.mjs';
 QOG.prototype.scenarioParser = Parser;

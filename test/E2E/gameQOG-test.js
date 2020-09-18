@@ -26,7 +26,9 @@ describe('[QOG Game user Tests]',()=>{
             //let alert = await browser.switchTo().alert();
             //expect(await alert.getText()).to.equal(alertText);
             //await alert.accept();
-            let board = await browser.wait(until.elementLocated(By.css('#strategicMap')),10000);
+            const board = await browser.findElement(By.id('strategicMap'));
+            await browser.wait(until.elementIsVisible(board),10000)
+
             const gameLaunched = await browser.executeScript("return window.localStorage.getItem('gameLaunched');");
             expect(gameLaunched).to.equal('QOG');
         });
@@ -85,7 +87,8 @@ describe('[QOG Game user Tests]',()=>{
             await browser.get( browser.baseUrl); // to put context at the real begining
             const mainMenu = await browser.findElement(By.css('#mainMenu'));
             await mainMenu.click();
-            const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.tagName('button'));
+            const buttons = await browser.findElements(By.css('#buttonList > button'));
+            await browser.wait(until.elementIsVisible(buttons[0]));
             await buttons[0].click();
             await browser.findElement(By.id('dialogZone'))
         });

@@ -34,16 +34,14 @@ export default class Game {
 
     create(gameInterface) {
         if(!(typeof gameInterface === 'function')) throw ('ERROR Bad Game interface provided : expect a class constructor and received a '+typeof gameInterface);
+        if(gameInterface.prototype.hasOwnProperty('getGameName')) this.currentGame.name= gameInterface.prototype.getGameName();
         for(let i=0;i<this.#sequence.length;i++) {
             if(!gameInterface.prototype[this.#sequence[i]]) throw ('ERROR BAD Game interface in '+ gameInterface.name+' : '+this.#sequence[i]+' not available');
             if (!(typeof gameInterface.prototype[this.#sequence[i]] === 'function')) throw ('ERROR BAD Game interface in '+ gameInterface.name+' : '+this.#sequence[i]+' is not a function');
                 gameInterface.prototype[this.#sequence[i]].call(this);
         }
-            
-        if(gameInterface.prototype.getGameName) this.currentGame.name= gameInterface.prototype.getGameName();
 
-        if (window.localStorage) window.localStorage.setItem('gameLaunched','QOG');
-    }
+    };
 
 
-}
+};

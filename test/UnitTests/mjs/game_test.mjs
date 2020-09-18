@@ -108,5 +108,5 @@ describe ('[Game] game Manager manage external ressources loading', ()=>{
         XMLHttpRequest.restore();
         globalThis.window = undefined;
         
-    })
-})
+    });
+});

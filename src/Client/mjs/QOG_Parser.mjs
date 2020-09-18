@@ -1,6 +1,6 @@
 import scenario from './scenario.mjs';
 
-const parserDef =[["name"],["LRDG","Axis"],["roundNb","returnZone"]];
+const parserDef =[["name"],["LRDG","Axis"],["turnNb","returnZone"]];
 const OPPONENT_NAME = 1;
 const VICOND =2;
 export const parserOpponentDef = ["units","detachments","patrols","localisations"];

@@ -37,7 +37,7 @@
         }
     },
     "conditions":{
-        "roundNb": 1,
+        "turnNb": 1,
         "returnZone" :["Siwa"],
         "victoryTest":"()=>{return true}"
     }
