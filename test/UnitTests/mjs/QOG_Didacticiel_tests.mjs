@@ -23,7 +23,7 @@ describe ('[QOG DIDACTIC] didacticiel phase work well',()=>{
         //expect(gameManager.didacticiel instanceof Didacticiel).to.true;
     });
 
-    it('erify that if scenario don\'t use didacticiel then no instance of didacticiel is declared',()=>{
+    it('Verify that if scenario don\'t use didacticiel then no instance of didacticiel is declared',()=>{
         let gameManager ={};
         gameManager.currentScenario={'didacticiel':{'used':false}};
         expect(()=>{QOG.prototype.didacticiel.call(gameManager)}).to.not.throw();
