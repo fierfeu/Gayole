@@ -42,6 +42,9 @@ export default class QOG {
         if(!this.zones instanceof Object) throw 'ERROR no zones to let game running'
         if(!this.hasOwnProperty('currentScenario')) throw 'ERROR no scenario to let game running';
         window.localStorage.setItem('gameLaunched',this.currentGame.name);
+        while(this.currentGame.turnLeft) {
+            this.currentGame.turnLeft --;
+        }
     }
 
     getGameName () {
