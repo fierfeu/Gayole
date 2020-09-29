@@ -83,6 +83,7 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
     it('boards function initiate boards for Qui Ose Gagne',async ()=>{
         globalThis.document = new JSDOM(EMPTYHTML).window.document;
         let gameManager={};
+        gameManager.currentGame={};
         gameManager.loadExternalRessources = (opts) => {
             gameManager.load=true;
             return new Promise((resolve)=>{resolve(board)}) };

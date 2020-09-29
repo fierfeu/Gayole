@@ -20,7 +20,7 @@ describe('[QOG Game user Tests]',()=>{
         });
 
         it('Game creation button behavior verification',async ()=>{
-            const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.tagName('button'));
+            const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.css('button'));
             await buttons[0].click();
             //await browser.wait(until.alertIsPresent());
             //let alert = await browser.switchTo().alert();
@@ -49,7 +49,7 @@ describe('[QOG Game user Tests]',()=>{
             //await browser.wait(until.alertIsPresent());
             //await browser.switchTo().alert().accept();
             
-            await browser.wait(until.elementLocated(By.css('.unit')),4000);
+            await browser.wait(until.elementLocated(By.css('.unit')),10000);
             
             const origine = await browser.findElement(By.id('strategicMap'));
             const zone2place = await browser.findElement(By.id('Cross1'));
