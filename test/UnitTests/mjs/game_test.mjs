@@ -61,13 +61,12 @@ describe('[Game] game creation tests',()=>{
             getGameName () {return 'QOG'}
             boards () {this.boardsOk=true;}
             setUp () {this.setupOK=true;}
-            run () {this.runOK=true;}
         }
         expect(()=>{gameManager.create(GoodGameInterface)}).to.not.throw();
         expect(gameManager.currentGame.name).to.equal('QOG');
         expect (gameManager.boardsOk).to.true;
         expect (gameManager.setupOK).to.true;
-        expect (gameManager.runOK).to.true;
+
 
         globalThis.gameManager = undefined;
     });

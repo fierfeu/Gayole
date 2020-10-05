@@ -20,7 +20,7 @@ describe('[QOG Game user Tests]',()=>{
         });
 
         it('Game creation button behavior verification',async ()=>{
-            const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.css('button'));
+            const buttons = await browser.findElements(By.css('#buttonList button'));
             await buttons[0].click();
             //await browser.wait(until.alertIsPresent());
             //let alert = await browser.switchTo().alert();
