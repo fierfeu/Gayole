@@ -3,6 +3,8 @@ import chai from 'chai';
 import unit from '../../../src/Client/mjs/unit.mjs';
 import { unitSet } from '../../../src/Client/mjs/unitSet.mjs';
 const expect = chai.expect;
+import jsdom from 'jsdom';
+const {JSDOM} = jsdom;
 
 describe ('[QOG RUN] function work well',()=>{
     let gameManager ={};
@@ -27,9 +29,8 @@ describe ('[QOG RUN] function work well',()=>{
     });
 
     it('Run function initiate action point for one patrol',()=>{
-        globalThis.window={};
-        window.localStorage={};
-        window.localStorage.setItem = ()=>{};
+        globalThis.window= new JSDOM('<html><div id="PA"><span></span></div></html>',{url:'http://localhost'}).window;
+        globalThis.document = window.document;
         gameManager.currentGame.turnLeft =1;
         let goodImages=[];
         let units=[];
@@ -43,8 +44,10 @@ describe ('[QOG RUN] function work well',()=>{
         myUnitSet=new unitSet(goodImages,'myUnitSet','this is a patrol with 2 units',units);
         gameManager.units["Patrol1"]=myUnitSet;
 
-        /*QOG.prototype.run.call(gameManager);
+        QOG.prototype.run.call(gameManager);
         expect (gameManager.currentGame.patrolNb).to.equal(1);
-        expect(gameManager.units["Patrol1"].actionPoints).to.above(3);*/
+        expect(gameManager.units["Patrol1"].actionPoints).to.above(3);
+
+        globalThis.window = globalThis.document = undefined;
     });
 });
