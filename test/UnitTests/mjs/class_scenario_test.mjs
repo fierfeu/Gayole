@@ -16,7 +16,7 @@ const SCENAR = {
     "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":{"Siwa":"test"}},
     "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{"town":["random","test1","test2"]}},
     "conditions":{
-        "roundNb": 1,
+        "turnNb": 1,
         "returnZone" :["Siwa"],
         "victoryTest":"()=>{return true}"
     }

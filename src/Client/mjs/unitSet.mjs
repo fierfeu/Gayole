@@ -34,4 +34,9 @@ export class unitSet extends unit {
         });
         return nbOfUnitDetached;
     }
+
+    getNbOfUnitsInPatrol () {
+        const entities = Object.keys(this.units);
+        return entities.length;
+    }
 }

@@ -13,19 +13,17 @@ describe('[QOG Game user Tests]',()=>{
     });
         
     describe ('Game creation sequence',()=>{
-        const alertText = 'Scenario par défaut : Default Scenario';
-        before (async ()=>{
-            const mainMenu = await browser.findElement(By.css('#mainMenu'));
-            await mainMenu.click();
-        });
 
         it('Game creation button behavior verification',async ()=>{
-            const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.tagName('button'));
+            const mainMenu = await browser.findElement(By.css('#mainMenu'));
+            await browser.wait(until.elementIsVisible(mainMenu),4000)
+            await mainMenu.click();
+            const buttons = await browser.findElements(By.css('#buttonList button'));
+            await browser.wait(until.elementIsVisible(buttons[0]),4000)
             await buttons[0].click();
-            //await browser.wait(until.alertIsPresent());
-            //let alert = await browser.switchTo().alert();
-            //expect(await alert.getText()).to.equal(alertText);
-            //await alert.accept();
+            const board = await browser.findElement(By.id('strategicMap'));
+            await browser.wait(until.elementIsVisible(board),10000)
+
             const gameLaunched = await browser.executeScript("return window.localStorage.getItem('gameLaunched');");
             expect(gameLaunched).to.equal('QOG');
         });
@@ -34,17 +32,13 @@ describe('[QOG Game user Tests]',()=>{
 
     describe ('Game usages sequences',()=>{
         
-        before (async ()=>{
-            await browser.get( browser.baseUrl); // to put context at the real begining
-            const mainMenu = await browser.findElement(By.css('#mainMenu'));
-            await mainMenu.click();
-        });
-
         it('unit drag and drop',async ()=>{
+            const mainMenu = await browser.findElement(By.css('#mainMenu'));
+            await browser.wait(until.elementIsVisible(mainMenu),4000)
+            await mainMenu.click();
             const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.tagName('button'));
+            await browser.wait(until.elementIsVisible(buttons[0]),4000)
             await buttons[0].click();
-            //await browser.wait(until.alertIsPresent());
-            //await browser.switchTo().alert().accept();
             
             await browser.wait(until.elementLocated(By.css('.unit')),4000);
             
@@ -83,14 +77,16 @@ describe('[QOG Game user Tests]',()=>{
         before (async ()=>{
             await browser.get( browser.baseUrl); // to put context at the real begining
             const mainMenu = await browser.findElement(By.css('#mainMenu'));
+            await browser.wait(until.elementIsVisible(mainMenu),4000);
             await mainMenu.click();
-            const buttons = await browser.findElement(By.css('#buttonList')).findElements(By.tagName('button'));
+            const buttons = await browser.findElements(By.css('#buttonList > button'));
+            await browser.wait(until.elementIsVisible(buttons[0]),4000);
             await buttons[0].click();
             await browser.findElement(By.id('dialogZone'))
         });
         it('open a dialog box when over turn number',async ()=>{
             const turn = await browser.findElement(By.id('turn'));
-            await browser.actions({async:true}).move({origin: turn}).perform();
+            await browser.actions({async:false}).move({origin: turn}).perform();
             const dialog= await browser.findElement(By.id('dialogWindow'));
             expect(dialog).to.exist;
             expect(await dialog.isDisplayed()).to.true;
@@ -98,7 +94,8 @@ describe('[QOG Game user Tests]',()=>{
         });
         it('open a dialog window when over unit', async ()=>{
             const piece = await browser.findElement(By.name('1st Patrol'));
-            await browser.actions({async:true}).move({origin: piece}).perform();
+            await browser.wait(until.elementIsVisible(piece));
+            await browser.actions({async:false}).move({origin: piece}).perform();
             const dialog= await browser.findElement(By.id('dialogWindow'));
             expect(await dialog.isDisplayed()).to.true;
         });

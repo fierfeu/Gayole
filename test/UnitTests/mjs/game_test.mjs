@@ -60,11 +60,13 @@ describe('[Game] game creation tests',()=>{
         class GoodGameInterface { 
             getGameName () {return 'QOG'}
             boards () {this.boardsOk=true;}
-            setUp () {}
+            setUp () {this.setupOK=true;}
         }
         expect(()=>{gameManager.create(GoodGameInterface)}).to.not.throw();
         expect(gameManager.currentGame.name).to.equal('QOG');
         expect (gameManager.boardsOk).to.true;
+        expect (gameManager.setupOK).to.true;
+
 
         globalThis.gameManager = undefined;
     });
@@ -105,5 +107,5 @@ describe ('[Game] game Manager manage external ressources loading', ()=>{
         XMLHttpRequest.restore();
         globalThis.window = undefined;
         
-    })
-})
+    });
+});

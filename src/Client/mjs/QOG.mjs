@@ -1,10 +1,6 @@
-import eventStorageInterface from './eventStorageInterface.mjs';
 import unit from './unit.mjs';
 import {unitSet} from './unitSet.mjs';
 import zone from './zone.mjs';
-import Scenario from './scenario.mjs';
-
-
 
 export default class QOG {
     constructor () {
@@ -27,11 +23,55 @@ export default class QOG {
             QOG.prototype.scenarioParser(JSON.parse(data),this);
             QOG.prototype.initScenario.call(this,this.currentScenario);
             let turn = document.getElementById('turn').getElementsByTagName('span')[0];
-            turn.innerHTML = this.currentScenario.conditions.roundNb;
+            turn.innerHTML = this.currentScenario.conditions.turnNb;
+            this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
             QOG.prototype.initGameEvent();
+            QOG.prototype.run.call(this); // for #37 bug
         }).catch((err)=>{console.log(err)});
     }
 
+    didacticiel () {
+        if(!this.currentScenario) throw 'ERROR no Scenario declared';
+        if(this.currentScenario.didacticiel.used) {
+            this.didacticiel= new Didacticiel(this.currentScenario.didacticiel.file);
+        }
+
+    }
+
+    run() {
+        if(!(this.units instanceof Object)) throw 'ERROR no units to let game running'
+        if(!(this.zones instanceof Object)) throw 'ERROR no zones to let game running'
+        if(!(this.hasOwnProperty('currentScenario'))) throw 'ERROR no scenario to let game running';
+        window.localStorage.setItem('gameLaunched',this.currentGame.name);
+        this.currentGame.turnLeft --;
+        this.currentGame.patrolNb=0;
+        for (let id in this.units) {
+            console.log(id);
+            if (this.units[id] instanceof unitSet) {
+                this.currentGame.patrolNb ++;
+                const nbOfUnitInPatrol = this.units[id].getNbOfUnitsInPatrol();
+                console.log(nbOfUnitInPatrol);
+                if (nbOfUnitInPatrol>1 && nbOfUnitInPatrol<3) {
+                    this.units[id].actionPoints = 3+ Math.random()*5;
+                }
+                else if (nbOfUnitInPatrol>4 && nbOfUnitInPatrol<8) {
+                    this.units[id].actionPoints = 4+ Math.random()*5 +Math.random()*5;
+                }
+                else {
+                    this.units[id].actionPoints = 5+ Math.random()*5+Math.random()*5+Math.random()*5;
+                }
+                console.log(this.units[id].actionPoints);
+                const el =document.getElementById('PA').getElementsByTagName('span')[0];
+                el.innerHTML=this.units[id].actionPoints;
+            }
+        }
+        console.log('Run ok');
+
+    }
+
+    getGameName () {
+        return 'QOG';
+    }
 
     initZones (gameManager) {
         QOG.prototype.zones={};
@@ -257,4 +297,5 @@ export default class QOG {
 }
 
 import {Parser, parserOpponentDef} from './QOG_Parser.mjs';
+import Didacticiel from './Didacticiel.mjs';
 QOG.prototype.scenarioParser = Parser;

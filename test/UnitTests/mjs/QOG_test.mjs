@@ -20,7 +20,7 @@ const EMPTYHTML = "<body><div id='gameBoard'></div></body>"
 const HTML =    `<body>
                     <div id='gameBoard'>
                         <div id='dialogZone'>
-                            <div Id='turn' class="turnNB warLetters"><span style="display:block;">16</span></div>
+                            <div Id='turn' class="turnNb warLetters"><span style="display:block;">16</span></div>
                         </div>
                         <div id='strategicMap'>
                             <map name='gameBoardMap'>
@@ -57,7 +57,7 @@ const SCENAR = `{
                             },"detachments":"test","patrols":"test","localisations":{"zones":{"Siwa":"LRDGT2A"}}},
                     "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{"town":["random","test1","test2"]}},
                     "conditions":{
-                        "roundNb": 1,
+                        "turnNb": 1,
                         "returnZone" :["Siwa"],
                         "victoryTest":"()=>{return true}"
                     }
@@ -83,6 +83,7 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
     it('boards function initiate boards for Qui Ose Gagne',async ()=>{
         globalThis.document = new JSDOM(EMPTYHTML).window.document;
         let gameManager={};
+        gameManager.currentGame={};
         gameManager.loadExternalRessources = (opts) => {
             gameManager.load=true;
             return new Promise((resolve)=>{resolve(board)}) };
@@ -124,6 +125,26 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
 
         globalThis.document=undefined;
     });
+
+    it('existe a run function which init first turn',()=>{
+        expect(QOG.prototype.run).to.exist;
+        expect(()=>{QOG.prototype.run()}).to.throw();
+
+        globalThis.window = new JSDOM(HTML,{'url':'http://localhost'}).window;
+        globalThis.document = globalThis.window.document;
+        let gameManager = {};
+        gameManager.units = {};
+        gameManager.zones = {};
+        gameManager.currentGame={};
+        gameManager.currentGame.name="TOTO";
+        gameManager.currentScenario ={'conditions' :{'turnNb' : 99999}};
+
+        expect(()=>{QOG.prototype.run(gameManager)}).to.throw();
+        expect(()=>{QOG.prototype.run.call(gameManager)}).to.not.throw();
+        
+
+        globalThis.document = globalThis.window = undefined;
+    })
 });
 
 describe ('[QOG] init functions work well',()=>{
@@ -344,7 +365,7 @@ describe('[QOG] scenario parser works well',()=>{
         "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":{"Siwa":"test"}},
         "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{"town":["random","test1","test2"]}},
         "conditions":{
-            "roundNb": 1,
+            "turnNb": 1,
             "returnZone" :["Siwa"],
             "victoryTest":"()=>{return true}"
         }
@@ -389,23 +410,22 @@ describe('[QOG] scenario parser works well',()=>{
             "LRDG":"test",
             "Axis":"test"
         };
-        expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: no roundNb in victory conditions');
+        expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: no turnNb in victory conditions');
         data = {
             "description":{
                 "name":"test"
             },
             "conditions":{
-                "roundNb":1
+                "turnNb":1
             },
             "LRDG":"test",
             "Axis":"test"
         };
         expect (()=>{QOG.prototype.scenarioParser(data)}).to.throw('ERROR badly formated object : keys are missing: no returnZone in victory conditions');
-        // conditions.testis not mandatory
         let currentScenario = QOG.prototype.scenarioParser(goodData);
         expect(currentScenario.hasOwnProperty('conditions')).to.true;
-        //expect(scenar).to.have.key("conditions");
-        expect(currentScenario.conditions.roundNb).to.equal(1);
+        expect(currentScenario.conditions.hasOwnProperty('turnNb')).to.true;
+        expect(currentScenario.conditions.turnNb).to.equal(1);
         expect(currentScenario.conditions.returnZone).to.deep.equal(['Siwa']);
         expect(currentScenario.conditions.victoryTest).to.equal("()=>{return true}");
     });
@@ -416,7 +436,7 @@ describe('[QOG] scenario parser works well',()=>{
                 "name":"test"
             },
             "conditions":{
-                "roundNb": 1 ,
+                "turnNb": 1 ,
                 "returnZone":['Siwa']
             }
         };
@@ -426,7 +446,7 @@ describe('[QOG] scenario parser works well',()=>{
                 "name":"test"
             },
             "conditions":{
-                "roundNb": 1 ,
+                "turnNb": 1 ,
                 "returnZone":['Siwa']
             },
             "LRDG":"test"
@@ -440,7 +460,7 @@ describe('[QOG] scenario parser works well',()=>{
                 "name":"test"
             },
             "conditions":{
-                "roundNb": 1 ,
+                "turnNb": 1 ,
                 "returnZone":['Siwa']
             },
             "LRDG":"test",
@@ -452,7 +472,7 @@ describe('[QOG] scenario parser works well',()=>{
                 "name":"test"
             },
             "conditions":{
-                "roundNb": 1 ,
+                "turnNb": 1 ,
                 "returnZone":['Siwa']
             },
             "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":""},
@@ -464,7 +484,7 @@ describe('[QOG] scenario parser works well',()=>{
                 "name":"test"
             },
             "conditions":{
-                "roundNb": 1 ,
+                "turnNb": 1 ,
                 "returnZone":['Siwa']
             },
             "LRDG":{"units":"test","patrols":"test","localisations":""},
@@ -476,7 +496,7 @@ describe('[QOG] scenario parser works well',()=>{
                 "name":"test"
             },
             "conditions":{
-                "roundNb": 1 ,
+                "turnNb": 1 ,
                 "returnZone":['Siwa']
             },
             "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":""},
@@ -488,7 +508,7 @@ describe('[QOG] scenario parser works well',()=>{
                 "name":"test"
             },
             "conditions":{
-                "roundNb": 1 ,
+                "turnNb": 1 ,
                 "returnZone":['Siwa']
             },
             "LRDG":{"units":"test","detachments":"test","patrols":"test","localisations":""},
@@ -500,7 +520,7 @@ describe('[QOG] scenario parser works well',()=>{
                 "name":"test"
             },
             "conditions":{
-                "roundNb": 1 ,
+                "turnNb": 1 ,
                 "returnZone":['Siwa']
             },
             "LRDG":{"units":"test","detachments":"test","patrols":"test"},
@@ -565,14 +585,14 @@ describe ('[QOG game event] all game board event are initialised',()=>{
     it('showHelp function show good content',()=>{
         let ev={};
         globalThis.document= new JSDOM(board,{pretendToBeVisual:true}).window.document;
-        const turnNB = document.getElementById('turn');
+        const turnNb = document.getElementById('turn');
         const helpWin = document.getElementById('dialogWindow');
         expect (helpWin.className).to.include('gameBoardHide');
-        ev.currentTarget=turnNB;
+        ev.currentTarget=turnNb;
         expect(()=>{QOG.prototype.showHelp(ev)}).to.not.throw();
         QOG.prototype.showHelp(ev);
         expect (helpWin.className).to.not.include('gameBoardHide');
-        expect (helpWin.innerHTML).to.equal(turnNB.dataset.help);
+        expect (helpWin.innerHTML).to.equal(turnNb.dataset.help);
         expect (helpWin.style.left).to.equal('950px');
 
     });

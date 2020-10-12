@@ -1,6 +1,6 @@
 {
     "noPackage":true,
-    "timeout": 5000,
+    "timeout": 10000,
     "extension": [
       "js",
       "mjs"
@@ -17,10 +17,14 @@
       "test/UnitTests/mjs/class_unit_test.mjs",
       "test/UnitTests/mjs/class_zone_test.mjs",
       "test/UnitTests/mjs/Class_Menu_test.mjs",
+      "test/UnitTests/mjs/class_Didacticiel_test.mjs",
       "test/UnitTests/mjs/eventManager_test.mjs",
       "test/UnitTests/mjs/Module_Interfaces_test.mjs",
       "test/UnitTests/mjs/game_test.mjs",
       "test/UnitTests/mjs/QOG_test.mjs",
+      "test/UnitTests/mjs/QOG_Didacticiel_tests.mjs",
+      "test/UnitTests/mjs/QOG_Parser_test.mjs",
+      "test/UnitTests/mjs/QOG_Run_tests.mjs",
       "test/E2E/setUp.js",
       "test/E2E/e2e-canary.js",
       "test/E2E/MainPage-test.js",

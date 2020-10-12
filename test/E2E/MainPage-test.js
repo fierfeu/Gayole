@@ -15,13 +15,13 @@ describe('[Main Page overall Tests]',()=>{
         });
 
         it('and has good link to load index.css', async ()=>{
-            let cssLink = await browser.findElement(By.tagName('link'));
+            let cssLink = await browser.findElement(By.css('link'));
             expect(await cssLink.getAttribute('href')).to.include('/index.css');
             
         });
 
         it('has good script links and async to load main js', async ()=>{
-            let jsScript = await browser.findElement(By.tagName('script'));
+            let jsScript = await browser.findElement(By.css('script'));
             expect(await jsScript.getAttribute('src')).to.include('/QOG_Head.js');
             expect(await jsScript.getAttribute('async')).to.equal('true');
             expect(await jsScript.getAttribute('type')).to.equal('module');
@@ -40,6 +40,7 @@ describe('[Main Page overall Tests]',()=>{
             // if I use promise in the following line, it'll resolved after the click()
             expect(await mainMenu.getAttribute('class')).to.equal('minifiedMainMenu');
             await mainMenu.click();
+            console.log(await mainMenu.getAttribute('class'));
             expect(await mainMenu.getAttribute('class')).to.equal('minifiedMainMenu maxifiedMainMenu');
             await mainMenu.click();
             expect(await mainMenu.getAttribute('class')).to.equal('minifiedMainMenu');
@@ -51,7 +52,7 @@ describe('[Main Page overall Tests]',()=>{
             let mainMenu = browser.findElement(By.css('#mainMenu'));
             await mainMenu.click();
             const buttonList = await browser.findElement(By.css('#buttonList'));
-            const buttons = await buttonList.findElements(By.tagName('button'));
+            const buttons = await buttonList.findElements(By.css('button'));
             expect (buttons.length).to.equal(3); 
             //Saved button should be the third one
             expect (await buttons[2].getCssValue('cursor')).to.equal('not-allowed'); // to remove as soon
@@ -61,7 +62,7 @@ describe('[Main Page overall Tests]',()=>{
     
         it('game loading button is unavailable for the moment', async () => {
             const buttonList = await browser.findElement(By.css('#buttonList'));
-            const buttons = await buttonList.findElements(By.tagName('button'));
+            const buttons = await buttonList.findElements(By.css('button'));
             //Laoding button should be the second one and is unavailable until user management added
             expect (await buttons[1].getCssValue('cursor')).to.equal('not-allowed');
             expect (await buttons[1].getCssValue('opacity')).to.equal('0.5');
@@ -70,7 +71,7 @@ describe('[Main Page overall Tests]',()=>{
 
         it('game creation button available and in first place', async ()=>{
             const buttonList = await browser.findElement(By.css('#buttonList'));
-            const buttons = await buttonList.findElements(By.tagName('button'));
+            const buttons = await buttonList.findElements(By.css('button'));
             //create button is the first one
             expect(await buttons[0].getText()).to.equal('CREER NOUVELLE PARTIE');
             expect(await buttons[0].getAttribute('class')).to.equal('btn-enabled');
