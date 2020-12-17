@@ -117,6 +117,31 @@ body {
     border-image-repeat: round;
     border-image-width: 15px;
     border-image-outset: 13px;
+
+}
+
+@media (hover:none) and (pointer: coarse) and (orientation: landscape){
+    body {
+        transform: scale(0.12);
+        transform-origin: -8px -9px;
+        background-size: cover;
+    }
+
+}
+
+@media (hover:none) and (pointer: coarse) and (orientation: portrait){
+    body {
+        transform: scale(1);
+        transform-origin: top left;
+    }
+
+}
+
+@media (hover:hover) and (pointer: fine) {
+    html, body {
+        height:100%;
+        width:100%;
+    }
 }
 
 .gameBoardHide {
