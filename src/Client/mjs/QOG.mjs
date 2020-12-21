@@ -46,21 +46,18 @@ export default class QOG {
         this.currentGame.turnLeft --;
         this.currentGame.patrolNb=0;
         for (let id in this.units) {
-            console.log(id);
             if (this.units[id] instanceof unitSet) {
                 this.currentGame.patrolNb ++;
                 const nbOfUnitInPatrol = this.units[id].getNbOfUnitsInPatrol();
-                console.log(nbOfUnitInPatrol);
                 if (nbOfUnitInPatrol>1 && nbOfUnitInPatrol<3) {
-                    this.units[id].actionPoints = 3+ Math.random()*5;
+                    this.units[id].actionPoints = 3+ Math.round(Math.random()*5);
                 }
                 else if (nbOfUnitInPatrol>4 && nbOfUnitInPatrol<8) {
-                    this.units[id].actionPoints = 4+ Math.random()*5 +Math.random()*5;
+                    this.units[id].actionPoints = 4+ Math.round(Math.random()*5) +Math.round(Math.random()*5);
                 }
                 else {
-                    this.units[id].actionPoints = 5+ Math.random()*5+Math.random()*5+Math.random()*5;
+                    this.units[id].actionPoints = 5+ Math.round(Math.random()*5)+Math.round(Math.random()*5)+Math.round(Math.random()*5);
                 }
-                console.log(this.units[id].actionPoints);
                 const el =document.getElementById('PA').getElementsByTagName('span')[0];
                 el.innerHTML=this.units[id].actionPoints;
             }
