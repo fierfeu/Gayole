@@ -46,7 +46,7 @@ describe ('[QOG RUN] function work well',()=>{
 
         QOG.prototype.run.call(gameManager);
         expect (gameManager.currentGame.patrolNb).to.equal(1);
-        expect(gameManager.units["Patrol1"].actionPoints).to.above(3);
+        expect(gameManager.units["Patrol1"].actionPoints).to.above(2);
 
         globalThis.window = globalThis.document = undefined;
     });

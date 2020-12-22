@@ -1,4 +1,6 @@
 import Game from '../../../src/Client/mjs/game.mjs';
+import Event from 'events';
+import EventTarget from 'events';
 
 import chai from 'chai';
 const expect = chai.expect;
@@ -12,7 +14,8 @@ describe('[Game] game creation tests',()=>{
 
     it('is possible to instanciate one and only one game manager',()=>{
         globalThis.gameManager = undefined;
-
+        global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
+        
         expect(()=>{new Game()}).to.not.throw();
         expect (globalThis.gameManager).to.exist;
         expect (globalThis.gameManager.create).to.exist;
@@ -22,24 +25,31 @@ describe('[Game] game creation tests',()=>{
         expect(currentSequence[0]).to.equal('boards');
         expect(()=>{new Game()}).to.throw(); // singleton !
 
-        globalThis.gameManager = undefined;
+        globalThis.gameManager = global.window = undefined;
     });
 
     it ('is possible to instanciate one game manager in a window context',()=>{
-        const window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
+        global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
         const gameClassString = Game.toString();
         
+        window.addEventListener('test',()=>{});
         window.eval(gameClassString +"new Game();");
         expect(window.eval("globalThis.gameManager")).to.exist;
         expect(window.eval("window.gameManager")).to.exist;
         expect(window.gameManager.create).to.exist;
-        
+        const eventSpy = sinon.spy(window.gameManager,"create");
+        window.eval("const GameCreation = new CustomEvent('GameCreation');window.dispatchEvent(GameCreation)");
+        expect(eventSpy.calledOnce).to.true;
+
+        eventSpy.restore();
+        window = undefined;
     });
 
     it ('is possible to create a new game instance',()=>{
         globalThis.gameManager = undefined;
         const window= new JSDOM(HTML,{url:'http://localhost'}).window;
         globalThis.window = window;
+        globalThis.CustomEvent = Event;
         new Game();
         class Empty {}
 
@@ -67,6 +77,11 @@ describe('[Game] game creation tests',()=>{
         expect (gameManager.boardsOk).to.true;
         expect (gameManager.setupOK).to.true;
 
+        const GoodCustomEvent = new CustomEvent('GameCreation');// as it is, in fact, a nodejs Event we must add detail datas
+        GoodCustomEvent.detail={};
+        GoodCustomEvent.detail.gameInterface=GoodGameInterface;
+        expect(()=>{gameManager.create(GoodCustomEvent)}).to.not.throw();
+        expect(gameManager.currentGame.name).to.equal('QOG');
 
         globalThis.gameManager = undefined;
     });

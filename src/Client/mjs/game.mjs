@@ -1,12 +1,14 @@
+
 export default class Game {
-    #sequence
+
     constructor () {
         if(globalThis.gameManager) throw('ERROR gameManager singleton allready created');
         globalThis.gameManager = this;
         //this.#sequence =['boards','setUp','run'] to repare bug #37
-        this.#sequence =['boards','setUp']; // #37 bug to remove run call by game 
+        this.sequence =['boards','setUp']; // #37 bug to remove run call by game 
         this.currentGame = {};
         this.currentScenario=[];
+        window.addEventListener('GameCreation',(ev)=>{this.create(ev)});
     }
 
     loadExternalRessources (opts) {
@@ -30,16 +32,17 @@ export default class Game {
     }
 
     getSequence () {
-        return this.#sequence;
+        return this.sequence;
     }
 
     create(gameInterface) {
+        if(gameInterface instanceof CustomEvent) gameInterface=gameInterface.detail.gameInterface;
         if(!(typeof gameInterface === 'function')) throw ('ERROR Bad Game interface provided : expect a class constructor and received a '+typeof gameInterface);
         if(gameInterface.prototype.hasOwnProperty('getGameName')) this.currentGame.name= gameInterface.prototype.getGameName();
-        for(let i=0;i<this.#sequence.length;i++) {
-            if(!gameInterface.prototype[this.#sequence[i]]) throw ('ERROR BAD Game interface in '+ gameInterface.name+' : '+this.#sequence[i]+' not available');
-            if (!(typeof gameInterface.prototype[this.#sequence[i]] === 'function')) throw ('ERROR BAD Game interface in '+ gameInterface.name+' : '+this.#sequence[i]+' is not a function');
-                gameInterface.prototype[this.#sequence[i]].call(this);
+        for(let i=0;i<this.sequence.length;i++) {
+            if(!gameInterface.prototype[this.sequence[i]]) throw ('ERROR BAD Game interface in '+ gameInterface.name+' : '+this.sequence[i]+' not available');
+            if (!(typeof gameInterface.prototype[this.sequence[i]] === 'function')) throw ('ERROR BAD Game interface in '+ gameInterface.name+' : '+this.sequence[i]+' is not a function');
+                gameInterface.prototype[this.sequence[i]].call(this);
         }
 
     };

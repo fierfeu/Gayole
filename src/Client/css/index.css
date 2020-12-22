@@ -121,18 +121,19 @@ body {
 }
 
 @media (hover:none) and (pointer: coarse) and (orientation: landscape){
-    body {
-        transform: scale(0.12);
-        transform-origin: -8px -9px;
+    html, body {
+        transform: scale(0.38);
+        transform-origin: top left;
         background-size: cover;
     }
 
 }
 
 @media (hover:none) and (pointer: coarse) and (orientation: portrait){
-    body {
+    html, body {
         transform: scale(1);
         transform-origin: top left;
+        background-size: cover;
     }
 
 }
