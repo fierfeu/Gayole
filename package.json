@@ -14,7 +14,7 @@
       "js",
       "mjs"
     ],
-    "recursive": true,
+    "recursive": false,
     "full-trace": true
   },
   "scripts": {

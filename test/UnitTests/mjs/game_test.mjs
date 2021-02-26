@@ -11,10 +11,16 @@ import sinon from 'sinon';
 const HTML = "<!doctype html><html><body></body></html>";
 
 describe('[Game] game creation tests',()=>{
+    beforeEach(()=>{
+        global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
+        globalThis.gameManager = undefined;
+    });
+
+    afterEach(()=>{
+        global.window = undefined
+    });
 
     it('is possible to instanciate one and only one game manager',()=>{
-        globalThis.gameManager = undefined;
-        global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
         
         expect(()=>{new Game()}).to.not.throw();
         expect (globalThis.gameManager).to.exist;
@@ -25,11 +31,10 @@ describe('[Game] game creation tests',()=>{
         expect(currentSequence[0]).to.equal('boards');
         expect(()=>{new Game()}).to.throw(); // singleton !
 
-        globalThis.gameManager = global.window = undefined;
+        
     });
 
     it ('is possible to instanciate one game manager in a window context',()=>{
-        global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
         const gameClassString = Game.toString();
         
         window.addEventListener('test',()=>{});
@@ -38,32 +43,42 @@ describe('[Game] game creation tests',()=>{
         expect(window.eval("window.gameManager")).to.exist;
         expect(window.gameManager.create).to.exist;
         const eventSpy = sinon.spy(window.gameManager,"create");
-        window.eval("const GameCreation = new CustomEvent('GameCreation');window.dispatchEvent(GameCreation)");
+        class GoodGameInterface { 
+            getGameName () {return 'QOG'}
+            boards () {this.boardsOk=true;}
+            setUp () {this.setupOK=true;}
+        }
+        expect(window.eval(
+            GoodGameInterface.toString() +"\n"+
+            "const GameCreation = new CustomEvent('GameCreation', {'detail':{'gameInterface':GoodGameInterface}});"+
+            "window.dispatchEvent(GameCreation)")).to.true;
         expect(eventSpy.calledOnce).to.true;
 
         eventSpy.restore();
-        window = undefined;
     });
 
-    it ('is possible to create a new game instance',()=>{
-        globalThis.gameManager = undefined;
-        const window= new JSDOM(HTML,{url:'http://localhost'}).window;
-        globalThis.window = window;
-        globalThis.CustomEvent = Event;
+    it ('new game instanciation is wellmanage with a game prototype',()=>{
         new Game();
         class Empty {}
+        Empty.prototype.constructor = 'test';
+        globalThis.CustomEvent = Event;
 
         expect (()=>{gameManager.create()}).to.throw();
         expect(()=>{gameManager.create('TOTO')}).to.throw('ERROR Bad Game interface provided : expect a class constructor and received a string');
-        expect(()=>{gameManager.create(Empty)}).to.throw('ERROR BAD Game interface in Empty');
+        expect(()=>{gameManager.create(Empty)}).to.throw('ERROR BAD Game interface is Empty');
 
-        class BadBoards {}
+        class BadBoards {
+            getGameName () {return 'toto'}
+        }
         BadBoards.prototype.boards='test';
         expect(()=>{gameManager.create(BadBoards)}).to.throw('ERROR BAD Game interface in BadBoards : boards is not a function');
-        class GoodBoards {boards () {}};
+        class GoodBoards {
+            getGameName () {}
+            boards () {}};
         expect(()=>{gameManager.create(GoodBoards)}).to.throw('ERROR BAD Game interface in GoodBoards : setUp not available');
 
-        class GoodSetUp {setUp () {}};
+        class GoodSetUp {getGameName () {return 'toto'}
+        setUp () {}};
         expect(()=>{gameManager.create(GoodSetUp)}).to.throw('ERROR BAD Game interface in GoodSetUp : boards not available');
 
         gameManager.boardsOk = false;
@@ -83,7 +98,13 @@ describe('[Game] game creation tests',()=>{
         expect(()=>{gameManager.create(GoodCustomEvent)}).to.not.throw();
         expect(gameManager.currentGame.name).to.equal('QOG');
 
-        globalThis.gameManager = undefined;
+        globalThis.gameManager = globalThis.CustomEvent = undefined;
+    });
+});
+
+describe('[Game] gameManger is instanciable with events', ()=>{
+    it('is possible to create new game mnager throught window event',()=>{
+
     });
 });
 
