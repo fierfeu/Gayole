@@ -1,4 +1,5 @@
 version: 0.2
 
 env: 
-- PORT: 8080
+  variables:
+    PORT: 8080
