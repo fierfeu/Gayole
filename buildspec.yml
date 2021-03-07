@@ -21,7 +21,8 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling the Node.js code
-      - c8 npm run tests-alive
+      - npm run tests-alive
+      - c8 npm run All-tests
   post_build:
     commands:
       - echo Build completed on `date`
