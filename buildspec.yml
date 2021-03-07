@@ -29,8 +29,7 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo connect and report to coveralls
-      - c8 report --reporter=html --reporter=text-lcov | coveralls
+
 # Include only the files required for your application to run.
 artifacts:
   files:
