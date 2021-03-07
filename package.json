@@ -24,7 +24,7 @@
     "tests-alive": "mocha",
     "unit-tests": "mocha",
     "e2e-test": " mocha --no-package --config test/E2E/.mocharc.json",
-    "All-tests": "mocha --config test/.mocharc.json",
+    "all-tests": "mocha --config test/.mocharc.json",
     "start": "node ./src/Servers/index.js"
   },
   "repository": {
