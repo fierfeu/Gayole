@@ -7,6 +7,7 @@ env:
 phases:
   install:
     commands:
+      - sudo apt-get chromium
       - npm install chromedriver --chromedriver-force-download --detect_chromedriver-version
       - npm install -g mocha@latest
       - npm install -g c8@latest
