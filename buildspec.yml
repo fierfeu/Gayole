@@ -7,6 +7,7 @@ env:
 phases:
   install:
     commands:
+      - echo installing Chrome, Chromedriver, mocha and c8
       - wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
       - yum -y install ./google-chrome-stable_current_x86_64.rpm
       - ln -s /usr/bin/google-chrome-stable /usr/bin/chromium
@@ -16,13 +17,15 @@ phases:
   pre_build:
     commands:
       - echo Installing source NPM dependencies...
+      - node -v
       - npm install
   build:
     commands:
       - echo Build started on `date`
-      - echo Compiling the Node.js code
+      - echo test if test framework is alive
       - npm run tests-alive
-      - c8 npm run all-tests
+      - echo test code coverage for both unit and E2E tests
+      - c8 --check-coverage --lines 95 npm run all-tests
   post_build:
     commands:
       - echo Build completed on `date`
