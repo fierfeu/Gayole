@@ -7,7 +7,7 @@ env:
 phases:
   install:
     commands:
-      - echo Installing Mocha...
+      - npm install chromedriver --chromedriver-force-download --detect_chromedriver-version
       - npm install -g mocha@latest
       - npm install -g c8@latest
   pre_build:
@@ -18,7 +18,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling the Node.js code
-      - c8 npm run unit-tests
+      - c8 npm run tests-alive
   post_build:
     commands:
       - echo Build completed on `date`

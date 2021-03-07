@@ -8,7 +8,10 @@
   },
   "mocha": {
     "spec": [
-      "test/UnitTests"
+      "test/UnitTests/canary_test.js",
+      "test/UnitTests/HTML/jsdom-canary_test.js",
+      "test/E2E/setUp.js",
+      "test/E2E/e2e-canary.js"
     ],
     "extension": [
       "js",
@@ -18,6 +21,7 @@
     "full-trace": true
   },
   "scripts": {
+    "tests-alive": "mocha",
     "unit-tests": "mocha",
     "e2e-test": " mocha --no-package --config test/E2E/.mocharc.json",
     "All-tests": "mocha --config test/.mocharc.json",
