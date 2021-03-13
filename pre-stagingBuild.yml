@@ -9,6 +9,10 @@ phases :
       - python get-pip.py 
       - pip install awsebcli --upgrade
 
+  pre_build:
+    commands:
+      - eb --version
   build :
     commands :
-      - eb --version
+      - eb clone Gayole-env -n Gayole-pre-staging
+      - eb deploy --staged
