@@ -19,6 +19,6 @@ phases :
       - eb --version
   build :
     commands :
-      - eb init
+      - eb init --region eu-west-3
       - eb clone Gayole-env -n Gayole-pre-staging
       - eb deploy --staged
