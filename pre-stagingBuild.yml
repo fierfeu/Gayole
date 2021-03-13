@@ -4,7 +4,7 @@ phases :
   install :
     commands :
       - echo create a clone of gayole-env for  load tests
-      - yum install python37
+      - yum install python37 -Y
       - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
       - python get-pip.py 
       - pip install awsebcli --upgrade
