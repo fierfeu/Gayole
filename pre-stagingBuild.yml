@@ -14,5 +14,6 @@ phases :
       - eb --version
   build :
     commands :
+      - eb init
       - eb clone Gayole-env -n Gayole-pre-staging
       - eb deploy --staged
