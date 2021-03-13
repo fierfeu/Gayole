@@ -3,5 +3,8 @@ version: 0.2
 phases :
   pre_build :
     commands :
-      echo create a clone of gayole-env for  load tests
-      eb --version
+      - echo create a clone of gayole-env for  load tests
+      - eb --version
+  build :
+    commands :
+      -- eb list
