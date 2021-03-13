@@ -37,7 +37,3 @@ artifacts:
     - package.json
     - node_modules/**/*
 
-eb_codebuild_settings:
-  CodeBuildServiceRole: aws-elasticbeanstalk-service-role
-  ComputeType: BUILD_GENERAL1_SMALL
-  Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0 
