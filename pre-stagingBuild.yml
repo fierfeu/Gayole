@@ -1,10 +1,14 @@
 version: 0.2
 
 phases :
-  pre_build :
+  install :
     commands :
       - echo create a clone of gayole-env for  load tests
-      - eb --version
+      - yum install python37
+      - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+      - python get-pip.py 
+      - pip install awsebcli --upgrade
+
   build :
     commands :
-      -- eb list
+      - eb --version
