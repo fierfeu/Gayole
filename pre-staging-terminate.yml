@@ -1,10 +1,5 @@
 version: 0.2
 
-eb_codebuild_settings:
-  CodeBuildServiceRole: aws-elasticbeanstalk-service-role
-  ComputeType: BUILD_GENERAL1_SMALL
-  Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0 
-
 phases :
   install :
     commands :
@@ -20,7 +15,6 @@ phases :
       - eb --version
   build :
     commands :
-      - echo clone gayole-env environment for load tests
+      - echo terminate pre-staging environment
       - eb init --region eu-west-3 Gayole
-      - eb clone Gayole-env -n Gayole-pre-staging
-      - eb deploy --staged
+      - eb terminate Gayole-pre-staging --force
