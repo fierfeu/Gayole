@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="build-web-test-plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -33,7 +33,7 @@ Make test last 1 minute (see Scheduler)</stringProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">https://gayole-web.herokuapp.com</stringProp>
+          <stringProp name="HTTPSampler.domain">Gayole-pre-staging.eba-ndpb3uph.eu-west-3.elasticbeanstalk.com</stringProp>
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">https://</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -57,7 +57,7 @@ var ui=JavaImporter(org.openqa.selenium.support.ui) //import Selenium Support UI
 WDS.sampleResult.sampleStart() //sample starting point
 var wait=new support_ui.WebDriverWait(WDS.browser,3000) // wait 1s 
 var conditions = org.openqa.selenium.support.ui.ExpectedConditions
-WDS.browser.get(&apos;https://gayole-web.herokuapp.com/&apos;)
+WDS.browser.get(&apos;Gayole-pre-staging.eba-ndpb3uph.eu-west-3.elasticbeanstalk.com&apos;)
 wait.until(conditions.presenceOfElementLocated(pkg.By.cssSelector(&apos;#mainMenu&apos;)))
 var menu=WDS.browser.findElement(pkg.By.cssSelector(&apos;#mainMenu&apos;))
 menu.click()
