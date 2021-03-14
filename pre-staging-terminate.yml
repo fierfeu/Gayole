@@ -16,5 +16,5 @@ phases :
   build :
     commands :
       - echo terminate pre-staging environment
-      - eb init --region eu-west-3 Gayole
+      - eb init --region eu-west-3 --platforme node.js Gayole
       - eb terminate Gayole-pre-staging --force
