@@ -24,8 +24,10 @@ describe('[QOG Game user Tests]',()=>{
             const board = await browser.findElement(By.id('strategicMap'));
             await browser.wait(until.elementIsVisible(board),10000)
             const turnNbDisplay = await browser.findElement(By.id('turn'));
+            console.log('enter wait for tunr value >0');
             await browser.wait(async ()=>{
                 let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
+                console.log(turnValue);
                 return turnValue;
                 }, 10000);
 
