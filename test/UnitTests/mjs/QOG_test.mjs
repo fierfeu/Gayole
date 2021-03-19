@@ -57,7 +57,7 @@ const SCENAR = `{
                             },"detachments":"test","patrols":"test","localisations":{"zones":{"Siwa":"LRDGT2A"}}},
                     "Axis":{"units":"test","detachments":"test","patrols":"test","localisations":{"town":["random","test1","test2"]}},
                     "conditions":{
-                        "turnNb": 1,
+                        "turnNb": "1",
                         "returnZone" :["Siwa"],
                         "victoryTest":"()=>{return true}"
                     }

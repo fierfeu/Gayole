@@ -42,7 +42,7 @@
           <boolProp name="WebDriverConfig.maximize_browser">true</boolProp>
           <boolProp name="WebDriverConfig.reset_per_iteration">false</boolProp>
           <boolProp name="WebDriverConfig.dev_mode">false</boolProp>
-          <stringProp name="ChromeDriverConfig.chromedriver_path">C:\Users\az02658-dev\AppData\Roaming\npm\chromedriver.exe</stringProp>
+          <stringProp name="ChromeDriverConfig.chromedriver_path">C:\Users\fierf\AppData\Roaming\npm\chromedriver.exe</stringProp>
           <boolProp name="ChromeDriverConfig.android_enabled">false</boolProp>
           <boolProp name="ChromeDriverConfig.headless_enabled">true</boolProp>
           <boolProp name="ChromeDriverConfig.insecurecerts_enabled">false</boolProp>
@@ -57,7 +57,7 @@ var ui=JavaImporter(org.openqa.selenium.support.ui) //import Selenium Support UI
 WDS.sampleResult.sampleStart() //sample starting point
 var wait=new support_ui.WebDriverWait(WDS.browser,3000) // wait 1s 
 var conditions = org.openqa.selenium.support.ui.ExpectedConditions
-WDS.browser.get(&apos;Gayole-pre-staging.eba-ndpb3uph.eu-west-3.elasticbeanstalk.com&apos;)
+WDS.browser.get(&apos;http://Gayole-pre-staging.eba-ndpb3uph.eu-west-3.elasticbeanstalk.com&apos;)
 wait.until(conditions.presenceOfElementLocated(pkg.By.cssSelector(&apos;#mainMenu&apos;)))
 var menu=WDS.browser.findElement(pkg.By.cssSelector(&apos;#mainMenu&apos;))
 menu.click()
@@ -72,7 +72,7 @@ WDS.sampleResult.sampleEnd()
         </com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler>
         <hashTree/>
         <DurationAssertion guiclass="DurationAssertionGui" testclass="DurationAssertion" testname="Duration Assertion" enabled="true">
-          <stringProp name="DurationAssertion.duration">3000</stringProp>
+          <stringProp name="DurationAssertion.duration">4000</stringProp>
         </DurationAssertion>
         <hashTree/>
         <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">

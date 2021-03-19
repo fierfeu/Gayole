@@ -23,6 +23,11 @@ describe('[QOG Game user Tests]',()=>{
             await buttons[0].click();
             const board = await browser.findElement(By.id('strategicMap'));
             await browser.wait(until.elementIsVisible(board),10000)
+            const turnNbDisplay = await browser.findElement(By.id('turn'));
+            await browser.wait(async ()=>{
+                let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
+                return turnValue;
+                }, 5000);
 
             const gameLaunched = await browser.executeScript("return window.localStorage.getItem('gameLaunched');");
             expect(gameLaunched).to.equal('QOG');

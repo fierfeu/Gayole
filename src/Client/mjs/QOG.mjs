@@ -25,6 +25,7 @@ export default class QOG {
             let turn = document.getElementById('turn').getElementsByTagName('span')[0];
             turn.innerHTML = this.currentScenario.conditions.turnNb;
             this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
+            window.localStorage.setItem('gameLaunched',this.currentGame.name);
             QOG.prototype.initGameEvent();
             QOG.prototype.run.call(this); // for #37 bug
         }).catch((err)=>{console.log(err)});
@@ -42,7 +43,7 @@ export default class QOG {
         if(!(this.units instanceof Object)) throw 'ERROR no units to let game running'
         if(!(this.zones instanceof Object)) throw 'ERROR no zones to let game running'
         if(!(this.hasOwnProperty('currentScenario'))) throw 'ERROR no scenario to let game running';
-        window.localStorage.setItem('gameLaunched',this.currentGame.name);
+        
         this.currentGame.turnLeft --;
         this.currentGame.patrolNb=0;
         for (let id in this.units) {
