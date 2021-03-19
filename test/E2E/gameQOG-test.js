@@ -29,7 +29,7 @@ describe('[QOG Game user Tests]',()=>{
                 let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
                 console.log(turnValue);
                 return turnValue;
-                }, 10000);
+                }, 30000);
 
             const gameLaunched = await browser.executeScript("return window.localStorage.getItem('gameLaunched');");
             expect(gameLaunched).to.equal('QOG');
