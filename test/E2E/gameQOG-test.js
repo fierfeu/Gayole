@@ -27,7 +27,7 @@ describe('[QOG Game user Tests]',()=>{
             await browser.wait(async ()=>{
                 let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
                 return turnValue;
-                }, 5000);
+                }, 10000);
 
             const gameLaunched = await browser.executeScript("return window.localStorage.getItem('gameLaunched');");
             expect(gameLaunched).to.equal('QOG');
@@ -87,7 +87,11 @@ describe('[QOG Game user Tests]',()=>{
             const buttons = await browser.findElements(By.css('#buttonList > button'));
             await browser.wait(until.elementIsVisible(buttons[0]),4000);
             await buttons[0].click();
-            await browser.findElement(By.id('dialogZone'))
+            const turnNbDisplay = await browser.findElement(By.id('turn'));
+            await browser.wait(async ()=>{
+                let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
+                return turnValue;
+                }, 10000);
         });
         it('open a dialog box when over turn number',async ()=>{
             const turn = await browser.findElement(By.id('turn'));
