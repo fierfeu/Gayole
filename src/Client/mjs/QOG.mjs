@@ -27,7 +27,9 @@ export default class QOG {
             this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
             window.localStorage.setItem('gameLaunched',this.currentGame.name);
             QOG.prototype.initGameEvent();
-            QOG.prototype.run.call(this); // for #37 bug
+            //QOG.prototype.run.call(this); // for #37 bug
+            const Run = new CustomEvent('GameRunning',{});
+        window.dispatchEvent(Run)
         }).catch((err)=>{console.log(err)});
     }
 
@@ -43,7 +45,6 @@ export default class QOG {
         if(!(this.units instanceof Object)) throw 'ERROR no units to let game running'
         if(!(this.zones instanceof Object)) throw 'ERROR no zones to let game running'
         if(!(this.hasOwnProperty('currentScenario'))) throw 'ERROR no scenario to let game running';
-        
         this.currentGame.turnLeft --;
         this.currentGame.patrolNb=0;
         for (let id in this.units) {
@@ -60,10 +61,12 @@ export default class QOG {
                     this.units[id].actionPoints = 5+ Math.round(Math.random()*5)+Math.round(Math.random()*5)+Math.round(Math.random()*5);
                 }
                 const el =document.getElementById('PA').getElementsByTagName('span')[0];
+
                 el.innerHTML=this.units[id].actionPoints;
+
             }
         }
-        console.log('Run ok');
+
 
     }
 

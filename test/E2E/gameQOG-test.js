@@ -22,9 +22,8 @@ describe('[QOG Game user Tests]',()=>{
             await browser.wait(until.elementIsVisible(buttons[0]),4000)
             await buttons[0].click();
             const board = await browser.findElement(By.id('strategicMap'));
-            await browser.wait(until.elementIsVisible(board),10000)
+            await browser.wait(until.elementIsVisible(board),15000,"board not visible")
             const turnNbDisplay = await browser.findElement(By.id('turn'));
-            console.log('enter wait for tunr value >0');
             await browser.wait(async ()=>{
                 let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
                 return turnValue;
@@ -39,6 +38,7 @@ describe('[QOG Game user Tests]',()=>{
     describe ('Game usages sequences',()=>{
         
         it('unit drag and drop',async ()=>{
+            await browser.get( browser.baseUrl); // to put context at the real begining
             const mainMenu = await browser.findElement(By.css('#mainMenu'));
             await browser.wait(until.elementIsVisible(mainMenu),4000)
             await mainMenu.click();
@@ -88,6 +88,7 @@ describe('[QOG Game user Tests]',()=>{
             const buttons = await browser.findElements(By.css('#buttonList > button'));
             await browser.wait(until.elementIsVisible(buttons[0]),4000);
             await buttons[0].click();
+            await browser.wait(until.elementLocated(By.css('.unit')),4000);
             const turnNbDisplay = await browser.findElement(By.id('turn'));
             await browser.wait(async ()=>{
                 let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
@@ -115,4 +116,30 @@ describe('[QOG Game user Tests]',()=>{
             expect( await browser.findElement(By.id('dialogWindow')).isDisplayed()).to.false;
         })
     });
+
+    describe ('[gameQOG] Running verification',()=>{
+        before (async ()=>{
+            await browser.get( browser.baseUrl); // to put context at the real begining
+            const mainMenu = await browser.findElement(By.css('#mainMenu'));
+            await browser.wait(until.elementIsVisible(mainMenu),4000);
+            await mainMenu.click();
+            const buttons = await browser.findElements(By.css('#buttonList > button'));
+            await browser.wait(until.elementIsVisible(buttons[0]),4000);
+            await buttons[0].click();
+            const turnNbDisplay = await browser.findElement(By.id('turn'));
+            await browser.wait(async ()=>{
+                let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
+                return turnValue;
+                }, 20000,"before statement");
+        });
+
+        it('first action points are initialised',async ()=>{
+            const actionPointsDisplay = await browser.findElement(By.id('PA'));
+            await browser.wait(async ()=>{
+                let value = parseInt(await actionPointsDisplay.findElement(By.css('span')).getText());
+                return value;
+                }, 4000,"Action point not available");
+            expect (parseInt(await actionPointsDisplay.findElement(By.css('span')).getText())).greaterThan(2);
+        })
+    })
 });
