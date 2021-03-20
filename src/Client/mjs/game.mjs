@@ -44,15 +44,26 @@ export default class Game {
         if(this.currentGame.gameInterface.prototype.hasOwnProperty('getGameName')) 
             this.currentGame.name= this.currentGame.gameInterface.prototype.getGameName();
         else throw ('ERROR BAD Game interface is Empty');
-        for(let i=0;i<this.sequence.length;i++) {
+        for( let i=0;i<this.sequence.length;i++) {
             if(!this.currentGame.gameInterface.prototype[this.sequence[i]]) 
                 throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' not available');
             if (!(typeof this.currentGame.gameInterface.prototype[this.sequence[i]] === 'function'))
                  throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' is not a function');
-            this.currentGame.gameInterface.prototype[this.sequence[i]].call(this);
         }
+        // create game events
+        window.addEventListener('GameInit',this.initialise);
+        window.addEventListener('GameRunning',this.runner);
 
     };
 
+    initialise () {
+        for(let i=0;i<gameManager.sequence.length;i++) {
+            gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
+        }   
+    }
+
+    runner () {
+        gameManager.currentGame.gameInterface.prototype.run.call(gameManager)
+    }
 
 };

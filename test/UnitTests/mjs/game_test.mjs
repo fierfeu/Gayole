@@ -89,8 +89,7 @@ describe('[Game] game creation tests',()=>{
         }
         expect(()=>{gameManager.create(GoodGameInterface)}).to.not.throw();
         expect(gameManager.currentGame.name).to.equal('QOG');
-        expect (gameManager.boardsOk).to.true;
-        expect (gameManager.setupOK).to.true;
+
 
         const GoodCustomEvent = new CustomEvent('GameCreation');// as it is, in fact, a nodejs Event we must add detail datas
         GoodCustomEvent.detail={};
@@ -102,10 +101,68 @@ describe('[Game] game creation tests',()=>{
     });
 });
 
-describe('[Game] gameManger is instanciable with events', ()=>{
-    it('is possible to create new game mnager throught window event',()=>{
+describe('[Game] gameManager is instanciable and runnable with events', ()=>{
+    beforeEach(()=>{
+        global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
+        global.CustomEvent = window.CustomEvent
+        new Game();
 
     });
+
+    afterEach(()=>{
+        globalThis.gameManager = undefined;
+        window.close(); // remove any eventlistener
+        global.CustomEvent = undefined;
+        global.window = undefined;
+    });
+
+    it('initiate good events to manage initialisation',()=>{
+        class GoodGameInterface  { 
+            getGameName () {return 'QOG'};
+            boards () {};
+            setUp () {}
+        }
+        const GameCreation = new CustomEvent('GameCreation',{
+            detail :{
+            'gameInterface': GoodGameInterface
+            }
+        });
+        window.dispatchEvent(GameCreation);
+        
+        const GameInit = new window.CustomEvent('GameInit',{});
+        let boardSpy = sinon.spy(GoodGameInterface.prototype,"boards");
+        let setUpSpy = sinon.spy(GoodGameInterface.prototype,"setUp");
+
+        window.dispatchEvent(GameInit);
+
+        expect (boardSpy.calledOnce).to.true;
+        expect (setUpSpy.calledAfter(boardSpy)).to.true;
+    
+    });
+
+    it('Initiate good event to allow game running',()=>{
+        class GoodGameInterface  { 
+            getGameName () {return 'QOG'};
+            boards () {};
+            setUp () {};
+            run() {}
+        }
+        const GameCreation = new CustomEvent('GameCreation',{
+            detail :{
+            'gameInterface': GoodGameInterface
+            }
+        });
+        window.dispatchEvent(GameCreation);
+        
+        const GameInit = new CustomEvent('GameInit',{});
+        window.dispatchEvent(GameInit);
+
+        const runningSpy = sinon.spy(GoodGameInterface.prototype,'run')
+        const GameRunning = new CustomEvent('GameRunning',{});
+        window.dispatchEvent(GameRunning);
+        expect (runningSpy.calledOnce).to.true;
+
+    })
 });
 
 describe ('[Game] game Manager manage external ressources loading', ()=>{

@@ -16,6 +16,10 @@ document.getElementById('mainMenu').onclick = ()=>{
     document.getElementById('mainMenu').classList.toggle('maxifiedMainMenu');
 };
 const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});
-//document.getElementsByTagName('button').item(0).onclick = ()=>{gameManager.create(QOG)};
+const QOGInit = new CustomEvent('GameInit',{});
+
+
 document.getElementsByTagName('button').item(0).onclick = ()=>{
-    window.dispatchEvent(QOGCreation)};
+    window.dispatchEvent(QOGCreation);
+    window.dispatchEvent(QOGInit)
+};
