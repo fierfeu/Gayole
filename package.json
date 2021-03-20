@@ -22,8 +22,8 @@
   },
   "scripts": {
     "tests-alive": "mocha",
-    "unit-tests": "mocha",
-    "e2e-test": " mocha --no-package --config test/E2E/.mocharc.json",
+    "unit-tests": "mocha --no-package -b --recursive ./test/UnitTests/",
+    "e2e-tests": " mocha -b --config test/E2E/.mocharc.json",
     "all-tests": "mocha --config test/.mocharc.json",
     "start": "node ./src/Servers/index.js"
   },

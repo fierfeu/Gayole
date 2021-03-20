@@ -5,7 +5,6 @@ import jsdom from 'jsdom';
 const {JSDOM} = jsdom;
 
 import zone from '../../../src/Client/mjs/zone.mjs';
-import unit from '../../../src/Client/mjs/unit.mjs';
 
 describe ('[Game Board] contains the good html',()=>{
     let document;

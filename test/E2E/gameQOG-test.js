@@ -27,7 +27,6 @@ describe('[QOG Game user Tests]',()=>{
             console.log('enter wait for tunr value >0');
             await browser.wait(async ()=>{
                 let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
-                console.log(turnValue);
                 return turnValue;
                 }, 20000);
 
