@@ -24,7 +24,7 @@
     "tests-alive": "mocha",
     "unit-tests": "mocha --no-package -b --recursive ./test/UnitTests/",
     "e2e-tests": " mocha -b --config test/E2E/.mocharc.json",
-    "all-tests": "mocha --config test/.mocharc.json",
+    "all-tests": "mocha --timeout 20000 --config test/.mocharc.json",
     "start": "node ./src/Servers/index.js"
   },
   "repository": {
