@@ -22,7 +22,7 @@ describe('[QOG Game user Tests]',()=>{
             await browser.wait(until.elementIsVisible(buttons[0]),4000)
             await buttons[0].click();
             const board = await browser.findElement(By.id('strategicMap'));
-            await browser.wait(until.elementIsVisible(board),10000)
+            await browser.wait(until.elementIsVisible(board),15000,"board not visible")
             const turnNbDisplay = await browser.findElement(By.id('turn'));
             console.log('enter wait for tunr value >0');
             await browser.wait(async ()=>{
