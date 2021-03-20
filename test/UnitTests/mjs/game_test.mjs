@@ -101,7 +101,7 @@ describe('[Game] game creation tests',()=>{
     });
 });
 
-describe('[Game] gameManager is instanciable with events', ()=>{
+describe('[Game] gameManager is instanciable and runnable with events', ()=>{
     beforeEach(()=>{
         global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
         global.CustomEvent = window.CustomEvent
@@ -115,6 +115,7 @@ describe('[Game] gameManager is instanciable with events', ()=>{
         global.CustomEvent = undefined;
         global.window = undefined;
     });
+
     it('initiate good events to manage initialisation',()=>{
         class GoodGameInterface  { 
             getGameName () {return 'QOG'};
@@ -138,6 +139,30 @@ describe('[Game] gameManager is instanciable with events', ()=>{
         expect (setUpSpy.calledAfter(boardSpy)).to.true;
     
     });
+
+    it('Initiate good event to allow game running',()=>{
+        class GoodGameInterface  { 
+            getGameName () {return 'QOG'};
+            boards () {};
+            setUp () {};
+            run() {}
+        }
+        const GameCreation = new CustomEvent('GameCreation',{
+            detail :{
+            'gameInterface': GoodGameInterface
+            }
+        });
+        window.dispatchEvent(GameCreation);
+        
+        const GameInit = new CustomEvent('GameInit',{});
+        window.dispatchEvent(GameInit);
+
+        const runningSpy = sinon.spy(GoodGameInterface.prototype,'run')
+        const GameRunning = new CustomEvent('GameRunning',{});
+        window.dispatchEvent(GameRunning);
+        expect (runningSpy.calledOnce).to.true;
+
+    })
 });
 
 describe ('[Game] game Manager manage external ressources loading', ()=>{

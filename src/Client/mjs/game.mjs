@@ -52,14 +52,18 @@ export default class Game {
         }
         // create game events
         window.addEventListener('GameInit',this.initialise);
+        window.addEventListener('GameRunning',this.runner);
 
     };
 
-    initialise (ev) {
+    initialise () {
         for(let i=0;i<gameManager.sequence.length;i++) {
             gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
         }   
     }
 
+    runner () {
+        gameManager.currentGame.gameInterface.prototype.run.call(gameManager)
+    }
 
 };

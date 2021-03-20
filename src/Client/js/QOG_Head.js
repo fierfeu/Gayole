@@ -17,7 +17,9 @@ document.getElementById('mainMenu').onclick = ()=>{
 };
 const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});
 const QOGInit = new CustomEvent('GameInit',{});
-//document.getElementsByTagName('button').item(0).onclick = ()=>{gameManager.create(QOG)};
+
+
 document.getElementsByTagName('button').item(0).onclick = ()=>{
     window.dispatchEvent(QOGCreation);
-    window.dispatchEvent(QOGInit)};
+    window.dispatchEvent(QOGInit)
+};
