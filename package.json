@@ -42,19 +42,19 @@
   },
   "homepage": "https://github.com/fierfeu/Gayole#readme",
   "devDependencies": {
-    "chai": "*",
+    "chai": "^4.3.4",
     "chai-as-promised": "*",
     "chromedriver": "^85.0.1",
     "coveralls": "^3.1.0",
     "driver": "^1.0.0",
-    "geckodriver": "^1.20.0",
-    "jsdom": "^16.4.0",
-    "mocha": "^8.1.3",
-    "selenium-webdriver": "^4.0.0-alpha.7",
-    "sinon": "^9.0.3"
+    "geckodriver": "^1.22.2",
+    "jsdom": "^16.5.1",
+    "mocha": "^8.3.2",
+    "selenium-webdriver": "^4.0.0-beta.2",
+    "sinon": "^9.2.4"
   },
   "dependencies": {
-    "npm": "^6.14.8",
-    "npm-registry-fetch": "^8.1.4"
+    "npm": "^6.14.11",
+    "npm-registry-fetch": "^8.1.5"
   }
 }
