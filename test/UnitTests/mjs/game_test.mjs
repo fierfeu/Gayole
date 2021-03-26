@@ -12,7 +12,7 @@ const HTML = "<!doctype html><html><body></body></html>";
 
 describe('[Game] game creation tests',()=>{
     beforeEach(()=>{
-        global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
+        global.window= new JSDOM(HTML,{url:'http://localhost',pretendToBeVisual: true, runScripts:"dangerously"}).window;
         globalThis.gameManager = undefined;
     });
 

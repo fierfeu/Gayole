@@ -93,3 +93,22 @@ describe('[DIALOG] html game board definition contain a dialog window',()=>{
         });
     });
 })
+
+describe ('[GameQOG Run] html must contain movement HMI',()=>{
+    it('contains a div with id cost to give data to user when drag and drop units',()=>{
+        return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
+            let document=dom.window.document;
+            
+            expect(document.getElementById('MVTcost')).to.exist;
+            const costDir = document.getElementById('MVTcost');
+            expect(costDir.classList.contains('dialogWindow')).to.true;
+            expect(costDir.classList.contains('gameBoardHide')).to.true;
+            expect(costDir.style.backgroundImage).to.equal('url(/PA.png)');
+            expect(costDir.style.backgroundPosition).to.equal('center');
+            expect(costDir.style.backgroundSize).to.equal('contain');
+            expect(costDir.style.backgroundRepeat).to.equal('no-repeat');
+            expect(costDir.style.fontFamily).to.equal('\'mainMenuTitleFont\'');
+            expect(costDir.style.padding).to.equal('15px');
+        });
+    })
+})

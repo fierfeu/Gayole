@@ -29,7 +29,7 @@ export default class QOG {
             QOG.prototype.initGameEvent();
             //QOG.prototype.run.call(this); // for #37 bug
             const Run = new CustomEvent('GameRunning',{});
-        window.dispatchEvent(Run)
+            window.dispatchEvent(Run)
         }).catch((err)=>{console.log(err)});
     }
 
@@ -84,6 +84,8 @@ export default class QOG {
         
         for (let areaZone in QOG.prototype.zones ) {
             QOG.prototype.zones[areaZone].Element.ondragover=QOG.prototype.dragoverHandler;
+            QOG.prototype.zones[areaZone].Element.ondragenter=QOG.prototype.dragEnterHandler;
+            QOG.prototype.zones[areaZone].Element.ondragleave=QOG.prototype.dragLeaveHandler;
             QOG.prototype.zones[areaZone].Element.ondrop = QOG.prototype.dropHandler;
             if(QOG.prototype.zones[areaZone].Element.dataset.links) {
                 let sourceZone=QOG.prototype.zones[areaZone].Element;
@@ -177,9 +179,14 @@ export default class QOG {
                         if(jsonDesc.town[0]==='random') {
                             for(const zoneName in manager.zones) {
                                if (manager.zones[zoneName].ground === 'town') {
-                                QOG.prototype.randomizeUnit(manager.zones[zoneName],jsonDesc.town,manager);
-                                if (IADrived)
-                                    manager.zones[zoneName].Element.ondragover = "";
+                                    QOG.prototype.randomizeUnit(manager.zones[zoneName],jsonDesc.town,manager);
+                                    if (IADrived) {
+                                        manager.zones[zoneName].Element.ondrop = "";
+                                        manager.zones[zoneName].Element.ondragenter = "";
+                                        manager.zones[zoneName].Element.ondragleave = "";
+                                        manager.zones[zoneName].Element.ondragover = "";
+                                    }
+                                    
                                 }
                             }
                         }
@@ -187,8 +194,12 @@ export default class QOG {
                     case "zones" :
                         for (let key in jsonDesc.zones) {
                             manager.zones[key].attach(manager.units[jsonDesc.zones[key]]);
-                            if (IADrived)
+                            if (IADrived) {
+                                manager.zones[key].Element.ondrop = "";
+                                manager.zones[key].Element.ondragenter = "";
+                                manager.zones[key].Element.ondragleave = "";
                                 manager.zones[key].Element.ondragover = "";
+                            }
                             QOG.prototype.placeAPiece(manager.units[jsonDesc.zones[key]],manager.zones[key]);
                         }
                         break;
@@ -290,10 +301,26 @@ export default class QOG {
             img2move.style.left = Number(Zone.Element.coords.split(',')[0])+5+"px";
             img2move.style.top = Number (Zone.Element.coords.split(',')[1])+5+"px";
         }
-        
-
      }
-        
+    
+     dragEnterHandler (event) {
+        event.preventDefault();
+
+        let zoneCoords = event.target.coords;
+        zoneCoords = zoneCoords.split(',');
+
+        const costDiv = document.getElementById('MVTcost');
+        costDiv.style.left = zoneCoords[2]+'px';
+        costDiv.style.top = (parseInt(zoneCoords[3])+90)+'px';
+        costDiv.classList.remove('gameBoardHide');
+     }
+
+     dragLeaveHandler(event) {
+         event.preventDefault();
+
+         const costDiv = document.getElementById('MVTcost');
+         costDiv.classList.add('gameBoardHide');
+     }
 
 }
 

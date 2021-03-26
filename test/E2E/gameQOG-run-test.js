@@ -34,7 +34,7 @@ describe ('[QOG run] movement behaviour',()=>{
                 .move({origin:origine,x:280,y:150},1000)
                 .perform();
         
-        const cost = await browser.findElement(By.id('cost'));
+        const cost = await browser.findElement(By.id('MVTcost'));
         await browser.wait(until.elementIsVisible(cost),4000,"cost information not visible");
         expect (cost.getText()).to.not.empty;
         

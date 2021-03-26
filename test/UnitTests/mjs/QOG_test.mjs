@@ -95,7 +95,7 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
         expect(document.getElementsByName('gameBoardMap')[0].areas.length).to.equal(1);
         expect(initZonesSpy.calledOnceWith(gameManager)).to.true;
 
-        globalThis.document=undefined;
+        globalThis.document = undefined;
         initZonesSpy.restore();
     });
 
@@ -170,6 +170,19 @@ describe ('[QOG] init functions work well',()=>{
         expect (()=>{QOG.prototype.initZones(gameManager)}).to.not.throw();
         expect (gameManager.zones['Siwa']).to.exist;
         expect (QOG.prototype.zones['Siwa'] instanceof zone).to.be.true;
+    })
+
+    it('[QOG run Movement] zones have good event handler definition',()=>{
+        globalThis.document =new JSDOM(HTML).window.document;
+        let gameManager={};
+        QOG.prototype.initZones(gameManager);
+        expect (gameManager.zones['Cross1']).to.exist;
+        let aZone= gameManager.zones['Cross1'].Element;
+
+        expect(aZone.ondragenter).to.not.null;
+        expect(aZone.ondragenter.name).to.equal('dragEnterHandler');
+        expect(aZone.ondragleave).to.not.null;
+        expect(aZone.ondragleave.name).to.equal('dragLeaveHandler');
     })
 
     it("there's a function to place pieces on board",() =>{
@@ -249,13 +262,17 @@ describe ('[QOG] init functions work well',()=>{
         expect(imgs[1].ondragstart).to.equal(QOG.prototype.dragStartHandler);
 
         // verify for Axis opponent that we can desallow drag&drop when an axis unit is in the zone
-        gameManager.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        gameManager.zones['Siwa'].Element.ondrop=QOG.prototype.dropHandler;
+        gameManager.zones['Siwa'].Element.ondragenter=QOG.prototype.dragEnterHandler;
+        gameManager.zones['Siwa'].Element.ondragleave=QOG.prototype.dragLeaveHandler;
         const cross = document.getElementById('Cross1');
         gameManager.zones['Cross1'] = new zone (cross,'Cross1');
-        gameManager.zones['Cross1'].Element.ondragover=QOG.prototype.dragoverHandler;
+        gameManager.zones['Cross1'].Element.ondrop=QOG.prototype.dropHandler;
         QOG.prototype.placeUnits(jsonZoneDesc,true, gameManager); 
-        expect(gameManager.zones['Siwa'].Element.ondragover).to.be.null;
-        expect(gameManager.zones['Cross1'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
+        expect(gameManager.zones['Siwa'].Element.ondrop).to.be.null;
+        expect(gameManager.zones['Siwa'].Element.ondragenter).to.be.null;
+        expect(gameManager.zones['Siwa'].Element.ondragleave).to.be.null;
+        expect(gameManager.zones['Cross1'].Element.ondrop).to.equal(QOG.prototype.dropHandler);
 
         globalThis.document = globalThis.window = undefined;
     });

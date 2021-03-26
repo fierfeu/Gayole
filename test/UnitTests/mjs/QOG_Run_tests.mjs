@@ -51,3 +51,51 @@ describe ('[QOG RUN] function work well',()=>{
         globalThis.window = globalThis.document = undefined;
     });
 });
+
+describe ('[QOG run Movement] verify that movement action is well managed',()=>{
+
+    beforeEach (async ()=>{
+        await JSDOM.fromFile ('src/Client/html/boardGame.html',{
+            url:'http://localhost', 
+            pretendToBeVisual: true,
+            runScripts:"dangerously"
+        }).then((dom)=>{
+            globalThis.window = dom.window;
+            globalThis.document = window.document;
+        });
+    })
+
+    afterEach (()=>{
+        globalThis.window=undefined;
+    })
+
+    it('shows cost for current unit movement when enter a valid target zone',()=>{
+        const MVTcost = document.getElementById('MVTcost');
+        let event = {
+            "dataTransfert" : {},
+            "bubble" : true,
+            "target" : {},
+            preventDefault () {}
+        };
+        let zoneTarget = document.getElementById('Cross1');
+        event.target= zoneTarget;
+        let coords=zoneTarget.getAttribute('coords');
+        coords=coords.split(',');
+
+        expect(()=>{QOG.prototype.dragEnterHandler(event)}).to.not.throw();
+        expect (MVTcost.className).to.not.contain('gameBoardHide');
+        expect(MVTcost.style.left).to.equal(coords[2]+'px');
+        let top = parseInt(coords[3])+90;
+        expect(MVTcost.style.top).to.equal(top+'px');
+
+    })
+
+    it('hide cost for current unit movement when leave a valid target zone',()=>{
+        const MVTcost = document.getElementById('MVTcost');
+        let event = {
+            preventDefault () {}
+        }
+        expect(()=>{QOG.prototype.dragLeaveHandler(event)}).to.not.throw();
+        expect (MVTcost.className).to.contain('gameBoardHide');
+    })
+})
