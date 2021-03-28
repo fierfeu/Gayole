@@ -1,4 +1,6 @@
 <div id='dialogZone' class='dialogZone'>
+    <div id='mouse' style="margin-right:50px;font-size:x-large"></div>
+    <div id='client-mouse' style="margin-right:600px;font-size:x-large"></div>
     <div id='PA' class="PA warLetters"
         data-help="Gives you the number of action points available for this turn">
         <span style="display:block;margin-top:5px">0</span>
@@ -16,14 +18,16 @@
     background-image : url(&quot;/PA.png&quot;);
     background-repeat: no-repeat;
     text-align: center;
-    padding: 15px;
-    width: 60px;
-    height: 20px;
+    width: 35px;
+    height: 15px;
+    padding:5px;
     background-size: contain;
     background-position: center;
     font-weight: bold;
     font-family: 'mainMenuTitleFont';
-    font-size: x-large;">0 PA</div>
+    font-size: large;
+    border-image-width:5px;
+    border-image-outset:1px">-10</div>
 <div id='strategicMap' class='strategicMap'>
     <map name='gameBoardMap'>
         <area shape='rect' coords='383,10,412,49' id='Derna' data-ground='town' data-links='BedaLittoria:0,5;Mechili:1;Gazala:0,5'>
@@ -59,7 +63,7 @@
         <area shape='rect' coords='853,315,900,350' id='Cross6' data-links='Cross5:2;Mersa:1;Cross4:2;Cross1:1;Cross3:2'>
         <area shape='rect' coords='29,325,75,370' id='MarsaAlBrega' data-ground='town' data-links='Ajdabiya:1;Cross11:1'>
         <area shape='rect' coords='719,331,765,376' id='Cross2' data-links='Cross3:1;Cross1:1;FortMaddalena:2'>
-        <area shape='rect' coords='130,345,175,490' id='Cross11' data-links='Ajdabiya:1;MaatenElGrara:1;Jalo:1;MarsaAlBrega:1'>
+        <area shape='rect' coords='130,345,175,390' id='Cross11' data-links='Ajdabiya:1;MaatenElGrara:1;Jalo:1;MarsaAlBrega:1'>
         <area shape='rect' coords='384,366,419,411' id='Cross9' data-links='Cross7:2;Cross10:2;Jagahbub:1;BenGania:2'>
         <area shape='rect' coords='722,400,767,445' id='Cross1' data-links='Cross2:1;Cross6:1;Siwa:1;Jagahbub:2'>
         <area shape='rect' coords='604,405,650,451' id='Jagahbub' data-links='Cross7:1;ElCuasc:1;FortMaddalena:1;Cross1:2;LongCross1:1;Cross9:1;Cross10:2'>

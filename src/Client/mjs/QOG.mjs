@@ -148,6 +148,7 @@ export default class QOG {
         if (unit4piece.draggable) {
             piece.draggable = "true";
             piece.ondragstart = QOG.prototype.dragStartHandler;
+            piece.ondrag = QOG.prototype.dragHandler;
             piece.ondragend = QOG.prototype.dragEndHandler;
         }
 
@@ -279,6 +280,10 @@ export default class QOG {
         event.target.classList.add('dragged');   
      }   
 
+     dragHandler (e) {
+        e.preventDefault();
+     }
+
      dragEndHandler (event) {
         event.preventDefault();
         event.target.classList.remove('dragged');
@@ -288,6 +293,7 @@ export default class QOG {
 
      dragoverHandler (event) {
         event.preventDefault();
+        QOG.prototype.dragEnterHandler(event);
      }
 
      dropHandler(event) {
@@ -311,7 +317,7 @@ export default class QOG {
 
         const costDiv = document.getElementById('MVTcost');
         costDiv.style.left = zoneCoords[2]+'px';
-        costDiv.style.top = (parseInt(zoneCoords[3])+90)+'px';
+        costDiv.style.top = (parseInt(zoneCoords[3])+80)+'px';
         costDiv.classList.remove('gameBoardHide');
      }
 

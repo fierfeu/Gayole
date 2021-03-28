@@ -85,7 +85,7 @@ describe ('[QOG run Movement] verify that movement action is well managed',()=>{
         expect(()=>{QOG.prototype.dragEnterHandler(event)}).to.not.throw();
         expect (MVTcost.className).to.not.contain('gameBoardHide');
         expect(MVTcost.style.left).to.equal(coords[2]+'px');
-        let top = parseInt(coords[3])+90;
+        let top = parseInt(coords[3])+80;
         expect(MVTcost.style.top).to.equal(top+'px');
 
     })

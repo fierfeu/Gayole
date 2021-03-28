@@ -108,7 +108,7 @@ describe ('[GameQOG Run] html must contain movement HMI',()=>{
             expect(costDir.style.backgroundSize).to.equal('contain');
             expect(costDir.style.backgroundRepeat).to.equal('no-repeat');
             expect(costDir.style.fontFamily).to.equal('\'mainMenuTitleFont\'');
-            expect(costDir.style.padding).to.equal('15px');
+            expect(costDir.style.padding).to.equal('5px');
         });
     })
 })
