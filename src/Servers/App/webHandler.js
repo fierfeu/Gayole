@@ -45,6 +45,7 @@ const sitePagesConf ={
     '/chrono.png':'src/Client/images/chrono.png',
     '/PA.png':'src/Client/images/PA.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
+    '/dd4tests.js':'src/Client/js/dd4tests.js',
     '/favicon.ico' : './src/Client/images/favicon.ico' 
 };
 

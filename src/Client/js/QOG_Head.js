@@ -6,7 +6,6 @@ localStorage.setItem('gameLaunched','false');
 import Game from '/game.mjs';
 import QOG from '/QOG.mjs';
 
-//globalThis.game = QOG.prototype;
 new Game();
 
 document.getElementById('mainMenu').onclick = ()=>{
@@ -27,3 +26,4 @@ document.getElementsByTagName('button').item(0).onclick = ()=>{
     document.getElementById('mouse').innerHTML="X:"+e.offsetX+" Y:"+e.offsetY;
     document.getElementById('client-mouse').innerHTML="cX:"+e.clientX+" cY:"+e.clientY;
 }); */
+

@@ -28,7 +28,8 @@
       "test/E2E/setUp.js",
       "test/E2E/e2e-canary.js",
       "test/E2E/MainPage-test.js",
-      "test/E2E/gameQOG-test.js"],
+      "test/E2E/gameQOG-test.js",
+      "test/E2E/gameQOG-run-test.js"],
     "recursive": true,
     "full-trace": true
   }

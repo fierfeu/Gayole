@@ -264,7 +264,6 @@ export default class QOG {
         event.target.removeEventListener('mouseover',QOG.prototype.showHelp,true);
         event.target.removeEventListener('mouseout',QOG.prototype.hideHelp,true);
         document.getElementById('dialogWindow').classList.add('gameBoardHide');
-        event.dataTransfer.effectAllowed = "move";
         event.dataTransfer.setData("img",event.target);
         event.dataTransfer.setData("UnitName", event.target.name);
         event.dataTransfer.setData("NbUnits",1);// pour le moment depent si c'et un unit, un detachment ou une patrouille
@@ -278,10 +277,11 @@ export default class QOG {
         };
         event.dataTransfer.setData("fromZone",fromZone);  
         event.target.classList.add('dragged');   
+        event.dataTransfer.effectAllowed = 'move';
      }   
 
      dragHandler (e) {
-        e.preventDefault();
+        //e.preventDefault();
      }
 
      dragEndHandler (event) {
@@ -293,7 +293,7 @@ export default class QOG {
 
      dragoverHandler (event) {
         event.preventDefault();
-        QOG.prototype.dragEnterHandler(event);
+        //QOG.prototype.dragEnterHandler(event);
      }
 
      dropHandler(event) {
@@ -318,7 +318,7 @@ export default class QOG {
         const costDiv = document.getElementById('MVTcost');
         costDiv.style.left = zoneCoords[2]+'px';
         costDiv.style.top = (parseInt(zoneCoords[3])+80)+'px';
-        costDiv.classList.remove('gameBoardHide');
+        costDiv.classList.toggle('gameBoardHide');
      }
 
      dragLeaveHandler(event) {
