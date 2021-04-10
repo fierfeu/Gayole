@@ -155,8 +155,8 @@ describe ('[QOG] init functions work well',()=>{
         globalThis.document = globalThis.window.document;
         expect (()=>{QOG.prototype.initZones()}).to.not.throw();
         expect (QOG.prototype.zones['Siwa'] instanceof zone).to.be.true;
-        expect (QOG.prototype.zones['Siwa'].moveAllowedTo(QOG.prototype.zones['Cross1'])).to.be.equal('1');
-        expect (QOG.prototype.zones['Cross1'].moveAllowedTo(QOG.prototype.zones['Siwa'])).to.be.equal('1');
+        expect (QOG.prototype.zones['Siwa'].moveAllowedTo(QOG.prototype.zones['Cross1'])).to.be.equal(1);
+        expect (QOG.prototype.zones['Cross1'].moveAllowedTo(QOG.prototype.zones['Siwa'])).to.be.equal(1);
         expect (QOG.prototype.zones['Cross1'].Element.ondragover).to.be.equal(QOG.prototype.dragoverHandler);
         expect (QOG.prototype.zones['Cross1'].Element.ondrop).to.be.equal(QOG.prototype.dropHandler);
         expect(QOG.prototype.zones['Cross1'].hasOwnProperty('ground')).to.true;
@@ -628,7 +628,8 @@ describe ('[QOG game event] all game board event are initialised',()=>{
 describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     let ev ={dataTransfer:{}};
     beforeEach (()=>{
-        globalThis.document = new JSDOM('<mapname="mappy"><area id="Cross1" shape="rect" coords="100,100,200,200"> </map>'+
+        globalThis.document = new JSDOM('<div id="MVTcost"></div><div id="turn"><span>10</span><div id="PA"><span></span></div></div>'+
+            '<mapname="mappy"><area id="Siwa" shape="rect" coords="100,100,200,200"><area id="Cross1" shape="rect" coords="100,100,200,200"> </map>'+
             '<img name="1st Patrol" usemap="#mappy" style="position:absolute;top:520px;left:694px;" src="/patrol.png"><div id="dialogWindow"></div>',
             {pretendToBeVisual:true}).window.document;
         const scenario = {"units":[{"images":{"recto":"/patrol1.png"},
@@ -638,14 +639,13 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
             scenario.units[0].images,
             scenario.units[0].name,
             scenario.units[0].description );
-        gameManager.zones=[];
+        //gameManager.zones=[];
         gameManager.zones['Siwa'] = new zone(document.getElementsByTagName('area')[0],'Siwa');
-        gameManager.zones['Cross1']= new zone(document.getElementsByTagName('area')[0],'Cross1');
+        gameManager.zones['Cross1']= new zone(document.getElementsByTagName('area')[1],'Cross1');
         gameManager.zones['Siwa'].linkTo(gameManager.zones['Cross1'],1);
-        gameManager.zones['Cross1'].linkTo(gameManager.zones['Siwa'],1);
+        //gameManager.zones['Cross1'].linkTo(gameManager.zones['Siwa'],1);
         gameManager.zones['Siwa'].attach(gameManager.units['1st Patrol']);
-        ev.dataTransfer.setData = (key,value) => { ev.dataTransfer[key]=value};
-        ev.dataTransfer.getData = (key) => {return ev.dataTransfer[key]};
+        gameManager.currentGame ={};
     });
 
     afterEach (()=>{
@@ -655,8 +655,8 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     it('unit image dragstart event store good data',()=>{
         ev.target=document.getElementsByTagName('img')[0];
         QOG.prototype.dragStartHandler(ev);
-        expect(ev.dataTransfer).to.contain({"UnitName":"1st Patrol","NbUnits":1});
-        expect(ev.dataTransfer.getData('fromZone')).to.equal("Siwa");
+        expect(gameManager.unit2Move.name).to.equal("1st Patrol");
+        expect(gameManager.fromZone.Element.id).to.equal("Siwa");
     });
 
     //#34 bug
@@ -672,9 +672,8 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
         QOG.prototype.dragStartHandler(ev);
         ev.target=document.getElementsByTagName('area')[0];
         ev.preventDefault = sinon.spy();
-        QOG.prototype.dropHandler(ev);
+        QOG.prototype.dragoverHandler(ev);
         expect(ev.preventDefault.called).to.be.true;
-        
         ev.preventDefault=undefined;
     });
 
@@ -682,15 +681,21 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     it('drop handler move unit in the good place',()=>{
         const patrolImg = document.getElementsByTagName('img')[0];
         ev.target=patrolImg;
+        gameManager.currentGame.turnLeft=10;
         QOG.prototype.dragStartHandler(ev);
-        ev.preventDefault = sinon.spy();
-        ev.target = document.getElementsByTagName('area')[0];
+        ev.target = document.getElementsByTagName('area')[1];
         QOG.prototype.dropHandler(ev);
-        expect(ev.preventDefault.called).to.be.true;
         expect(gameManager.zones['Siwa'].units[0]).to.be.undefined;
         expect(gameManager.zones['Cross1'].units['1st Patrol']).to.equal(gameManager.units['1st Patrol']);
         expect(patrolImg.style.top).to.be.equal('105px');
         expect(patrolImg.style.left).to.be.equal('105px');
-        ev.preventDefault=undefined;
     });
+
+    it('finishing drag process by removing unit dragged css',()=>{
+        const patrolImg = document.getElementsByTagName('img')[0];
+        ev.target=patrolImg;
+        QOG.prototype.dragStartHandler(ev);
+        QOG.prototype.dragEndHandler(ev);
+        expect(patrolImg.className).to.not.contain('dragged');
+    })
 });

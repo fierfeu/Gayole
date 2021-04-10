@@ -46,17 +46,11 @@ window.dragAndDrop = (el,zone) => {
             const drop = new DragEvent('drop',{"dataTransfer":data});
             const dragEnd = new DragEvent('dragend',{"dataTransfer":data});
             el.dispatchEvent(dragStart);
-            console.log('dragstart');
             el.dispatchEvent(drag)
-            console.log('drag');
             zone.dispatchEvent(dropEnter);
-            console.log('dropenter');
             zone.dispatchEvent(dropOver);
-            console.log('dropover');
             zone.dispatchEvent(drop);
-            console.log('drop');
             el.dispatchEvent(dragEnd);
-            console.log('dragEnd');
             return data;
         } else return false
         
@@ -86,5 +80,15 @@ window.dragAndDrop = (el,zone) => {
             return data;
         } else return false
         
+    } else return false;
+
+}
+
+window.endingDrag = (el) => {
+    if(el.draggable === true) {
+        const data = new DataTransfer();
+        const dragEnd = new DragEvent('dragend',{"dataTransfer":data});
+        el.dispatchEvent(dragEnd);
+        return data;
     } else return false;
 }

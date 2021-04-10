@@ -264,9 +264,9 @@ export default class QOG {
         event.target.removeEventListener('mouseover',QOG.prototype.showHelp,true);
         event.target.removeEventListener('mouseout',QOG.prototype.hideHelp,true);
         document.getElementById('dialogWindow').classList.add('gameBoardHide');
-        event.dataTransfer.setData("img",event.target);
-        event.dataTransfer.setData("UnitName", event.target.name);
-        event.dataTransfer.setData("NbUnits",1);// pour le moment depent si c'et un unit, un detachment ou une patrouille
+        
+        gameManager.unit2Move = gameManager.units[event.target.name];
+
         let fromZone;
         for (let [ZoneName,Zone] of Object.entries(gameManager.zones)) {
             const unit2move = gameManager.units[event.target.name];
@@ -275,17 +275,19 @@ export default class QOG {
                 break;
             };
         };
-        event.dataTransfer.setData("fromZone",fromZone);  
+ 
+        gameManager.fromZone = gameManager.zones[fromZone];
+
         event.target.classList.add('dragged');   
-        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.effectAllowed = "move";
      }   
 
      dragHandler (e) {
-        //e.preventDefault();
+        e.preventDefault()
      }
 
      dragEndHandler (event) {
-        event.preventDefault();
+        //event.preventDefault();
         event.target.classList.remove('dragged');
         event.target.addEventListener('mouseover',QOG.prototype.showHelp,true);
         event.target.addEventListener('mouseout',QOG.prototype.hideHelp,true);
@@ -293,37 +295,78 @@ export default class QOG {
 
      dragoverHandler (event) {
         event.preventDefault();
-        //QOG.prototype.dragEnterHandler(event);
+        const cost = parseInt(document.getElementById('MVTcost').innerText);
+        if (!Number.isNaN(cost)) {
+            event.dataTransfer.dropEffect = "move";
+        } else {
+            event.dataTransfer.dropEffect='none';
+        }
+
      }
 
      dropHandler(event) {
-        event.preventDefault();
+        const costDiv = document.getElementById('MVTcost');
+        if (costDiv.innerText !== 'No') {
+            console.log('drop = ok');
+            const cost = parseInt(costDiv.innerText);
+            costDiv.classList.add('gameBoardHide');
+
+            const Zone = gameManager.zones[event.target.id];
+
+            if (gameManager.fromZone.moveTo(Zone,gameManager.unit2Move)) {
+                const img2move = document.getElementsByName(gameManager.unit2Move.name)[0];
+                img2move.style.left = Number(Zone.Element.coords.split(',')[0])+5+"px";
+                img2move.style.top = Number (Zone.Element.coords.split(',')[1])+5+"px";
+                const PA = document.getElementById('PA').getElementsByTagName('span')[0];
+                const remain = parseInt(PA.innerText)+cost;
+                PA.innerText = ''+(parseInt(PA.innerText)+cost);
+            }
+            gameManager.unit2Move = undefined;
+            gameManager.fromZone = undefined;
+        } /*else {
+            const costDiv = document.getElementById('MVTcost');
+            console.log('drop = none');
+            costDiv.classList.add('gameBoardHide');
+            gameManager.unit2Move = undefined;
+            gameManager.fromZone = undefined;
+            return false;
+        }*/
         
-        const Zone = gameManager.zones[event.target.id];
-        const fromZone = gameManager.zones[event.dataTransfer.getData('fromZone')];
-        const unit2move = gameManager.units[event.dataTransfer.getData('UnitName')];
-        if (fromZone.moveTo(Zone,unit2move)) {
-            const img2move = document.getElementsByName(unit2move.name)[0];
-            img2move.style.left = Number(Zone.Element.coords.split(',')[0])+5+"px";
-            img2move.style.top = Number (Zone.Element.coords.split(',')[1])+5+"px";
-        }
      }
     
-     dragEnterHandler (event) {
-        event.preventDefault();
-
+     /**
+      * @description ondragenter handler
+      * @author fierfeu
+      * @param {DragEvent} event
+      * @memberof QOG
+      */
+     dragEnterHandler (event) {   
+        const zone = gameManager.zones[event.target.id];
+        let nbOfUnits=0;
+        // calculate cost
+        if (typeof gameManager.unit2Move.getNbOfUnitsInPatrol !=='undefined') nbOfUnits = gameManager.unit2Move.getNbOfUnitsInPatrol();
+        else nbOfUnits = 1;
+        let cost = Math.round(nbOfUnits * gameManager.fromZone.moveAllowedTo(zone,gameManager.unit2Move));
         let zoneCoords = event.target.coords;
         zoneCoords = zoneCoords.split(',');
-
         const costDiv = document.getElementById('MVTcost');
         costDiv.style.left = zoneCoords[2]+'px';
         costDiv.style.top = (parseInt(zoneCoords[3])+80)+'px';
+        // verify that cost is less than actionpoints or disallow movement
+        const actionPoints = parseInt(document.getElementById('PA').getElementsByTagName('span')[0].innerText);
+        if ((actionPoints - cost) >= 0) {
+            event.dataTransfer.dropEffect = "move";
+            costDiv.innerText = "-"+cost;
+        } else {
+            event.dataTransfer.dropEffect='none';
+            costDiv.innerText = "No"
+        }
         costDiv.classList.toggle('gameBoardHide');
+
      }
 
      dragLeaveHandler(event) {
-         event.preventDefault();
-
+        
          const costDiv = document.getElementById('MVTcost');
          costDiv.classList.add('gameBoardHide');
      }
