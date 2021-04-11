@@ -294,7 +294,7 @@ describe ('[QOG] init functions work well',()=>{
         const area = document.getElementById('Siwa');
         gameManager.zones['Siwa'] = new zone (area,'Siwa');
         gameManager.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
-        gameManager.zones['Siwa'].ground="town";
+        gameManager.zones['Siwa'].ground="Town";
 
         expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,true,gameManager)}).to.not.throw();
         expect(gameManager.zones['Siwa'].units['1st Patrol']).to.exist;
@@ -611,7 +611,14 @@ describe ('[QOG game event] all game board event are initialised',()=>{
         expect (helpWin.className).to.not.include('gameBoardHide');
         expect (helpWin.innerHTML).to.equal(turnNb.dataset.help);
         expect (helpWin.style.left).to.equal('950px');
-
+        ev.currentTarget = document.createElement('div');
+        ev.currentTarget.id = 'myTest';
+        ev.currentTarget.style.position = 'absolute';
+        ev.currentTarget.style.left = '100px';
+        ev.currentTarget.style.top = '100px';
+        helpWin.classList.toggle('gameBoardHide');
+        QOG.prototype.showHelp(ev);
+        expect(helpWin.style.left).to.equal(parseInt(ev.currentTarget.style.left)+60+'px');
     });
 
     it('hideHelp function hide help window and empty window content',()=>{
@@ -672,7 +679,22 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
         QOG.prototype.dragStartHandler(ev);
         ev.target=document.getElementsByTagName('area')[0];
         ev.preventDefault = sinon.spy();
+        // case that MVTcost is NaN
         QOG.prototype.dragoverHandler(ev);
+        expect(ev.preventDefault.called).to.be.true;
+        expect(ev.dataTransfer.dropEffect).to.equal('none');
+        // case MVTcost is not NaN
+        document.getElementById('MVTcost').innerText = "1";
+        QOG.prototype.dragoverHandler(ev);
+        expect(ev.preventDefault.called).to.be.true;
+        expect(ev.dataTransfer.dropEffect).to.equal('move');
+        ev.preventDefault=undefined;
+    });
+
+    it('drag use preventDefault',()=>{
+        ev.target=document.getElementsByTagName('img')[0];
+        ev.preventDefault = sinon.spy();
+        QOG.prototype.dragHandler(ev);
         expect(ev.preventDefault.called).to.be.true;
         ev.preventDefault=undefined;
     });
@@ -698,4 +720,21 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
         QOG.prototype.dragEndHandler(ev);
         expect(patrolImg.className).to.not.contain('dragged');
     })
+});
+
+describe('[QOG Run Movement] managedice',()=>{
+    it('diceRoll give results between 1 and 6',()=>{
+        expect(QOG.prototype.diceRoll).to.exist;
+        const randomStub = sinon.stub(Math,"random");
+        randomStub.returns(0);
+        expect(QOG.prototype.diceRoll()).to.equal(1);
+        randomStub.resetBehavior();
+        randomStub.returns(0.49);
+        expect(QOG.prototype.diceRoll()).to.equal(3);
+        randomStub.resetBehavior();
+        randomStub.returns(0.99);
+        expect(QOG.prototype.diceRoll()).to.equal(6);
+        randomStub.restore();
+    });
+
 });

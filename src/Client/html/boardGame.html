@@ -5,8 +5,8 @@
         data-help="Gives you the number of action points available for this turn">
         <span style="display:block;margin-top:5px">0</span>
     </div>
-    <div class ="alarm"
-        data-help="Gives you the current level of awarness/alarm for the Axis forces">
+    <div id='alarm' class='alarm' style="background-position-x:0px"
+        data-help="Gives you the current level of awarness/alarm for the Axis forces"> 
     </div>
     <div id='turn' class="turnNB warLetters"
         data-help="This zone gives you the remaining number of turn before historical achievement. You'll loose Victory points while finishing the mission over this time">
@@ -30,49 +30,49 @@
     border-image-outset:1px">-10</div>
 <div id='strategicMap' class='strategicMap'>
     <map name='gameBoardMap'>
-        <area shape='rect' coords='383,10,412,49' id='Derna' data-ground='town' data-links='BedaLittoria:0.5;Mechili:1;Gazala:0.5'>
-        <area shape='rect' coords='278,17,318,57' id='BedaLittoria' data-ground='town' data-links='Derna:0.5;Mechili:1;Charruba:2;Barça:0.5'>
-        <area shape='rect' coords='171,29,211,75' id='Barça'  data-links='BedaLittoria:0.5;Charruba:2;BenGhazi:0.5'>
-        <area shape='rect' coords='454,76,494,116' id='Gazala' data-links='Tobrouk:0.5;ElAdem:2;BirHacheim:2;Cross8:2;Mechili:2;Derna:0.5'>
-        <area shape='rect' coords='341,79,381,119' id='Mechili' data-links='BedaLittoria:1;Derna:1;Gazala:2;BirTengeder:1;Charruba:1'>
-        <area shape='rect' coords='98,97,138,137' id='BenGhazi'  data-links='Barça:0.5;MSus:1;BedaFomm:0.5'>
-        <area shape='rect' coords='240,106,290,150' id='Charruba' data-links='Barça:2;BedaLittoria:2;Mechili:1;BenGania:2;MSus:1'>
-        <area shape='rect' coords='529,103,575,150' id='Tobrouk' data-links='Cambut:0.5;ElAdem:1;Gazala:0.5'>
-        <area shape='rect' coords='662,133,711,180' id='Bardia' data-ground='town' data-links='Buqbuq:0.5;FortMaddalena:1;Cambut:0.5'>
-        <area shape='rect' coords='413,137,458,180' id='Cross8'  data-links='Gazala:2;BirTengeder:1'>
-        <area shape='rect' coords='600,143,645,190' id='Cambut' data-links='Bardia:0.5;ElCuasc:1;Tobrouk:0.5'>
-        <area shape='rect' coords='524,154,570,200' id='ElAdem' data-links='Tobrouk:1;Gazala:2;ElCuasc:1;BirHacheim:1'>
-        <area shape='rect' coords='191,169,242,214' id='MSus' data-links='BenGhazi:1;Charruba:1;Ajdabiya:1;BedaFomm:2'>
-        <area shape='rect' coords='336,173,381,220' id='BirTengeder' data-links='Mechili:1;Cross8:1;BirHacheim:1;BenGania:1'>
-        <area shape='rect' coords='783,173,828,220' id='SidiBarrani' data-links='Mersa:0.5;Cross5:2;Cross3:2;Buqbuq:0.5'>
-        <area shape='rect' coords='714,187,759,232' id='Buqbuq' data-links='SidiBarrani:0.5;Cross3:1;Bardia:0.5'>
-        <area shape='rect' coords='449,193,493,238' id='BirHacheim' data-links='Gazala:2;ElAdem:1;Cross7:1;BirTengeder:1'>
-        <area shape='rect' coords='99,200,144,245' id='BedaFomm' data-links='BenGhazi:0.5;MSus:2;Ajdabiya:0.5'>
-        <area shape='rect' coords='919,201,964,246' id='Mersa' data-links='ElDaba:0.5;Cross6:1;SidiBarrani:0.5'>
-        <area shape='rect' coords='561,233,606,278' id='ElCuasc' data-links='ElAdem:1;Cambut:2;FortMaddalena:1;Jagahbub:1'>
-        <area shape='rect' coords='827,231,872,276' id='Cross5' data-links='SidiBarrani:2;Cross6:2'>
-        <area shape='rect' coords='1054,241,1099,286' id='ElDaba' data-links='ElAlamein:0.5;Cross4:2;Mersa:0.5'>
-        <area shape='rect' coords='279,231,314,276' id='BenGania' data-links='Charruba:2;BirTengeder:1;Cross9:2;MaatenElGrara:1'>
-        <area shape='rect' coords='722,262,767,307' id='Cross3' data-links='Buqbuq:1;SidiBarrani:2;Cross6:2;Cross2:1;FortMaddalena:2'>
-        <area shape='rect' coords='1122,271,1170,316' id='ElAlamein' data-links='ElDaba:0.5;Cross4:2'>
-        <area shape='rect' coords='107,275,152,316' id='Ajdabiya' data-ground='town' data-links='BedaFomm:0.5;MSus:1;MaatenElGrara:2;Cross11:1;MarsaAlBrega:1'>
-        <area shape='rect' coords='645,287,690,323' id='FortMaddalena' data-links='Bardia:1;Cross3:2;Cross2:2;Jagahbub:1;ElCuasc:1'>
-        <area shape='rect' coords='201,290,246,335' id='MaatenElGrara' data-links='BenGania:1;Jalo:2;Cross11:1;Ajdabiya:2'>
-        <area shape='rect' coords='960,291,1005,336' id='Cross4' data-links='ElDaba:2;ElAlamein:2;Cross6:2'>
-        <area shape='rect' coords='505,299,550,344' id='Cross7' data-links='BirHacheim:1;Jagahbub:1;Cross9:2'>
-        <area shape='rect' coords='853,315,900,350' id='Cross6' data-links='Cross5:2;Mersa:1;Cross4:2;Cross1:1;Cross3:2'>
-        <area shape='rect' coords='29,325,75,370' id='MarsaAlBrega' data-ground='town' data-links='Ajdabiya:1;Cross11:1'>
-        <area shape='rect' coords='719,331,765,376' id='Cross2' data-links='Cross3:1;Cross1:1;FortMaddalena:2'>
-        <area shape='rect' coords='130,345,175,390' id='Cross11' data-links='Ajdabiya:1;MaatenElGrara:1;Jalo:1;MarsaAlBrega:1'>
-        <area shape='rect' coords='384,366,419,411' id='Cross9' data-links='Cross7:2;Cross10:2;Jagahbub:1;BenGania:2'>
-        <area shape='rect' coords='722,400,767,445' id='Cross1' data-links='Cross2:1;Cross6:1;Siwa:1;Jagahbub:2'>
-        <area shape='rect' coords='604,405,650,451' id='Jagahbub' data-links='Cross7:1;ElCuasc:1;FortMaddalena:1;Cross1:2;LongCross1:1;Cross9:1;Cross10:2'>
-        <area shape='rect' coords='430,424,475,470' id='Cross10' data-links='Jagahbub:2;Cross9:2;Jalo:1'>
-        <area shape='rect' id='Siwa' data-arrival='available' data-links='Cross1:1;Koufra:1;LongCross1:1' coords='733,477,780,523'>
-        <area shape='rect' id='Jalo'  coords='239,487,284,533' data-links='Cross11:1;MaatenElGrara:2;Cross10:1;LongCross2:1'>
-        <area shape='rect' coords='604,520,647,565' id='LongCross1' data-links='Jagahbub:1;Siwa:1;Koufra:1;LongCross2:1'>
-        <area shape='rect' coords='434,519,479,564' id='LongCross2' data-links='Jalo:1;LongCross1:1'>
-        <area shape='rect' coords='732,554,777,600' id='Koufra' data-links='Siwa:1;LongCross1:1'>
+        <area shape='rect' coords='383,10,412,49' id='Derna' data-ground='Town,Airport' data-links='BedaLittoria:0.5;Mechili:1;Gazala:0.5'>
+        <area shape='rect' coords='278,17,318,57' id='BedaLittoria' data-ground='Town' data-links='Derna:0.5;Mechili:1;Charruba:2;Barça:0.5'>
+        <area shape='rect' coords='171,29,211,75' id='Barça' data-ground='Fort,Airport' data-links='BedaLittoria:0.5;Charruba:2;BenGhazi:0.5'>
+        <area shape='rect' coords='454,76,494,116' id='Gazala' data-ground='Village,Airport' data-links='Tobrouk:0.5;ElAdem:2;BirHacheim:2;Cross8:2;Mechili:2;Derna:0.5'>
+        <area shape='rect' coords='341,79,381,119' id='Mechili' data-ground='Village' data-links='BedaLittoria:1;Derna:1;Gazala:2;BirTengeder:1;Charruba:1'>
+        <area shape='rect' coords='98,97,138,137' id='BenGhazi' data-ground='Fort,Airport' data-links='Barça:0.5;MSus:1;BedaFomm:0.5'>
+        <area shape='rect' coords='240,106,290,150' id='Charruba' data-ground='Village' data-links='Barça:2;BedaLittoria:2;Mechili:1;BenGania:2;MSus:1'>
+        <area shape='rect' coords='529,103,575,150' id='Tobrouk' data-ground='Fort,Airport' data-links='Cambut:0.5;ElAdem:1;Gazala:0.5'>
+        <area shape='rect' coords='662,133,711,180' id='Bardia' data-ground='Town' data-links='Buqbuq:0.5;FortMaddalena:1;Cambut:0.5'>
+        <area shape='rect' coords='413,137,458,180' id='Cross8' data-ground='Desert_rocky' data-links='Gazala:2;BirTengeder:1'>
+        <area shape='rect' coords='600,143,645,190' id='Cambut' data-ground='Village' data-links='Bardia:0.5;ElCuasc:1;Tobrouk:0.5'>
+        <area shape='rect' coords='524,154,570,200' id='ElAdem' data-ground='Desert_sand,Airport' data-links='Tobrouk:1;Gazala:2;ElCuasc:1;BirHacheim:1'>
+        <area shape='rect' coords='191,169,242,214' id='MSus' data-ground='Village' data-links='BenGhazi:1;Charruba:1;Ajdabiya:1;BedaFomm:2'>
+        <area shape='rect' coords='336,173,381,220' id='BirTengeder' data-ground='Desert_rocky' data-links='Mechili:1;Cross8:1;BirHacheim:1;BenGania:1'>
+        <area shape='rect' coords='783,173,828,220' id='SidiBarrani' data-ground='Village' data-links='Mersa:0.5;Cross5:2;Cross3:2;Buqbuq:0.5'>
+        <area shape='rect' coords='714,187,759,232' id='Buqbuq' data-ground='Village' data-links='SidiBarrani:0.5;Cross3:1;Bardia:0.5'>
+        <area shape='rect' coords='449,193,493,238' id='BirHacheim' data-ground='Desert_rocky' data-links='Gazala:2;ElAdem:1;Cross7:1;BirTengeder:1'>
+        <area shape='rect' coords='99,200,144,245' id='BedaFomm' data-ground='Village' data-links='BenGhazi:0.5;MSus:2;Ajdabiya:0.5'>
+        <area shape='rect' coords='919,201,964,246' id='Mersa' data-ground='Village' data-links='ElDaba:0.5;Cross6:1;SidiBarrani:0.5'>
+        <area shape='rect' coords='561,233,606,278' id='ElCuasc' data-ground='Desert_sand' data-links='ElAdem:1;Cambut:2;FortMaddalena:1;Jagahbub:1'>
+        <area shape='rect' coords='827,231,872,276' id='Cross5' data-ground='Desert_sand' data-links='SidiBarrani:2;Cross6:2'>
+        <area shape='rect' coords='1054,241,1099,286' id='ElDaba' data-ground='Village' data-links='ElAlamein:0.5;Cross4:2;Mersa:0.5'>
+        <area shape='rect' coords='279,231,314,276' id='BenGania' data-ground='Village' data-links='Charruba:2;BirTengeder:1;Cross9:2;MaatenElGrara:1'>
+        <area shape='rect' coords='722,262,767,307' id='Cross3' data-ground='Desert_rocky' data-links='Buqbuq:1;SidiBarrani:2;Cross6:2;Cross2:1;FortMaddalena:2'>
+        <area shape='rect' coords='1122,271,1170,316' id='ElAlamein' data-ground='Desert_sand' data-links='ElDaba:0.5;Cross4:2'>
+        <area shape='rect' coords='107,275,152,316' id='Ajdabiya' data-ground='Town,Airport' data-links='BedaFomm:0.5;MSus:1;MaatenElGrara:2;Cross11:1;MarsaAlBrega:1'>
+        <area shape='rect' coords='645,287,690,323' id='FortMaddalena' data-ground='Village' data-links='Bardia:1;Cross3:2;Cross2:2;Jagahbub:1;ElCuasc:1'>
+        <area shape='rect' coords='201,290,246,335' id='MaatenElGrara' data-ground='Village' data-links='BenGania:1;Jalo:2;Cross11:1;Ajdabiya:2'>
+        <area shape='rect' coords='960,291,1005,336' id='Cross4' data-ground='Desert_rocky' data-links='ElDaba:2;ElAlamein:2;Cross6:2'>
+        <area shape='rect' coords='505,299,550,344' id='Cross7' data-ground='Desert_sand' data-links='BirHacheim:1;Jagahbub:1;Cross9:2'>
+        <area shape='rect' coords='853,315,900,350' id='Cross6' data-ground='Desert_rocky' data-links='Cross5:2;Mersa:1;Cross4:2;Cross1:1;Cross3:2'>
+        <area shape='rect' coords='29,325,75,370' id='MarsaAlBrega' data-ground='Town' data-links='Ajdabiya:1;Cross11:1'>
+        <area shape='rect' coords='719,331,765,376' id='Cross2' data-ground='Desert_rocky' data-links='Cross3:1;Cross1:1;FortMaddalena:2'>
+        <area shape='rect' coords='130,345,175,390' id='Cross11' data-ground='Desert_sand' data-links='Ajdabiya:1;MaatenElGrara:1;Jalo:1;MarsaAlBrega:1'>
+        <area shape='rect' coords='384,366,419,411' id='Cross9' data-ground='Desert_sand' data-links='Cross7:2;Cross10:2;Jagahbub:2;BenGania:2'>
+        <area shape='rect' coords='722,400,767,445' id='Cross1' data-ground='Desert_sand' data-links='Cross2:1;Cross6:1;Siwa:1;Jagahbub:2'>
+        <area shape='rect' coords='604,405,650,451' id='Jagahbub' data-ground='Village,Oasis' data-links='Cross7:1;ElCuasc:1;FortMaddalena:1;Cross1:2;LongCross1:1;Cross9:1;Cross10:2'>
+        <area shape='rect' coords='430,424,475,470' id='Cross10' data-ground='Desert_sand' data-links='Jagahbub:1;Cross9:2;Jalo:1'>
+        <area shape='rect' id='Siwa' data-ground='Desert_sand,Oasis' data-arrival='available' data-links='Cross1:1;Koufra:1;LongCross1:1' coords='733,477,780,523'>
+        <area shape='rect' id='Jalo' data-ground='Desert_sand,Oasis'  coords='239,487,284,533' data-links='Cross11:1;MaatenElGrara:2;Cross10:1;LongCross2:1'>
+        <area shape='rect' data-ground='Desert_sand' coords='604,520,647,565' id='LongCross1' data-links='Jagahbub:1;Siwa:1;Koufra:1;LongCross2:1'>
+        <area shape='rect' data-ground='Desert_sand' coords='434,519,479,564' id='LongCross2' data-links='Jalo:1;LongCross1:1'>
+        <area shape='rect' data-ground='Desert_sand,Oasis' coords='732,554,777,600' id='Koufra' data-links='Siwa:1;LongCross1:1'>
     </map>
 <img src='/strategicMap.png' style="position:relative;width:100%;height:100%;padding:0;" usemap='#gameBoardMap'>
 </div>

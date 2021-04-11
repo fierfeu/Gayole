@@ -2,7 +2,43 @@ import unit from './unit.mjs';
 import {unitSet} from './unitSet.mjs';
 import zone from './zone.mjs';
 
+// constants and game tables for "Who dares win"
+/** 
+ * @constant {String} NO_MVT
+ * @description value when movement is not allowed to a given zone
+ */
+const NO_MVT='No';
+/** 
+ * @constant {Object} DISCRETION_TEST
+ * @description table to define dice(d6) number and MD to roll discretion test
+ * @example dices = DISCRETION_TEST["Oasis"]["dice"]
+ */
+const DISCRETION_TEST = {
+    "Desert_rocky":{"dice":1,"MD":-1},
+    "Desert_sand":{"dice":1,"MD":0},
+    "Oasis":{"dice":2,"MD":0},
+    "Village":{"dice":2,"MD":0},
+    "Town":{"dice":3,"MD":0},
+    "Fort":{"dice":3,"MD":0},
+    "Airport":{"dice":3,"MD":0}
+};
+/** 
+ * @constant {Array} DISCRETION_MD
+ * @description Modifier to be applied according to the nb of unit moved
+ * @example md = DISCRETION_MD[unitSet.nbOfUnitInPatril()] 
+ */
+const DISCRETION_MD = [
+    1,0,0,0,1,1,1,2,2,3
+];
+/** 
+ * @constant {Number} MD_AXIS_UNIT
+ * @description Modifier to apply for each Axis unit in the targeted zone
+ */
+const MD_AXIS_UNIT = DISCRETION_MD[0];
+// End of constant and tables declaration
+
 export default class QOG {
+    
     constructor () {
         throw ('ERROR QOG is not instanciable');
     }
@@ -51,10 +87,10 @@ export default class QOG {
             if (this.units[id] instanceof unitSet) {
                 this.currentGame.patrolNb ++;
                 const nbOfUnitInPatrol = this.units[id].getNbOfUnitsInPatrol();
-                if (nbOfUnitInPatrol>1 && nbOfUnitInPatrol<3) {
+                if (nbOfUnitInPatrol>=1 && nbOfUnitInPatrol<3) {
                     this.units[id].actionPoints = 3+ Math.round(Math.random()*5);
                 }
-                else if (nbOfUnitInPatrol>4 && nbOfUnitInPatrol<8) {
+                else if (nbOfUnitInPatrol>=4 && nbOfUnitInPatrol<8) {
                     this.units[id].actionPoints = 4+ Math.round(Math.random()*5) +Math.round(Math.random()*5);
                 }
                 else {
@@ -179,7 +215,7 @@ export default class QOG {
                     case "town":
                         if(jsonDesc.town[0]==='random') {
                             for(const zoneName in manager.zones) {
-                               if (manager.zones[zoneName].ground === 'town') {
+                               if (manager.zones[zoneName].ground === 'Town') {
                                     QOG.prototype.randomizeUnit(manager.zones[zoneName],jsonDesc.town,manager);
                                     if (IADrived) {
                                         manager.zones[zoneName].Element.ondrop = "";
@@ -306,31 +342,29 @@ export default class QOG {
 
      dropHandler(event) {
         const costDiv = document.getElementById('MVTcost');
-        if (costDiv.innerText !== 'No') {
-            console.log('drop = ok');
+        let nbOfUnits
+        if (costDiv.innerText !== NO_MVT) {
             const cost = parseInt(costDiv.innerText);
             costDiv.classList.add('gameBoardHide');
 
-            const Zone = gameManager.zones[event.target.id];
+            const zone = gameManager.zones[event.target.id];
 
-            if (gameManager.fromZone.moveTo(Zone,gameManager.unit2Move)) {
+            if (gameManager.fromZone.moveTo(zone,gameManager.unit2Move)) {
                 const img2move = document.getElementsByName(gameManager.unit2Move.name)[0];
-                img2move.style.left = Number(Zone.Element.coords.split(',')[0])+5+"px";
-                img2move.style.top = Number (Zone.Element.coords.split(',')[1])+5+"px";
+                img2move.style.left = Number(zone.Element.coords.split(',')[0])+5+"px";
+                img2move.style.top = Number (zone.Element.coords.split(',')[1])+5+"px";
                 const PA = document.getElementById('PA').getElementsByTagName('span')[0];
                 const remain = parseInt(PA.innerText)+cost;
                 PA.innerText = ''+(parseInt(PA.innerText)+cost);
+                if (typeof gameManager.unit2Move.getNbOfUnitsInPatrol !=='undefined') nbOfUnits = gameManager.unit2Move.getNbOfUnitsInPatrol();
+                else nbOfUnits = 1;
+                const discretionEvent = new window.CustomEvent('discretiontest',{detail:{NbOfUnits:nbOfUnits}});
+                zone.Element.addEventListener('discretiontest',QOG.prototype.performDiscretionTest)
+                zone.Element.dispatchEvent(discretionEvent);
             }
             gameManager.unit2Move = undefined;
             gameManager.fromZone = undefined;
-        } /*else {
-            const costDiv = document.getElementById('MVTcost');
-            console.log('drop = none');
-            costDiv.classList.add('gameBoardHide');
-            gameManager.unit2Move = undefined;
-            gameManager.fromZone = undefined;
-            return false;
-        }*/
+        } 
         
      }
     
@@ -359,7 +393,7 @@ export default class QOG {
             costDiv.innerText = "-"+cost;
         } else {
             event.dataTransfer.dropEffect='none';
-            costDiv.innerText = "No"
+            costDiv.innerText = NO_MVT;
         }
         costDiv.classList.toggle('gameBoardHide');
 
@@ -369,6 +403,86 @@ export default class QOG {
         
          const costDiv = document.getElementById('MVTcost');
          costDiv.classList.add('gameBoardHide');
+     }
+
+     performDiscretionTest(ev) {
+        if(!ev || !(ev instanceof window.CustomEvent)) throw('performDiscretionTest must be called throught a customeEvent firing process');
+        else {
+            let alarmed = false;
+            let roll1, roll2, roll3;
+            let MD = DISCRETION_MD[ev.detail.NbOfUnits];
+            let ground= ev.target.dataset.ground;
+            if(ground != undefined) {
+                ground = ground.split(',');
+                if (ground.length == 1) {
+                    switch (ground[0]) {
+                        case 'Desert_sand' :
+                            if (QOG.prototype.diceRoll()+MD > 5) alarmed=true;
+                            break;
+                        case 'Desert_rocky' :
+                            if ((QOG.prototype.diceRoll()-1)+MD > 5) alarmed=true;
+                            break; 
+                        case 'Village' :
+                            roll1 = QOG.prototype.diceRoll()+MD;
+                            roll2 = QOG.prototype.diceRoll()+MD;
+                            if (roll1 > 5 || roll2 >5 ) alarmed=true;
+                            break;
+                        case "Town" :
+                            roll1 = QOG.prototype.diceRoll()+MD;
+                            roll2 = QOG.prototype.diceRoll()+MD;
+                            roll3 = QOG.prototype.diceRoll()+MD;
+                            if (roll1 > 5 || roll2 >5 || roll3 >5 ) alarmed=true;
+                            break;
+                    }
+                } else {
+                    switch (ground[1]) {
+                        case "Oasis" :
+                            roll1 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            roll2 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            if (roll1 > 5 || roll2 >5 ) alarmed=true;
+                            break;
+                        case "Airport" :
+                            roll1 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            roll2 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            roll3 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            if (roll1 > 5 || roll2 >5 || roll3 >5 ) alarmed=true;
+                            break;
+                    }
+    
+                }
+                if(alarmed) QOG.prototype.increaseAlarmLevel();
+            }
+            
+        }
+     }
+
+     diceRoll () {
+        let roll = 1+Math.round(Math.random()*5)
+        //console.log(roll); for test only
+        return roll;
+     }
+
+     increaseAlarmLevel(val=1) {
+        if(gameManager.currentGame.alarmLevel == 4) return;
+        let dialog = document.createElement('div');
+        let map = document.getElementById('strategicMap');
+        dialog.style.left="450px";
+        dialog.style.top ="300px";
+        dialog.style.position="absolute";
+        dialog.innerText = "You've been detected by Axis : Alarm Level increase by one";
+        dialog.classList.add('dialogWindow');
+        dialog.onclick= (ev) =>{ 
+            document.getElementById('strategicMap').removeChild(ev.target);
+        }
+        map.appendChild(dialog);
+        let alarmeView = document.getElementById('alarm');
+        if(val == -1) {
+            gameManager.currentGame.alarmLevel --;
+        } else {
+            if(gameManager.currentGame.alarmLevel)  gameManager.currentGame.alarmLevel ++
+            else gameManager.currentGame.alarmLevel=1
+        }
+        alarmeView.style.backgroundPositionX = (-56*gameManager.currentGame.alarmLevel)+'px';
      }
 
 }

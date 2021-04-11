@@ -6,6 +6,7 @@
       "mjs"
     ],
     "spec":[
+      "test/E2E/gameQOG-run-test.js",
       "test/UnitTests/canary_test.js",
       "test/UnitTests/App",
       "test/UnitTests/HTML/jsdom-canary_test.js",
@@ -28,8 +29,7 @@
       "test/E2E/setUp.js",
       "test/E2E/e2e-canary.js",
       "test/E2E/MainPage-test.js",
-      "test/E2E/gameQOG-test.js",
-      "test/E2E/gameQOG-run-test.js"],
+      "test/E2E/gameQOG-test.js"],
     "recursive": true,
     "full-trace": true
   }
