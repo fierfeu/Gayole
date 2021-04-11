@@ -6,6 +6,7 @@
       "mjs"
     ],
     "spec":[
+      "test/E2E/gameQOG-run-test.js",
       "test/UnitTests/canary_test.js",
       "test/UnitTests/App",
       "test/UnitTests/HTML/jsdom-canary_test.js",

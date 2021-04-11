@@ -95,7 +95,7 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
         expect(document.getElementsByName('gameBoardMap')[0].areas.length).to.equal(1);
         expect(initZonesSpy.calledOnceWith(gameManager)).to.true;
 
-        globalThis.document=undefined;
+        globalThis.document = undefined;
         initZonesSpy.restore();
     });
 
@@ -155,8 +155,8 @@ describe ('[QOG] init functions work well',()=>{
         globalThis.document = globalThis.window.document;
         expect (()=>{QOG.prototype.initZones()}).to.not.throw();
         expect (QOG.prototype.zones['Siwa'] instanceof zone).to.be.true;
-        expect (QOG.prototype.zones['Siwa'].moveAllowedTo(QOG.prototype.zones['Cross1'])).to.be.equal('1');
-        expect (QOG.prototype.zones['Cross1'].moveAllowedTo(QOG.prototype.zones['Siwa'])).to.be.equal('1');
+        expect (QOG.prototype.zones['Siwa'].moveAllowedTo(QOG.prototype.zones['Cross1'])).to.be.equal(1);
+        expect (QOG.prototype.zones['Cross1'].moveAllowedTo(QOG.prototype.zones['Siwa'])).to.be.equal(1);
         expect (QOG.prototype.zones['Cross1'].Element.ondragover).to.be.equal(QOG.prototype.dragoverHandler);
         expect (QOG.prototype.zones['Cross1'].Element.ondrop).to.be.equal(QOG.prototype.dropHandler);
         expect(QOG.prototype.zones['Cross1'].hasOwnProperty('ground')).to.true;
@@ -170,6 +170,19 @@ describe ('[QOG] init functions work well',()=>{
         expect (()=>{QOG.prototype.initZones(gameManager)}).to.not.throw();
         expect (gameManager.zones['Siwa']).to.exist;
         expect (QOG.prototype.zones['Siwa'] instanceof zone).to.be.true;
+    })
+
+    it('[QOG run Movement] zones have good event handler definition',()=>{
+        globalThis.document =new JSDOM(HTML).window.document;
+        let gameManager={};
+        QOG.prototype.initZones(gameManager);
+        expect (gameManager.zones['Cross1']).to.exist;
+        let aZone= gameManager.zones['Cross1'].Element;
+
+        expect(aZone.ondragenter).to.not.null;
+        expect(aZone.ondragenter.name).to.equal('dragEnterHandler');
+        expect(aZone.ondragleave).to.not.null;
+        expect(aZone.ondragleave.name).to.equal('dragLeaveHandler');
     })
 
     it("there's a function to place pieces on board",() =>{
@@ -249,13 +262,17 @@ describe ('[QOG] init functions work well',()=>{
         expect(imgs[1].ondragstart).to.equal(QOG.prototype.dragStartHandler);
 
         // verify for Axis opponent that we can desallow drag&drop when an axis unit is in the zone
-        gameManager.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
+        gameManager.zones['Siwa'].Element.ondrop=QOG.prototype.dropHandler;
+        gameManager.zones['Siwa'].Element.ondragenter=QOG.prototype.dragEnterHandler;
+        gameManager.zones['Siwa'].Element.ondragleave=QOG.prototype.dragLeaveHandler;
         const cross = document.getElementById('Cross1');
         gameManager.zones['Cross1'] = new zone (cross,'Cross1');
-        gameManager.zones['Cross1'].Element.ondragover=QOG.prototype.dragoverHandler;
+        gameManager.zones['Cross1'].Element.ondrop=QOG.prototype.dropHandler;
         QOG.prototype.placeUnits(jsonZoneDesc,true, gameManager); 
-        expect(gameManager.zones['Siwa'].Element.ondragover).to.be.null;
-        expect(gameManager.zones['Cross1'].Element.ondragover).to.equal(QOG.prototype.dragoverHandler);
+        expect(gameManager.zones['Siwa'].Element.ondrop).to.be.null;
+        expect(gameManager.zones['Siwa'].Element.ondragenter).to.be.null;
+        expect(gameManager.zones['Siwa'].Element.ondragleave).to.be.null;
+        expect(gameManager.zones['Cross1'].Element.ondrop).to.equal(QOG.prototype.dropHandler);
 
         globalThis.document = globalThis.window = undefined;
     });
@@ -277,7 +294,7 @@ describe ('[QOG] init functions work well',()=>{
         const area = document.getElementById('Siwa');
         gameManager.zones['Siwa'] = new zone (area,'Siwa');
         gameManager.zones['Siwa'].Element.ondragover=QOG.prototype.dragoverHandler;
-        gameManager.zones['Siwa'].ground="town";
+        gameManager.zones['Siwa'].ground="Town";
 
         expect(()=>{QOG.prototype.placeUnits(jsonZoneDesc,true,gameManager)}).to.not.throw();
         expect(gameManager.zones['Siwa'].units['1st Patrol']).to.exist;
@@ -594,7 +611,14 @@ describe ('[QOG game event] all game board event are initialised',()=>{
         expect (helpWin.className).to.not.include('gameBoardHide');
         expect (helpWin.innerHTML).to.equal(turnNb.dataset.help);
         expect (helpWin.style.left).to.equal('950px');
-
+        ev.currentTarget = document.createElement('div');
+        ev.currentTarget.id = 'myTest';
+        ev.currentTarget.style.position = 'absolute';
+        ev.currentTarget.style.left = '100px';
+        ev.currentTarget.style.top = '100px';
+        helpWin.classList.toggle('gameBoardHide');
+        QOG.prototype.showHelp(ev);
+        expect(helpWin.style.left).to.equal(parseInt(ev.currentTarget.style.left)+60+'px');
     });
 
     it('hideHelp function hide help window and empty window content',()=>{
@@ -611,7 +635,8 @@ describe ('[QOG game event] all game board event are initialised',()=>{
 describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     let ev ={dataTransfer:{}};
     beforeEach (()=>{
-        globalThis.document = new JSDOM('<mapname="mappy"><area id="Cross1" shape="rect" coords="100,100,200,200"> </map>'+
+        globalThis.document = new JSDOM('<div id="MVTcost"></div><div id="turn"><span>10</span><div id="PA"><span></span></div></div>'+
+            '<mapname="mappy"><area id="Siwa" shape="rect" coords="100,100,200,200"><area id="Cross1" shape="rect" coords="100,100,200,200"> </map>'+
             '<img name="1st Patrol" usemap="#mappy" style="position:absolute;top:520px;left:694px;" src="/patrol.png"><div id="dialogWindow"></div>',
             {pretendToBeVisual:true}).window.document;
         const scenario = {"units":[{"images":{"recto":"/patrol1.png"},
@@ -621,14 +646,13 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
             scenario.units[0].images,
             scenario.units[0].name,
             scenario.units[0].description );
-        gameManager.zones=[];
+        //gameManager.zones=[];
         gameManager.zones['Siwa'] = new zone(document.getElementsByTagName('area')[0],'Siwa');
-        gameManager.zones['Cross1']= new zone(document.getElementsByTagName('area')[0],'Cross1');
+        gameManager.zones['Cross1']= new zone(document.getElementsByTagName('area')[1],'Cross1');
         gameManager.zones['Siwa'].linkTo(gameManager.zones['Cross1'],1);
-        gameManager.zones['Cross1'].linkTo(gameManager.zones['Siwa'],1);
+        //gameManager.zones['Cross1'].linkTo(gameManager.zones['Siwa'],1);
         gameManager.zones['Siwa'].attach(gameManager.units['1st Patrol']);
-        ev.dataTransfer.setData = (key,value) => { ev.dataTransfer[key]=value};
-        ev.dataTransfer.getData = (key) => {return ev.dataTransfer[key]};
+        gameManager.currentGame ={};
     });
 
     afterEach (()=>{
@@ -638,8 +662,8 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     it('unit image dragstart event store good data',()=>{
         ev.target=document.getElementsByTagName('img')[0];
         QOG.prototype.dragStartHandler(ev);
-        expect(ev.dataTransfer).to.contain({"UnitName":"1st Patrol","NbUnits":1});
-        expect(ev.dataTransfer.getData('fromZone')).to.equal("Siwa");
+        expect(gameManager.unit2Move.name).to.equal("1st Patrol");
+        expect(gameManager.fromZone.Element.id).to.equal("Siwa");
     });
 
     //#34 bug
@@ -655,9 +679,23 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
         QOG.prototype.dragStartHandler(ev);
         ev.target=document.getElementsByTagName('area')[0];
         ev.preventDefault = sinon.spy();
-        QOG.prototype.dropHandler(ev);
+        // case that MVTcost is NaN
+        QOG.prototype.dragoverHandler(ev);
         expect(ev.preventDefault.called).to.be.true;
-        
+        expect(ev.dataTransfer.dropEffect).to.equal('none');
+        // case MVTcost is not NaN
+        document.getElementById('MVTcost').innerText = "1";
+        QOG.prototype.dragoverHandler(ev);
+        expect(ev.preventDefault.called).to.be.true;
+        expect(ev.dataTransfer.dropEffect).to.equal('move');
+        ev.preventDefault=undefined;
+    });
+
+    it('drag use preventDefault',()=>{
+        ev.target=document.getElementsByTagName('img')[0];
+        ev.preventDefault = sinon.spy();
+        QOG.prototype.dragHandler(ev);
+        expect(ev.preventDefault.called).to.be.true;
         ev.preventDefault=undefined;
     });
 
@@ -665,15 +703,38 @@ describe('[QOG drag&drop] is possible to move a unit to a zone linked',() =>{
     it('drop handler move unit in the good place',()=>{
         const patrolImg = document.getElementsByTagName('img')[0];
         ev.target=patrolImg;
+        gameManager.currentGame.turnLeft=10;
         QOG.prototype.dragStartHandler(ev);
-        ev.preventDefault = sinon.spy();
-        ev.target = document.getElementsByTagName('area')[0];
+        ev.target = document.getElementsByTagName('area')[1];
         QOG.prototype.dropHandler(ev);
-        expect(ev.preventDefault.called).to.be.true;
         expect(gameManager.zones['Siwa'].units[0]).to.be.undefined;
         expect(gameManager.zones['Cross1'].units['1st Patrol']).to.equal(gameManager.units['1st Patrol']);
         expect(patrolImg.style.top).to.be.equal('105px');
         expect(patrolImg.style.left).to.be.equal('105px');
-        ev.preventDefault=undefined;
     });
+
+    it('finishing drag process by removing unit dragged css',()=>{
+        const patrolImg = document.getElementsByTagName('img')[0];
+        ev.target=patrolImg;
+        QOG.prototype.dragStartHandler(ev);
+        QOG.prototype.dragEndHandler(ev);
+        expect(patrolImg.className).to.not.contain('dragged');
+    })
+});
+
+describe('[QOG Run Movement] managedice',()=>{
+    it('diceRoll give results between 1 and 6',()=>{
+        expect(QOG.prototype.diceRoll).to.exist;
+        const randomStub = sinon.stub(Math,"random");
+        randomStub.returns(0);
+        expect(QOG.prototype.diceRoll()).to.equal(1);
+        randomStub.resetBehavior();
+        randomStub.returns(0.49);
+        expect(QOG.prototype.diceRoll()).to.equal(3);
+        randomStub.resetBehavior();
+        randomStub.returns(0.99);
+        expect(QOG.prototype.diceRoll()).to.equal(6);
+        randomStub.restore();
+    });
+
 });

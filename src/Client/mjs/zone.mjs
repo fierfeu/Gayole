@@ -23,7 +23,7 @@ export default class zone {
 
     moveAllowedTo(targetZone) {
         if(!targetZone||!(targetZone instanceof zone)) return 'instance';
-        if (this.connections[targetZone.name]) return this.connections[targetZone.name];
+        if (this.connections[targetZone.name]) return parseFloat(this.connections[targetZone.name]);
         return 'not linked';
     }
 
