@@ -1,0 +1,42 @@
+<script>
+    const cssLink = document.createElement('link')
+    cssLink.rel = 'stylesheet';
+    cssLink.href = '/actionMenu.css';
+    document.getElementsByTagName('head')[0].appendChild(cssLink);
+    gameManager.loadExternalRessources('/fr/helper.json').then((data)=>{
+        globalThis.i18n+=JSON.parse(data);
+    }).catch(()=>{
+        throw('ERROR : impossible de charger le fichier français de la traduction des helper du menu action');
+    });
+</script>
+<div id='actionMenu' class='dialogWindow' style="width:230px;font-family:mainMenuTitleFont;">
+    <div style="text-align:center;">Available actions</div>
+    <hr>
+    <div id='sendUnit' class="patrolAction" data-help="helper.sendUnit" onclick="QOG.prototype.performAction(ev)">
+        <div class="actionCost">0</div>
+        <span>Envoyer une unité en mission</span>
+    </div>
+    <div id='intelligence' class="unitAction" data-help="helper.intelligence" onclick="QOG.prototype.performAction(ev)">
+        <div class="actionCost">2</div>
+        <span>Action de renseignement</span>
+    </div>
+    <div id='recognition' class="patrolAction" data-help="helper.recognition" onclick="QOG.prototype.performAction(ev)">
+        <div class="actionCost">3</div>
+        <span>Action de reconnaissance</span>
+    </div>
+    <div id='cache' class="patrolAction" data-hep="helper.cache" onclick="QOG.prototype.performAction(ev)">
+        <div class="actionCost">2</div>
+        <span>Faire une cache</span>
+    </div>
+    <div id='maintenance' class="unitAction" data-help="helper.maintenance" onclick="QOG.prototype.performAction(ev)">
+        <div class="actionCost">3</div>
+        <span>Faire une maintenance</span>
+    </div>
+    <div id='lowProfil' class="patrolAction" data-help= "helper.lowProfil" onclick="QOG.prototype.performAction(ev)">
+        <div class="actionCost">X</div>
+        <span>Profil bas</span>
+    </div>
+    <div style="margin-left: 22px" onclick="document.getElementById('actionMenu').classList.toggle('gameBoardHide');">
+        <span>Fermer le menu</span>
+    </div>
+</div>
