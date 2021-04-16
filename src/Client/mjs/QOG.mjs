@@ -88,6 +88,7 @@ export default class QOG {
                 this.currentGame.patrolNb ++;
                 const nbOfUnitInPatrol = this.units[id].getNbOfUnitsInPatrol();
                 if (nbOfUnitInPatrol>=1 && nbOfUnitInPatrol<3) {
+                    //@todo use diceRoll for all the following action Points calculation
                     this.units[id].actionPoints = 3+ Math.round(Math.random()*5);
                 }
                 else if (nbOfUnitInPatrol>=4 && nbOfUnitInPatrol<8) {
@@ -187,6 +188,7 @@ export default class QOG {
             piece.ondrag = QOG.prototype.dragHandler;
             piece.ondragend = QOG.prototype.dragEndHandler;
         }
+        piece.oncontextmenu = QOG.prototype.contextMenuHandler;
 
         piece.id=unit4piece.name.replace(/\s+/g, '') + Date.now();
 
@@ -484,6 +486,15 @@ export default class QOG {
         }
         alarmeView.style.backgroundPositionX = (-56*gameManager.currentGame.alarmLevel)+'px';
      }
+
+    /**
+     * @description this function manage the right click or ctrl-click to open contextual menu
+     * @memberof QOG.prototype
+     * @param {mouseEvent} ev 
+     */
+     contextMenuHandler(ev) {
+
+    }
 
 }
 
