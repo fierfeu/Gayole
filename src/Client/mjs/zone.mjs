@@ -32,6 +32,29 @@ export default class zone {
         this.units[unitToAttach.name]=unitToAttach;
     }
 
+    /**
+     * @description secondment allows a unit to move separatly while remaining in the Patrol
+     * @param {Unit} unitToSent 
+     * @memberof Zone
+     * @return {boolean}
+     */
+    secondment (unitToSent) {
+
+    }
+    
+    /**
+     * @description the reverse of secondment function
+     * @param {Unit} unitSentToRegroup 
+     * @memberof Zone
+     */
+    rejoin (unitSentToRegroup) {
+
+    }
+
+    detach (unitToRemove) {
+
+    }  
+
     isInZone(unit2verif) {
         if(!unit2verif ) throw ('ERROR isInZone fct : you must provide at least a unit to test');
         if(!(unit2verif instanceof unit)) throw ('ERROR isInZone fct can only test valide unit instance')

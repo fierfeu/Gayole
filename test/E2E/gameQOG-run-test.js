@@ -66,3 +66,33 @@ describe ('[QOG run] movement behaviour',()=>{
         }
     })
 })
+
+describe('[QOG Run Stealth] Intelligence action behaviour',()=>{
+    beforeEach (async ()=>{
+        await browser.get( browser.baseUrl); // to put context at the real begining
+        const mainMenu = await browser.findElement(By.css('#mainMenu'));
+        await browser.wait(until.elementIsVisible(mainMenu),4000);
+        await mainMenu.click();
+        const buttons = await browser.findElements(By.css('#buttonList > button'));
+        await browser.wait(until.elementIsVisible(buttons[0]),4000);
+        await buttons[0].click();
+        const turnNbDisplay = await browser.findElement(By.id('turn'));
+        await browser.wait(async ()=>{
+            let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
+            return turnValue;
+            }, 20000,"before statement");
+    });
+
+    it('Allows by right clicking on a Patrol to access to Patrol action menu', async ()=>{
+        let actions = browser.actions();
+        let unit2RightClick = await browser.findElement(By.name('1st Patrol'));
+/*         expect(browser.executeScript('return document.getElementsByName("1st Patrol")[0].contextmenu')).to.exist;
+        expect(browser.executeScript('return document.getElementsByName("1st Patrol")[0].contextmenu')).to.equal('QOG.prototype.contextMenuHandler'); */
+        actions.contextClick(unit2RightClick);
+        const actionsMenu = await browser.findElement(By.id('actionMenu'));
+        await browser.wait(until.elementIsVisible(actionsMenu),4000);
+        expect(browser.executeScript('return gameManager.currentGame.currentUnit')).to.equal(unit2RightClick.name);
+    });
+
+});
+

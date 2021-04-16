@@ -218,10 +218,17 @@ describe ('[QOG] init functions work well',()=>{
         QOG.prototype.placeAPiece(unit2place,zone2use);
         expect(document.getElementsByTagName('img').length).to.equal(3);
         let Piece2 = document.getElementsByTagName('img')[2];
+        expect(QOG.prototype.dragStartHandler).to.exist; // to avoid undefined === undefined
+        expect(QOG.prototype.dragHandler).to.exist; // in the below tests where we're checcking 
+        expect(QOG.prototype.dragEndHandler).to.exist; // that all event handlers are well initiated
+        expect(QOG.prototype.contextMenuHandler).to.exist; // different way than for zone event handlers
         expect(Piece2.name).to.equal("1st Patrol");
         expect(Piece2.src).to.equal("http://localhost/patrol1.png");
         expect(Piece2.getAttribute("draggable")).to.equal('true');
         expect(Piece2.ondragstart).to.equal(QOG.prototype.dragStartHandler);
+        expect(Piece2.ondrag).to.equal(QOG.prototype.dragHandler);
+        expect(Piece2.ondragend).to.equal(QOG.prototype.dragEndHandler);
+        expect(Piece2.contextmenu).to.equal(QOG.prototype.actionMenu);
         expect (thePiece.id).to.not.equal(Piece2.id);
         let coords=zone2use.Element.coords;
         coords=coords.split(',');
