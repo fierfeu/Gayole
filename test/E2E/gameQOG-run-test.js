@@ -84,14 +84,20 @@ describe('[QOG Run Stealth] Intelligence action behaviour',()=>{
     });
 
     it('Allows by right clicking on a Patrol to access to Patrol action menu', async ()=>{
+        //context
         let actions = browser.actions();
         let unit2RightClick = await browser.findElement(By.name('1st Patrol'));
-/*         expect(browser.executeScript('return document.getElementsByName("1st Patrol")[0].contextmenu')).to.exist;
-        expect(browser.executeScript('return document.getElementsByName("1st Patrol")[0].contextmenu')).to.equal('QOG.prototype.contextMenuHandler'); */
-        actions.contextClick(unit2RightClick);
-        const actionsMenu = await browser.findElement(By.id('actionMenu'));
+        const currentUnitId=await unit2RightClick.getAttribute('id');
+
+        //test
+        const unitRect = await unit2RightClick.getRect();
+        await actions.contextClick(unit2RightClick).perform();
+        const actionsMenu = browser.findElement(By.id('contextualContainer'));
         await browser.wait(until.elementIsVisible(actionsMenu),4000);
-        expect(browser.executeScript('return gameManager.currentGame.currentUnit')).to.equal(unit2RightClick.name);
+        const menuRect = await actionsMenu.getRect();
+        expect(menuRect.x).to.equal(unitRect.x+16);
+        expect(menuRect.y).to.equal(unitRect.y+16);
+        expect(await browser.executeScript('return gameManager.currentGame.currentUnit')).to.equal(currentUnitId);
     });
 
 });

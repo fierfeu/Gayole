@@ -22,7 +22,7 @@ describe ('[Game Board] contains the good html',()=>{
         return JSDOM.fromFile("src/Client/html/index.html").then((dom)=>{
             document =dom.window.document;
             const gameBoard = document.getElementById('gameBoard');
-            expect(gameBoard.childNodes.length).to.equal(2);
+            expect(gameBoard.childNodes.length).to.equal(3);
             expect(gameBoard.childNodes[0].id).to.equal('dialogZone');
             expect(gameBoard.childNodes[0].className).to.equal('dialogZone');
             expect(gameBoard.childNodes[1].id).to.equal('strategicMap');

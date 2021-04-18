@@ -187,8 +187,8 @@ export default class QOG {
             piece.ondragstart = QOG.prototype.dragStartHandler;
             piece.ondrag = QOG.prototype.dragHandler;
             piece.ondragend = QOG.prototype.dragEndHandler;
+            piece.oncontextmenu = QOG.prototype.contextMenuHandler;
         }
-        piece.oncontextmenu = QOG.prototype.contextMenuHandler;
 
         piece.id=unit4piece.name.replace(/\s+/g, '') + Date.now();
 
@@ -493,6 +493,47 @@ export default class QOG {
      * @param {mouseEvent} ev 
      */
      contextMenuHandler(ev) {
+        QOG.prototype.hideHelp(ev.toString());
+        gameManager.currentGame.currentUnit=ev.target.id;
+        ev.target.classList.toggle('dragged');
+        const actionMenu = document.getElementById('contextualContainer');
+        if(document.getElementById('actionMenu') == null) {
+            gameManager.loadExternalRessources({'url':'/en/actionsMenu.html'}).then((data)=>{
+
+                actionMenu.innerHTML += data;
+                const actionNodesIterator = document.createNodeIterator(actionMenu);
+                let currentactionNode;
+                while(currentactionNode = actionNodesIterator.nextNode()) {
+                    currentactionNode.addEventListener('click', QOG.prototype.performAction);
+                }   
+            }).catch((err)=>{
+                throw err;
+            });
+        };
+        actionMenu.style.top = (ev.pageY)+'px';
+        actionMenu.style.left = (ev.pageX)+'px';
+        document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseover',QOG.prototype.showHelp,true);
+        document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseout',QOG.prototype.hideHelp,true);
+        document.getElementById('strategicMap').onclick = QOG.prototype.closeContextMenuHandler;
+        document.getElementById('contextualContainer').style.display="block";
+         
+    }
+
+    closeContextMenuHandler (ev) {
+        document.getElementById('contextualContainer').style.display='none';
+        document.getElementById(gameManager.currentGame.currentUnit).classList.toggle('dragged');
+        document.getElementById(gameManager.currentGame.currentUnit).addEventListener('mouseover',QOG.prototype.showHelp,true);
+        document.getElementById(gameManager.currentGame.currentUnit).addEventListener('mouseout',QOG.prototype.hideHelp,true);
+        gameManager.currentGame.currentUnit=undefined;
+        document.getElementById('strategicMap').removeEventListener('click',QOG.prototype.closeContextMenuHandler);
+    }
+
+    performAction (ev) {
+        if(ev.currentTarget.id != '' ) {
+            console.log(ev.currentTarget.id);
+            console.log(ev.currentTarget.dataset.help);
+            ev.stopPropagation();
+        }
 
     }
 

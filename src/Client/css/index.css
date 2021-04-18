@@ -1,3 +1,15 @@
+:root {
+    --main-color : rgb(250, 155, 77);
+    --main-color-variant : rgb(200, 103, 23);
+    --border-color : olive;
+    --dark-border-color : darkolivegreen;
+    --umbraColor : rgba(95, 49, 12, 0.2);
+    --penumbraColor : rgba(95, 49, 12, 0.14);
+    --ambientColor :rgba(95, 49, 12, 0.12);
+    --accent-color : rgb(70, 118, 250);
+    --accent-color-variant : rgb(11, 65, 211);
+}
+
 body {
     background-image : url('/QuiOseGagneFE.png');
     background-repeat: no-repeat;
@@ -26,7 +38,7 @@ body {
     width : 59px;
     height : 55px;
     border-radius : 6px;
-    border : solid 3px olive;
+    border : solid 3px  var(--border-color);
     background-color:Bisque;
     font-size: 45px;
     text-align: center;
@@ -45,7 +57,7 @@ body {
     height : 55px;
     border-radius : 6px;
     margin: 0 20px 10px 20px;
-    border : solid 3px olive;
+    border : solid 3px var(--border-color);
     background-color:Bisque;
     font-size: 45px;
     text-align: center;
@@ -64,7 +76,7 @@ body {
 }
 
 .dragged {
-    border: solid 2px darkolivegreen;
+    border: solid 2px var(--dark-border-color);
 }
 
 #mainMenu {
@@ -72,7 +84,7 @@ body {
 }
 
 .dialogWindow {
-    background-color : rgba(247, 134, 41, 0.7);
+    background-color :var(--main-color);
     position:absolute;
     height:auto;
     top:90px;
@@ -226,7 +238,7 @@ body {
 }
 
 hr {
-    border: 2px solid olive;
+    border: 2px solid var(--border-color);
     border-radius: 5%;
     margin-top:0px;
   }

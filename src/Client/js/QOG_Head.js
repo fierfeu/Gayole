@@ -6,6 +6,7 @@ localStorage.setItem('gameLaunched','false');
 import Game from '/game.mjs';
 import QOG from '/QOG.mjs';
 
+document.oncontextmenu = (ev) =>{ev.preventDefault();ev.stopImmediatePropagation();};
 new Game();
 
 document.getElementById('mainMenu').onclick = ()=>{

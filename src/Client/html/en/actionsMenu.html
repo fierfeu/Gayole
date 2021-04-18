@@ -1,42 +1,29 @@
-<script>
-    const cssLink = document.createElement('link')
-    cssLink.rel = 'stylesheet';
-    cssLink.href = '/actionMenu.css';
-    document.getElementsByTagName('head')[0].appendChild(cssLink);
-    gameManager.loadExternalRessources('/en/helper.json').then((data)=>{
-        globalThis.i18n+=JSON.parse(data);
-    }).catch(()=>{
-        throw('ERROR while loading english translation file for action Menu');
-    });
-</script>
-<div id='actionMenu' class='dialogWindow' style="width:230px;font-family:mainMenuTitleFont;">
-    <div style="text-align:center;">Actions disponibles</div>
-    <hr>
-    <div id='sendUnit' class="patrolAction" data-help="helper.sendUnit" onclick="QOG.prototype.performAction(ev)">
-        <div class="actionCost">0</div>
-        <span>Send a unit on a mission</span>
-    </div>
-    <div id='intelligence' class="unitAction" data-help="helper.intelligence" onclick="QOG.prototype.performAction(ev)">
+
+
+<div id='actionMenu'>
+    <div class='title' style="text-align:center;"><span>Actions</span></div>
+    <div id='intelligence' class="unitAction"  
+            onmouseover="gameManager.currentGame.gameInterface.hoverItemOfContextMenuHandler">
         <div class="actionCost">2</div>
-        <span>Intelligence action</span>
+        <div class="actiontext">
+            <span>Intelligence</span>
+        </div>
     </div>
-    <div id='recognition' class="patrolAction" data-help="helper.recognition" onclick="QOG.prototype.performAction(ev)">
+    <div id='recognition' class="patrolAction" available=false style="opacity:0.5">
         <div class="actionCost">3</div>
-        <span>Reconnaissance action</span>
+        <div class="actiontext"><span>Recognition</span></div>
     </div>
-    <div id='cache' class="patrolAction" data-hep="helper.cache" onclick="QOG.prototype.performAction(ev)">
+    <div id='cache' class="patrolAction" available=false style="opacity:0.5">
         <div class="actionCost">2</div>
         <span>Make a cache</span>
     </div>
-    <div id='maintenance' class="unitAction" data-help="helper.maintenance" onclick="QOG.prototype.performAction(ev)">
+    <div id='maintenance' class="unitAction" available=false style="opacity:0.5">
         <div class="actionCost">3</div>
-        <span>Maintenance action</span>
+        <span>Maintenance</span>
     </div>
-    <div id='lowProfil' class="patrolAction" data_help= "helper.lowProfil" onclick="QOG.prototype.performAction(ev)">
+    <div id='lowProfil' class="patrolAction" available=false style="opacity:0.5">
         <div class="actionCost">X</div>
-        <span>Low Profil</span>
-    </div>
-    <div style="margin-left: 22px" onclick="document.getElementById('actionMenu').classList.toggle('gameBoardHide');">
-        <span>Close action menu</span>
+        <span>Low Profile</span>
     </div>
 </div>
+
