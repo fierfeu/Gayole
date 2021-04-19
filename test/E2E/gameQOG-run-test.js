@@ -45,7 +45,6 @@ describe ('[QOG run] movement behaviour',()=>{
     })
 
     it('is possible to draganddrop to cross1 as action points is more than 2 at beginning', async () =>{
-        const origine = await browser.findElement(By.id('strategicMap'));
         const zone2place = await browser.findElement(By.id('Cross1'));
         const unit2move = await browser.findElement(By.name("1st Patrol"));
 
@@ -92,12 +91,57 @@ describe('[QOG Run Stealth] Intelligence action behaviour',()=>{
         //test
         const unitRect = await unit2RightClick.getRect();
         await actions.contextClick(unit2RightClick).perform();
-        const actionsMenu = browser.findElement(By.id('contextualContainer'));
+        const actionsMenu = await browser.findElement(By.id('contextualContainer'));
         await browser.wait(until.elementIsVisible(actionsMenu),4000);
         const menuRect = await actionsMenu.getRect();
         expect(menuRect.x).to.equal(unitRect.x+16);
         expect(menuRect.y).to.equal(unitRect.y+16);
         expect(await browser.executeScript('return gameManager.currentGame.currentUnit')).to.equal(currentUnitId);
+    });
+
+    it('manage intelligence item according to available zone (Siwa no and cross1 yes)',async ()=>{
+        //context
+        let actions = browser.actions();
+        let unit2RightClick = await browser.findElement(By.name('1st Patrol'));
+        const zone2place = await browser.findElement(By.id('Cross1'));
+        const actionPoints = await browser.findElement(By.id('PA'));
+
+        //test siwa => Intelligence not available
+        await actions.contextClick(unit2RightClick).perform();
+        const actionsMenu = await browser.findElement(By.id('contextualContainer'));
+        const intelligenceItem = await actionsMenu.findElement(By.id('intelligence'));
+        let ItemOpacity = await intelligenceItem.getCssValue('opacity');
+        expect(ItemOpacity).to.equal(0.7);
+        expect(await browser.findElement(By.id('selectUnit2Second').isDisplayed)).to.false;
+        await broser.findElement('strategicMap').click();
+
+        //drag and drop to Cross1 => Intelleigence available if enough AP
+ 
+        //use simulation for drag and drop
+        await browser.executeScript(`const script = document.createElement('script');
+                                        script.src = 'dd4tests.js';
+                                        document.body.appendChild(script);`);
+        await browser.sleep(500);
+        await browser.executeScript('dragAndDrop(arguments[0],arguments[1]);', unit2RightClick,zone2place);
+
+        // set Action Points to 1 and verify that intelligence item is not available
+        let PAValue=1;
+        await browser.executeScript(`const PA = arguments[0].getElementsByTagName('span')[0];
+                                     PA.innerText = arguments[1];`,actionPoints, PAValue);
+        await actions.contextClick(unit2RightClick).perform();
+        ItemOpacity = await intelligenceItem.getCssValue('opacity');
+        expect(ItemOpacity).to.equal(0.7);
+        await broser.findElement('strategicMap').click();
+
+        // set action point to 4 and verify availability
+        PAValue=4;
+        await browser.executeScript(`const PA = arguments[0].getElementsByTagName('span')[0];
+                                     PA.innerText = arguments[1];`,actionPoints, PAValue);
+        await actions.contextClick(unit2RightClick).perform();
+        ItemOpacity = await intelligenceItem.getCssValue('opacity');
+        expect(ItemOpacity).to.equal(1);
+        await intelligenceItem.click();
+        expect(await browser.findElement(By.id('selectUnit2Second').isDisplayed)).to.true;
     });
 
 });
