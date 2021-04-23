@@ -510,6 +510,15 @@ export default class QOG {
                 throw err;
             });
         };
+        const intelligneceValidZones = QOG.prototype.intelligenceActionValid(gameManager.units[ev.target.name])
+        console.log(intelligneceValidZones);
+        if(intelligneceValidZones == "") {
+            console.log('SIWA');
+            const menu = document.getElementById('actionMenu')
+            
+            document.getElementById('intelligence').style.opacity=0.7
+            document.getElementById('intelligence').removeEventListener('click',QOG.prototype.performAction)
+        }
         actionMenu.style.top = (ev.pageY)+'px';
         actionMenu.style.left = (ev.pageX)+'px';
         document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseover',QOG.prototype.showHelp,true);
@@ -519,6 +528,11 @@ export default class QOG {
          
     }
 
+    /**
+     * @description use a click out of contextualMenu to close it
+     * @memberof QOG.prototype
+     * @param {mouseEvent} ev click on strategicMap
+     */
     closeContextMenuHandler (ev) {
         document.getElementById('contextualContainer').style.display='none';
         document.getElementById(gameManager.currentGame.currentUnit).classList.toggle('dragged');
@@ -536,6 +550,45 @@ export default class QOG {
         }
 
     }
+
+    //intelligence action management
+    /**
+     * @description test if a valid intelligence action is available for the current Patrol
+     * @memberof QOG.prototype
+     * @param {UnitSet} patrol
+     * @returns {Array[zones]} Avalibale zones for intelligence
+     */
+     intelligenceActionValid (patrol) {
+        let response = []
+        for (const [zoneName, zone] of Object.entries(gameManager.zones)) {
+            console.log('zone: '+zone.name);
+            if(zone.isInZone(patrol)) {
+                console.log('found it');
+                const connections = zone.connectedZones()
+                console.log('connections: '+connections);
+                let ground
+                for(const[connectionName,cost] of Object.entries(connections)) {
+                    console.log('currentConnection: '+connectionName);
+                    ground = gameManager.zones[connectionName].getGround()
+                    if(ground) {
+                        ground = ground.split(',')
+                        switch(ground.length) {
+                            case 1:
+                                if(ground[0]=='Village'||ground[0]=='Town'||ground[0]=='Fort')
+                                    response.push(gameManager.zones[connectionName])
+                                break
+                            case 2:
+                                if(ground[1]=='Oasis'||ground[1]=='Airport')
+                                    response.push(gameManager.zones[connectionName])
+                                break
+                        }
+                    }
+                }
+                return response
+            }
+        }
+         throw ('unable to find the zone where the unit is')
+     }
 
 }
 

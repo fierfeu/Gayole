@@ -11,6 +11,12 @@ export class unitSet extends unit {
         };
     }
 
+    /**
+     * @description Add one or more units to the unitSet
+     * @param {array[Unit]} unitArray unit to Add 
+     * @memberof UnitSet
+     * @return {int} the number of unit added to the unitSet
+     */
     attach (unitArray) {
         if(!unitArray || !Array.isArray(unitArray)) throw ('ERROR you must provide a valide array of unit');
         let nbOfUnitsAttached = 0;
@@ -22,6 +28,12 @@ export class unitSet extends unit {
         return nbOfUnitsAttached;
     }
 
+    /**
+     * @description Remove one or more units form the unitSet and the units are independant
+     * @param {array[Unit]} unitArray unit to detach 
+     * @memberof UnitSet
+     * @return {int} the number of unit removed from the unitSet
+     */
     detach (unitArray) {
         if(!unitArray || !Array.isArray(unitArray)) throw ('ERROR you must provide a valide array of unit');
         let nbOfUnitDetached=0;
@@ -33,6 +45,25 @@ export class unitSet extends unit {
             }
         });
         return nbOfUnitDetached;
+    }
+
+    /**
+     * @description secondment allows a unit to move separatly while remaining in the Patrol
+     * @param {Unit} unitToSent 
+     * @memberof UnitSet
+     * @return {boolean}
+     */
+     secondment (unitToSent) {
+
+    }
+    
+    /**
+     * @description the reverse of secondment function
+     * @param {Unit} unitSentToRegroup 
+     * @memberof UnitSet
+     */
+    rejoin (unitSentToRegroup) {
+
     }
 
     getNbOfUnitsInPatrol () {
