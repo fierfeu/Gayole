@@ -133,7 +133,7 @@ body {
 
 @media (hover:none) and (pointer: coarse) and (orientation: landscape){
     html, body {
-        transform: scale(0.38);
+        transform: scale(1);
         transform-origin: top left;
         background-size: cover;
     }
