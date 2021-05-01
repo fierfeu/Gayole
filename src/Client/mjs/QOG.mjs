@@ -492,32 +492,29 @@ export default class QOG {
      * @memberof QOG.prototype
      * @param {mouseEvent} ev 
      */
-     contextMenuHandler(ev) {
+     async contextMenuHandler(ev) {
         QOG.prototype.hideHelp(ev.toString());
         gameManager.currentGame.currentUnit=ev.target.id;
         ev.target.classList.toggle('dragged');
         const actionMenu = document.getElementById('contextualContainer');
         if(document.getElementById('actionMenu') == null) {
-            gameManager.loadExternalRessources({'url':'/en/actionsMenu.html'}).then((data)=>{
+            await gameManager.loadExternalRessources({'url':'/en/actionsMenu.html'}).then((data)=>{
 
-                actionMenu.innerHTML += data;
-                const actionNodesIterator = document.createNodeIterator(actionMenu);
-                let currentactionNode;
-                while(currentactionNode = actionNodesIterator.nextNode()) {
-                    currentactionNode.addEventListener('click', QOG.prototype.performAction);
-                }   
+                actionMenu.innerHTML += data; 
             }).catch((err)=>{
                 throw err;
             });
         };
         const intelligneceValidZones = QOG.prototype.intelligenceActionValid(gameManager.units[ev.target.name])
-        console.log(intelligneceValidZones);
-        if(intelligneceValidZones == "") {
-            console.log('SIWA');
-            const menu = document.getElementById('actionMenu')
-            
+        const PA = document.getElementById('PA').getElementsByTagName('span')[0]
+        if(intelligneceValidZones == "" || parseInt(PA.innerText) < 2) {
             document.getElementById('intelligence').style.opacity=0.7
+            document.getElementById('intelligence').dataset.available="false"
             document.getElementById('intelligence').removeEventListener('click',QOG.prototype.performAction)
+        } else {
+            document.getElementById('intelligence').style.opacity=1
+            document.getElementById('intelligence').dataset.available="true"
+            document.getElementById('intelligence').addEventListener('click',QOG.prototype.performAction)
         }
         actionMenu.style.top = (ev.pageY)+'px';
         actionMenu.style.left = (ev.pageX)+'px';
@@ -561,14 +558,10 @@ export default class QOG {
      intelligenceActionValid (patrol) {
         let response = []
         for (const [zoneName, zone] of Object.entries(gameManager.zones)) {
-            console.log('zone: '+zone.name);
             if(zone.isInZone(patrol)) {
-                console.log('found it');
                 const connections = zone.connectedZones()
-                console.log('connections: '+connections);
                 let ground
                 for(const[connectionName,cost] of Object.entries(connections)) {
-                    console.log('currentConnection: '+connectionName);
                     ground = gameManager.zones[connectionName].getGround()
                     if(ground) {
                         ground = ground.split(',')

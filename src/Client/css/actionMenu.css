@@ -45,11 +45,11 @@
     cursor: context-menu;
 
 }
-.patrolAction[available] {
+.patrolAction[data-available="false"] {
     cursor: default;
 }
 
-.patrolAction:not([available]):hover {
+.patrolAction:not([data-available="false"]):hover {
     padding: 0px;
     height: 40px;
     background-color: var(--main-color-variant);
@@ -73,11 +73,11 @@
     cursor: pointer;
 }
 
-.unitAction[available] {
+.unitAction[data-available = "false"] {
     cursor: default;
 }
 
-.unitAction:not([available]):hover {
+.unitAction:not([data-available="false"]):hover {
     padding: 0px;
     height: 40px;
     background-color: var(--main-color-variant);

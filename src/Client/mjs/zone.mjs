@@ -68,7 +68,6 @@ export default class zone {
     }
 
     getGround() {
-        console.log (this.ground)
         if(this.ground == undefined) return false
         else {
             return this.ground

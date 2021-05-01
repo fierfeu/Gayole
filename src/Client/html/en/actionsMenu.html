@@ -2,26 +2,25 @@
 
 <div id='actionMenu'>
     <div class='title' style="text-align:center;"><span>Actions</span></div>
-    <div id='intelligence' class="unitAction"  
-            onmouseover="gameManager.currentGame.gameInterface.hoverItemOfContextMenuHandler">
+    <div id='intelligence' class="unitAction" data-available=false>
         <div class="actionCost">2</div>
         <div class="actiontext">
             <span>Intelligence</span>
         </div>
     </div>
-    <div id='recognition' class="patrolAction" available=false style="opacity:0.5">
+    <div id='recognition' class="patrolAction" data-available=false>
         <div class="actionCost">3</div>
         <div class="actiontext"><span>Recognition</span></div>
     </div>
-    <div id='cache' class="patrolAction" available=false style="opacity:0.5">
+    <div id='cache' class="patrolAction" data-available=false>
         <div class="actionCost">2</div>
         <span>Make a cache</span>
     </div>
-    <div id='maintenance' class="unitAction" available=false style="opacity:0.5">
+    <div id='maintenance' class="unitAction" data-available=false>
         <div class="actionCost">3</div>
         <span>Maintenance</span>
     </div>
-    <div id='lowProfil' class="patrolAction" available=false style="opacity:0.5">
+    <div id='lowProfil' class="patrolAction" data-available=false >
         <div class="actionCost">X</div>
         <span>Low Profile</span>
     </div>
