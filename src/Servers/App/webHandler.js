@@ -32,6 +32,7 @@ const sitePagesConf ={
     '/Hamburger_QOG_icon.png' : 'src/Client/images/Hamburger_QOG_icon.png',
     '/strategicMap.png' : 'src/Client/images/QOGMap.png',
     '/strategicBorder.png':'src/Client/images/strategicBorder.png',
+    '/vaevictis-logo.jpg':'src/Client/images/vaevictis-logo.jpg',
     '/patrol1.png':'src/Client/images/patrol1.png',
     '/Axis-FC.png':'src/Client/images/Axis-FC.png',
     '/Axis_It_1.png':'src/Client/images/Axis_It_1.png',

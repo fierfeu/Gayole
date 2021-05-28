@@ -2,8 +2,10 @@
 
 const chai = require("chai");
 const expect = chai.expect;
+const fs = require('fs')
 
 const { Builder, By, Key, until } = require('selenium-webdriver');
+const { fakeServer } = require("sinon");
 const web = require('../../src/Servers/App/index.js');
 
 describe ('[QOG run] movement behaviour',()=>{
@@ -18,10 +20,10 @@ describe ('[QOG run] movement behaviour',()=>{
         await buttons[0].click();
         const turnNbDisplay = await browser.findElement(By.id('turn'));
         await browser.wait(async ()=>{
-            let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
+            let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getAttribute('innerHTML'));
             return turnValue;
             }, 20000,"before statement");
-        actionPoints = parseInt(await browser.findElement(By.id('PA')).findElement(By.css('span')).getText());
+        actionPoints = parseInt(await browser.findElement(By.id('PA')).findElement(By.css('span')).getAttribute('inner'));
     });
 
     it('When dragging a patrol to a new zone cost is shown', async ()=>{
@@ -31,6 +33,7 @@ describe ('[QOG run] movement behaviour',()=>{
         const unit2move = await browser.findElement(By.name("1st Patrol"));  //name ?
 
         //use simulation for drag and drop
+        await browser.actions({async:true}).move({origin: unit2move}).perform()
         await browser.executeScript(`const script = document.createElement('script');
                                         script.src = 'dd4tests.js';
                                         document.body.appendChild(script);`);
@@ -38,6 +41,8 @@ describe ('[QOG run] movement behaviour',()=>{
         await browser.executeScript(`dragMoveAndStay(arguments[0],arguments[1]);`,unit2move,zone2place);
 
         expect(await unit2move.getAttribute('class')).to.contain('dragged');
+        let image = await browser.takeScreenshot()
+        await fs.writeFile('out.png',image,'base64', err => console.log(err))
         expect(await browser.findElement(By.id('MVTcost')).isDisplayed()).to.true;
         expect(await browser.findElement(By.id('MVTcost')).getText()).to.equal('-2');
 
@@ -49,6 +54,7 @@ describe ('[QOG run] movement behaviour',()=>{
         const unit2move = await browser.findElement(By.name("1st Patrol"));
 
         //use simulation for drag and drop
+        await browser.actions({async:true}).move({origin: unit2move}).perform()
         await browser.executeScript(`const script = document.createElement('script');
                                         script.src = 'dd4tests.js';
                                         document.body.appendChild(script);`);
@@ -77,72 +83,55 @@ describe('[QOG Run Stealth] Intelligence action behaviour',()=>{
         await buttons[0].click();
         const turnNbDisplay = await browser.findElement(By.id('turn'));
         await browser.wait(async ()=>{
-            let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getText());
+            let turnValue = parseInt(await turnNbDisplay.findElement(By.css('span')).getAttribute('innerHTML'));
             return turnValue;
             }, 20000,"before statement");
     });
 
     it('Allows by right clicking on a Patrol to access to Patrol action menu', async ()=>{
-        //context
-        let actions = browser.actions();
         let unit2RightClick = await browser.findElement(By.name('1st Patrol'));
-        const currentUnitId=await unit2RightClick.getAttribute('id');
-
-        //test
-        const unitRect = await unit2RightClick.getRect();
-        await actions.contextClick(unit2RightClick).perform();
-        const actionsMenu = await browser.findElement(By.id('contextualContainer'));
-        await browser.wait(until.elementIsVisible(actionsMenu),6000);
-        const menuRect = await actionsMenu.getRect();
-        expect(menuRect.x).to.equal(unitRect.x+16);
-        expect(menuRect.y).to.equal(unitRect.y+16);
-        expect(await browser.executeScript('return gameManager.currentGame.currentUnit')).to.equal(currentUnitId);
+        await browser.actions().contextClick(unit2RightClick).perform();
+        const actionsMenu = browser.findElement(By.id('contextualContainer'));
+        await browser.wait(until.elementIsVisible(actionsMenu),4000);
+        expect(await browser.executeScript('return gameManager.currentGame.currentUnit'))
+            .to.equal(await unit2RightClick.getAttribute('id'));
+        const intelligenceItem = await browser.findElement(By.id('intelligence'))
+        expect(await intelligenceItem.getAttribute('data-available')).to.equal("false")
+        expect(await intelligenceItem.findElement(By.className('actionCost')).getAttribute('innerHTML'))
+            .to.equal('2')
     });
 
-    it('manage intelligence item according to available zone (Siwa no and cross1 yes)',async ()=>{
-        //context
-        let actions = browser.actions();
-        let unit2RightClick = await browser.findElement(By.name('1st Patrol'));
-        const zone2place = await browser.findElement(By.id('Cross1'));
-        const actionPoints = await browser.findElement(By.id('PA'));
-
-        //test siwa => Intelligence not available
-        await actions.contextClick(unit2RightClick).perform();
-        const actionsMenu = await browser.findElement(By.id('contextualContainer'));
-        const intelligenceItem = await actionsMenu.findElement(By.id('intelligence'));
-        let ItemOpacity = await intelligenceItem.getCssValue('opacity');
-        expect(ItemOpacity).to.equal('0.7');
-        //expect(await browser.findElement(By.id('selectUnit2Second').isDisplayed)).to.false;
-        await browser.findElement(By.id('strategicMap')).click();
-
-        //drag and drop to Cross1 => Intelleigence available if enough AP
- 
-        //use simulation for drag and drop
+    it('IntelligenceItem is available when on Cross1', async ()=>{
+        //Arrange test context
+        let unit2RightClick = await browser.findElement(By.name('1st Patrol'))
+        const zone2place = await browser.findElement(By.id('Cross1'))
+        await browser.executeScript(`const PA = document.getElementById('PA')
+            PA.getElementsByTagName('span')[0].innerHTML='8'`)
         await browser.executeScript(`const script = document.createElement('script');
-                                        script.src = 'dd4tests.js';
-                                        document.body.appendChild(script);`);
-        await browser.sleep(500);
-        await browser.executeScript('dragAndDrop(arguments[0],arguments[1]);', unit2RightClick,zone2place);
+            script.src = 'dd4tests.js';
+            document.body.appendChild(script);`)
+        await browser.sleep(500)
+        await browser.executeScript(`dragAndDrop(arguments[0],arguments[1]);`,unit2RightClick,zone2place)
 
-        // set Action Points to 1 and verify that intelligence item is not available
-        let PAValue=1;
-        await browser.executeScript(`const PA = arguments[0].getElementsByTagName('span')[0];
-                                     PA.innerText = arguments[1];`,actionPoints, PAValue);
-        await actions.contextClick(unit2RightClick).perform();
-        ItemOpacity = await intelligenceItem.getCssValue('opacity');
-        expect(ItemOpacity).to.equal('0.7');
-        await browser.findElement(By.id('strategicMap')).click();
+        //Act to show contextual menu
+        await browser.actions().contextClick(unit2RightClick).perform()
+        const actionsMenu = browser.findElement(By.id('contextualContainer'))
+        await browser.wait(until.elementIsVisible(actionsMenu),4000)
 
-        // set action point to 4 and verify availability
-        PAValue=4;
-        await browser.executeScript(`const PA = arguments[0].getElementsByTagName('span')[0];
-                                     PA.innerText = arguments[1];`,actionPoints, PAValue);
-        await actions.contextClick(unit2RightClick).perform();
-        ItemOpacity = await intelligenceItem.getCssValue('opacity');
-        expect(ItemOpacity).to.equal('1');
-        await intelligenceItem.click();
-        //expect(await browser.findElement(By.id('selectUnit2Second').isDisplayed)).to.true;
-    });
+        //Assert that intelligence Item is available to click
+        expect(await browser.findElement(By.id('PA')).findElement(By.css('span')).getAttribute('innerHTML'))
+            .to.equal('6')
+        expect(await browser.findElement(By.id('intelligence')).getAttribute('data-available'))
+            .to.equal('true')
+
+        //Act to hover intelligence item
+        const intelligenceItem= browser.findElement(By.id('intelligence'))
+        await browser.actions({async:true}).move({origin: intelligenceItem}).perform()
+
+        //Assert that elevation and background color change when hover
+        expect(await intelligenceItem.getCssValue('background-color')).to.equal('rgba(200, 103, 23, 1)') // how to use css var ?
+        expect(await intelligenceItem.getCssValue('box-shadow')).to.contain('rgba(95, 49, 12, 0.2) 0px 2px 1px -1px')
+    })
 
 });
 

@@ -44,7 +44,7 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-as-promised": "*",
-    "chromedriver": "^85.0.1",
+    "chromedriver": "^90.0.1",
     "coveralls": "^3.1.0",
     "driver": "^1.0.0",
     "geckodriver": "^1.22.2",

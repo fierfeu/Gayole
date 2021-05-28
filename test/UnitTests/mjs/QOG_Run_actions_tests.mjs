@@ -27,7 +27,7 @@ describe('[QOG context Menu] manage a contextual menu for unit and zone',()=>{
         globalThis.gameManager = undefined;
     });
 
-    it('Context Menu Hnadler set good environment',async ()=>{
+    it('Context Menu Handler set good environment',async ()=>{
         //context
         const HTML = `<body>
                         <img class="unit" src="/patrol1.png" name="1st Patrol" draggable="true" id="1stPatrol" style="position: absolute; left: 738px; top: 482px;"> 
@@ -94,8 +94,6 @@ describe('[QOG context Menu] manage a contextual menu for unit and zone',()=>{
         expect(gameManager.entry).to.true;
         const menuContent = document.getElementById('contextualContainer');
         expect(menuContent.innerHTML).to.contain('<div id="actionMenu">');
-        expect(menuContent.style.display).to.equal('block');
-        expect(document.getElementById('strategicMap').onclick).to.equal(QOG.prototype.closeContextMenuHandler);
         const clickEv = new window.MouseEvent('click');
         document.getElementById('strategicMap').dispatchEvent(clickEv);
         expect(closeContextSpy.calledOnce).to.true;

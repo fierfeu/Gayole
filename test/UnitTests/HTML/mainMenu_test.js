@@ -101,24 +101,7 @@ describe('[mainMenu] has good css definition',()=>{
         expect(ComputedMainMenu.getPropertyValue('width')).to.equal('200px');
         expect(ComputedMainMenu.getPropertyValue('background-image')).to.equal('none');
         expect(ComputedMainMenu.getPropertyValue('border-radius')).to.equal('2%');
-        //to center the DIV in the body what ever is the size or the shape of the body
-        //we had verified that main menu has body as parent
-        expect(ComputedMainMenu.getPropertyValue('position')).to.equal('absolute');
-        expect(ComputedMainMenu.getPropertyValue('margin')).to.equal('auto');
-        expect(ComputedMainMenu.getPropertyValue('top')).to.equal('0px');
-        expect(ComputedMainMenu.getPropertyValue('bottom')).to.equal('0px');
-        expect(ComputedMainMenu.getPropertyValue('right')).to.equal('0px');
-        expect(ComputedMainMenu.getPropertyValue('left')).to.equal('0px');
-    });
-
-    it('in mainMenu entete has good css definition as a flexbox',() =>{
-        const entete = document.getElementById('entete');
-        const computedEntete = window.getComputedStyle(entete);
-        //pas de transparence sur le titre
-        expect (computedEntete.getPropertyValue('background-color')).to.equal ('rgb(247, 134, 41)');
-        // direction = row, tire au centre et aligné sur le centre de l'icone de menu 
-        expect (computedEntete.getPropertyValue('justify-content')).to.equal('space-between');
-        expect (computedEntete.getPropertyValue('align-items')).to.equal('center');
+        
     });
 
     it('in mainMenu buttonList div has good css definition as a flexbox', () => {

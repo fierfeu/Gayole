@@ -617,7 +617,7 @@ describe ('[QOG game event] all game board event are initialised',()=>{
         QOG.prototype.showHelp(ev);
         expect (helpWin.className).to.not.include('gameBoardHide');
         expect (helpWin.innerHTML).to.equal(turnNb.dataset.help);
-        expect (helpWin.style.left).to.equal('950px');
+        expect (helpWin.style.left).to.equal('960px');
         ev.currentTarget = document.createElement('div');
         ev.currentTarget.id = 'myTest';
         ev.currentTarget.style.position = 'absolute';
@@ -625,7 +625,7 @@ describe ('[QOG game event] all game board event are initialised',()=>{
         ev.currentTarget.style.top = '100px';
         helpWin.classList.toggle('gameBoardHide');
         QOG.prototype.showHelp(ev);
-        expect(helpWin.style.left).to.equal(parseInt(ev.currentTarget.style.left)+60+'px');
+        expect(helpWin.style.left).to.equal(parseInt(ev.currentTarget.style.left)+80+'px');
     });
 
     it('hideHelp function hide help window and empty window content',()=>{

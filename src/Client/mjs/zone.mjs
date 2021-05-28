@@ -21,7 +21,7 @@ export default class zone {
         this.connections[targetZone.name]=cost;
     }
     /**
-     * @description retunr an collection of key/values paire for all the zone connected to the current one
+     * @description return an collection of key/values paire for all the zone connected to the current one
      * @author fierfeu
      * @returns {Object{zoneName:cost}} 
      * @memberof zone

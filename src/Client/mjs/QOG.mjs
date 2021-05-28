@@ -46,7 +46,7 @@ export default class QOG {
     boards () {
         this.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
             document.getElementById('gameBoard').innerHTML = data;
-            document.getElementById('gameBoard').style.display="block";
+            document.getElementById('gameBoard').style.display="inline-block";
             QOG.prototype.initZones(this);
         }).catch((err)=>{
             throw err;
@@ -63,7 +63,6 @@ export default class QOG {
             this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
             window.localStorage.setItem('gameLaunched',this.currentGame.name);
             QOG.prototype.initGameEvent();
-            //QOG.prototype.run.call(this); // for #37 bug
             const Run = new CustomEvent('GameRunning',{});
             window.dispatchEvent(Run)
         }).catch((err)=>{console.log(err)});
@@ -78,6 +77,7 @@ export default class QOG {
     }
 
     run() {
+        console.log('runner')
         if(!(this.units instanceof Object)) throw 'ERROR no units to let game running'
         if(!(this.zones instanceof Object)) throw 'ERROR no zones to let game running'
         if(!(this.hasOwnProperty('currentScenario'))) throw 'ERROR no scenario to let game running';
@@ -155,13 +155,12 @@ export default class QOG {
         if(helpWin.classList.contains('gameBoardHide')) {
             helpWin.innerHTML=ev.currentTarget.dataset.help;
             if(ev.currentTarget.style.position != 'absolute'){
-                helpWin.style.left='950px';
+                helpWin.style.left='960px';
                 helpWin.style.top='90px';
             } else {
-                helpWin.style.left = parseInt(ev.currentTarget.style.left)+60+'px';
-                helpWin.style.top = parseInt(ev.currentTarget.style.top)+60+'px';
+                helpWin.style.left = parseInt(ev.currentTarget.style.left)+80+'px';
+                helpWin.style.top = parseInt(ev.currentTarget.style.top)+80+'px';
             }
-            
             helpWin.classList.remove('gameBoardHide');
         };
     }
@@ -191,7 +190,6 @@ export default class QOG {
         }
 
         piece.id=unit4piece.name.replace(/\s+/g, '') + Date.now();
-
         let coords = where2place.Element.coords.split(',');
         piece.style.position ='absolute';
         piece.style.left = (parseInt(coords[0])+5)+'px';
@@ -387,7 +385,7 @@ export default class QOG {
         zoneCoords = zoneCoords.split(',');
         const costDiv = document.getElementById('MVTcost');
         costDiv.style.left = zoneCoords[2]+'px';
-        costDiv.style.top = (parseInt(zoneCoords[3])+80)+'px';
+        costDiv.style.top = (parseInt(zoneCoords[3])+95)+'px';
         // verify that cost is less than actionpoints or disallow movement
         const actionPoints = parseInt(document.getElementById('PA').getElementsByTagName('span')[0].innerText);
         if ((actionPoints - cost) >= 0) {
@@ -497,9 +495,9 @@ export default class QOG {
         gameManager.currentGame.currentUnit=ev.target.id;
         ev.target.classList.toggle('dragged');
         const actionMenu = document.getElementById('contextualContainer');
+        document.getElementById('strategicMap').onclick = QOG.prototype.closeContextMenuHandler;
         if(document.getElementById('actionMenu') == null) {
             await gameManager.loadExternalRessources({'url':'/en/actionsMenu.html'}).then((data)=>{
-
                 actionMenu.innerHTML += data; 
             }).catch((err)=>{
                 throw err;
@@ -516,13 +514,19 @@ export default class QOG {
             document.getElementById('intelligence').dataset.available="true"
             document.getElementById('intelligence').addEventListener('click',QOG.prototype.performAction)
         }
-        actionMenu.style.top = (ev.pageY)+'px';
-        actionMenu.style.left = (ev.pageX)+'px';
+
+        const scale = parseFloat(getComputedStyle(document.body).getPropertyValue('--scale'));
+        actionMenu.style.top = ((ev.clientY)/scale)+'px';
+        actionMenu.style.left = ((ev.clientX)/scale)+'px';
+        if(parseInt(actionMenu.style.top) > 535) {
+            actionMenu.style.top ="535px"
+            actionMenu.style.left = (parseInt(actionMenu.style.left)+10)+"px"
+        }
         document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseover',QOG.prototype.showHelp,true);
         document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseout',QOG.prototype.hideHelp,true);
-        document.getElementById('strategicMap').onclick = QOG.prototype.closeContextMenuHandler;
+
         document.getElementById('contextualContainer').style.display="block";
-         
+        console.log("display Ok");
     }
 
     /**
