@@ -1,0 +1,4 @@
+
+# [START gayole_quickstart_yaml]
+runtime: nodejs16
+# [END gayole_quickstart_yaml]
