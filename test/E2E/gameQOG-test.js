@@ -17,7 +17,7 @@ describe('[QOG Game user Tests]',()=>{
 
         it('Game creation button behavior verification',async ()=>{
             const mainMenu = await browser.findElement(By.css('#mainMenu'));
-            await browser.wait(until.elementIsVisible(mainMenu),4000,)
+            await browser.wait(until.elementIsVisible(mainMenu),4000)
             await mainMenu.click();
             const buttons = await browser.findElements(By.css('#buttonList button'));
             await browser.wait(until.elementIsVisible(buttons[0]),4000)
@@ -91,7 +91,8 @@ describe('[QOG Game user Tests]',()=>{
         });
 
         it('open a dialog window when over unit', async ()=>{
-            const piece = browser.findElement(By.name('1st Patrol'));
+            const piece = await browser.findElement(By.name('1st Patrol'));
+            await browser.wait(until.elementIsVisible(piece));
             await browser.actions({async:false}).move({origin: piece}).perform();
             const dialog= await browser.findElement(By.id('dialogWindow'));
             expect(await dialog.isDisplayed()).to.true;

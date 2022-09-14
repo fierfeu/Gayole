@@ -2,8 +2,7 @@
 [travis-url]: https://travis-ci.org/fierfeu/Gayole
 
 # Gayole Sand Box
-**_This repository is a sand box for my own learning_**
-
+**_This repository is a sand box for my own learning_*
 ## Strucutral choices
 I began by working on a very light weight server in order to serve static page.
 As I continue to developp a one site page to use this lw server I kept both back and front in the same project.
@@ -63,7 +62,6 @@ build files for code pipeline are availbale in the root of the project
 # Gayole android app
 following a training course on android devlopment I made a small app for android based on a WebView to acces Gayole web game.
 you'll find code of the app here : [link to android app repo](https://github.com/fierfeu/Gayole-Android-App)
-
 
 
 
