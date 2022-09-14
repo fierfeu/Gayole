@@ -46,7 +46,7 @@ export default class QOG {
     boards () {
         this.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
             document.getElementById('gameBoard').innerHTML = data;
-            document.getElementById('gameBoard').style.display="block";
+            document.getElementById('gameBoard').style.display="inline-block";
             QOG.prototype.initZones(this);
         }).catch((err)=>{
             throw err;
@@ -63,7 +63,6 @@ export default class QOG {
             this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
             window.localStorage.setItem('gameLaunched',this.currentGame.name);
             QOG.prototype.initGameEvent();
-            //QOG.prototype.run.call(this); // for #37 bug
             const Run = new CustomEvent('GameRunning',{});
             window.dispatchEvent(Run)
         }).catch((err)=>{console.log(err)});
@@ -78,6 +77,7 @@ export default class QOG {
     }
 
     run() {
+        console.log('runner')
         if(!(this.units instanceof Object)) throw 'ERROR no units to let game running'
         if(!(this.zones instanceof Object)) throw 'ERROR no zones to let game running'
         if(!(this.hasOwnProperty('currentScenario'))) throw 'ERROR no scenario to let game running';
@@ -88,6 +88,7 @@ export default class QOG {
                 this.currentGame.patrolNb ++;
                 const nbOfUnitInPatrol = this.units[id].getNbOfUnitsInPatrol();
                 if (nbOfUnitInPatrol>=1 && nbOfUnitInPatrol<3) {
+                    //@todo use diceRoll for all the following action Points calculation
                     this.units[id].actionPoints = 3+ Math.round(Math.random()*5);
                 }
                 else if (nbOfUnitInPatrol>=4 && nbOfUnitInPatrol<8) {
@@ -154,13 +155,12 @@ export default class QOG {
         if(helpWin.classList.contains('gameBoardHide')) {
             helpWin.innerHTML=ev.currentTarget.dataset.help;
             if(ev.currentTarget.style.position != 'absolute'){
-                helpWin.style.left='950px';
+                helpWin.style.left='960px';
                 helpWin.style.top='90px';
             } else {
-                helpWin.style.left = parseInt(ev.currentTarget.style.left)+60+'px';
-                helpWin.style.top = parseInt(ev.currentTarget.style.top)+60+'px';
+                helpWin.style.left = parseInt(ev.currentTarget.style.left)+80+'px';
+                helpWin.style.top = parseInt(ev.currentTarget.style.top)+80+'px';
             }
-            
             helpWin.classList.remove('gameBoardHide');
         };
     }
@@ -186,10 +186,10 @@ export default class QOG {
             piece.ondragstart = QOG.prototype.dragStartHandler;
             piece.ondrag = QOG.prototype.dragHandler;
             piece.ondragend = QOG.prototype.dragEndHandler;
+            piece.oncontextmenu = QOG.prototype.contextMenuHandler;
         }
 
         piece.id=unit4piece.name.replace(/\s+/g, '') + Date.now();
-
         let coords = where2place.Element.coords.split(',');
         piece.style.position ='absolute';
         piece.style.left = (parseInt(coords[0])+5)+'px';
@@ -385,7 +385,7 @@ export default class QOG {
         zoneCoords = zoneCoords.split(',');
         const costDiv = document.getElementById('MVTcost');
         costDiv.style.left = zoneCoords[2]+'px';
-        costDiv.style.top = (parseInt(zoneCoords[3])+80)+'px';
+        costDiv.style.top = (parseInt(zoneCoords[3])+95)+'px';
         // verify that cost is less than actionpoints or disallow movement
         const actionPoints = parseInt(document.getElementById('PA').getElementsByTagName('span')[0].innerText);
         if ((actionPoints - cost) >= 0) {
@@ -483,6 +483,108 @@ export default class QOG {
             else gameManager.currentGame.alarmLevel=1
         }
         alarmeView.style.backgroundPositionX = (-56*gameManager.currentGame.alarmLevel)+'px';
+     }
+
+    /**
+     * @description this function manage the right click or ctrl-click to open contextual menu
+     * @memberof QOG.prototype
+     * @param {mouseEvent} ev 
+     */
+     async contextMenuHandler(ev) {
+        QOG.prototype.hideHelp(ev.toString());
+        gameManager.currentGame.currentUnit=ev.target.id;
+        ev.target.classList.toggle('dragged');
+        const actionMenu = document.getElementById('contextualContainer');
+        document.getElementById('strategicMap').onclick = QOG.prototype.closeContextMenuHandler;
+        if(document.getElementById('actionMenu') == null) {
+            await gameManager.loadExternalRessources({'url':'/en/actionsMenu.html'}).then((data)=>{
+                actionMenu.innerHTML += data; 
+            }).catch((err)=>{
+                throw err;
+            });
+        };
+        const intelligneceValidZones = QOG.prototype.intelligenceActionValid(gameManager.units[ev.target.name])
+        const PA = document.getElementById('PA').getElementsByTagName('span')[0]
+        if(intelligneceValidZones == "" || parseInt(PA.innerText) < 2) {
+            document.getElementById('intelligence').style.opacity=0.7
+            document.getElementById('intelligence').dataset.available="false"
+            document.getElementById('intelligence').removeEventListener('click',QOG.prototype.performAction)
+        } else {
+            document.getElementById('intelligence').style.opacity=1
+            document.getElementById('intelligence').dataset.available="true"
+            document.getElementById('intelligence').addEventListener('click',QOG.prototype.performAction)
+        }
+
+        const scale = parseFloat(getComputedStyle(document.body).getPropertyValue('--scale'));
+        actionMenu.style.top = ((ev.clientY)/scale)+'px';
+        actionMenu.style.left = ((ev.clientX)/scale)+'px';
+        if(parseInt(actionMenu.style.top) > 535) {
+            actionMenu.style.top ="535px"
+            actionMenu.style.left = (parseInt(actionMenu.style.left)+10)+"px"
+        }
+        document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseover',QOG.prototype.showHelp,true);
+        document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseout',QOG.prototype.hideHelp,true);
+
+        document.getElementById('contextualContainer').style.display="block";
+        console.log("display Ok");
+    }
+
+    /**
+     * @description use a click out of contextualMenu to close it
+     * @memberof QOG.prototype
+     * @param {mouseEvent} ev click on strategicMap
+     */
+    closeContextMenuHandler (ev) {
+        document.getElementById('contextualContainer').style.display='none';
+        document.getElementById(gameManager.currentGame.currentUnit).classList.toggle('dragged');
+        document.getElementById(gameManager.currentGame.currentUnit).addEventListener('mouseover',QOG.prototype.showHelp,true);
+        document.getElementById(gameManager.currentGame.currentUnit).addEventListener('mouseout',QOG.prototype.hideHelp,true);
+        gameManager.currentGame.currentUnit=undefined;
+        document.getElementById('strategicMap').removeEventListener('click',QOG.prototype.closeContextMenuHandler);
+    }
+
+    performAction (ev) {
+        if(ev.currentTarget.id != '' ) {
+            console.log(ev.currentTarget.id);
+            console.log(ev.currentTarget.dataset.help);
+            ev.stopPropagation();
+        }
+
+    }
+
+    //intelligence action management
+    /**
+     * @description test if a valid intelligence action is available for the current Patrol
+     * @memberof QOG.prototype
+     * @param {UnitSet} patrol
+     * @returns {Array[zones]} Avalibale zones for intelligence
+     */
+     intelligenceActionValid (patrol) {
+        let response = []
+        for (const [zoneName, zone] of Object.entries(gameManager.zones)) {
+            if(zone.isInZone(patrol)) {
+                const connections = zone.connectedZones()
+                let ground
+                for(const[connectionName,cost] of Object.entries(connections)) {
+                    ground = gameManager.zones[connectionName].getGround()
+                    if(ground) {
+                        ground = ground.split(',')
+                        switch(ground.length) {
+                            case 1:
+                                if(ground[0]=='Village'||ground[0]=='Town'||ground[0]=='Fort')
+                                    response.push(gameManager.zones[connectionName])
+                                break
+                            case 2:
+                                if(ground[1]=='Oasis'||ground[1]=='Airport')
+                                    response.push(gameManager.zones[connectionName])
+                                break
+                        }
+                    }
+                }
+                return response
+            }
+        }
+         throw ('unable to find the zone where the unit is')
      }
 
 }

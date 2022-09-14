@@ -9,6 +9,7 @@ export default class Game {
         this.currentGame = {};
         this.currentScenario=[];
         window.addEventListener('GameCreation',(ev)=>{this.create(ev)});
+        this.currentGame.i18n={"lang":['en','fr']};
     }
 
     loadExternalRessources (opts) {

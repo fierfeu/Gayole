@@ -10,7 +10,7 @@ export default class zone {
             if(typeof values != 'object') throw ('ERROR additional values must be stored in an object');
             for (let prop in values) this[prop]=values[prop];
         }
-        this.connections =[];
+        this.connections ={};
         this.units = [];
     }
 
@@ -20,7 +20,22 @@ export default class zone {
         if(!cost) cost=0;
         this.connections[targetZone.name]=cost;
     }
-
+    /**
+     * @description return an collection of key/values paire for all the zone connected to the current one
+     * @author fierfeu
+     * @returns {Object{zoneName:cost}} 
+     * @memberof zone
+     */
+    connectedZones () {
+        return this.connections
+    }
+    /**
+     * @description
+     * @author fierfeu
+     * @param {*} targetZone
+     * @returns {*} 
+     * @memberof zone
+     */
     moveAllowedTo(targetZone) {
         if(!targetZone||!(targetZone instanceof zone)) return 'instance';
         if (this.connections[targetZone.name]) return parseFloat(this.connections[targetZone.name]);
@@ -32,6 +47,13 @@ export default class zone {
         this.units[unitToAttach.name]=unitToAttach;
     }
 
+    /**
+     * @description define if the given unit is in the curretn zone
+     * @author fierfeu
+     * @param {Unit} unit2verif
+     * @returns {boolean} 
+     * @memberof zone
+     */
     isInZone(unit2verif) {
         if(!unit2verif ) throw ('ERROR isInZone fct : you must provide at least a unit to test');
         if(!(unit2verif instanceof unit)) throw ('ERROR isInZone fct can only test valide unit instance')
@@ -43,6 +65,13 @@ export default class zone {
             }
         } 
         return result;
+    }
+
+    getGround() {
+        if(this.ground == undefined) return false
+        else {
+            return this.ground
+        }
     }
 
     moveTo(destZone,unit2move) {
