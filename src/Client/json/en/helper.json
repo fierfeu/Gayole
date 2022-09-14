@@ -1,0 +1,12 @@
+{
+    "helper" : {
+        "actionMenu":{
+            "sendUnit":"Second a unit but keep the unit linked to the patrol for action points calculation and allow to move the unit or perform a unit action",
+            "intelligence":"Command a unit to begin an intelligence action",
+            "recognition":"Second a group of unit, move them to an adjacente zone and perform a recognition action",
+            "cache":"Command the patrol to establish a cache to store spare parts, ammunition, gasoline",
+            "maintenance":"Command a unit to repair and/or supply on the field",
+            "lowProfil":"The patrol keeps a low profile, does not move and covers its tracks. This action consumes allthe AP."
+        }
+    }
+}

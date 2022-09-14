@@ -5,7 +5,6 @@ import jsdom from 'jsdom';
 const {JSDOM} = jsdom;
 
 import zone from '../../../src/Client/mjs/zone.mjs';
-import unit from '../../../src/Client/mjs/unit.mjs';
 
 describe ('[Game Board] contains the good html',()=>{
     let document;
@@ -23,7 +22,7 @@ describe ('[Game Board] contains the good html',()=>{
         return JSDOM.fromFile("src/Client/html/index.html").then((dom)=>{
             document =dom.window.document;
             const gameBoard = document.getElementById('gameBoard');
-            expect(gameBoard.childNodes.length).to.equal(2);
+            expect(gameBoard.childNodes.length).to.equal(3);
             expect(gameBoard.childNodes[0].id).to.equal('dialogZone');
             expect(gameBoard.childNodes[0].className).to.equal('dialogZone');
             expect(gameBoard.childNodes[1].id).to.equal('strategicMap');
@@ -93,4 +92,23 @@ describe('[DIALOG] html game board definition contain a dialog window',()=>{
             expect(document.getElementById('dialogWindow').classList.contains('gameBoardHide')).to.true;;
         });
     });
+})
+
+describe ('[GameQOG Run] html must contain movement HMI',()=>{
+    it('contains a div with id cost to give data to user when drag and drop units',()=>{
+        return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
+            let document=dom.window.document;
+            
+            expect(document.getElementById('MVTcost')).to.exist;
+            const costDir = document.getElementById('MVTcost');
+            expect(costDir.classList.contains('dialogWindow')).to.true;
+            expect(costDir.classList.contains('gameBoardHide')).to.true;
+            expect(costDir.style.backgroundImage).to.equal('url(/PA.png)');
+            expect(costDir.style.backgroundPosition).to.equal('center');
+            expect(costDir.style.backgroundSize).to.equal('contain');
+            expect(costDir.style.backgroundRepeat).to.equal('no-repeat');
+            expect(costDir.style.fontFamily).to.equal('\'mainMenuTitleFont\'');
+            expect(costDir.style.padding).to.equal('5px');
+        });
+    })
 })

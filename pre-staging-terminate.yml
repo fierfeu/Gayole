@@ -1,0 +1,20 @@
+version: 0.2
+
+phases :
+  install :
+    commands :
+      - echo install eb cli
+      - yum -y install python37
+      - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+      - python get-pip.py 
+      - pip install awsebcli --upgrade
+
+  pre_build:
+    commands:
+      - echo eb version is
+      - eb --version
+  build :
+    commands :
+      - echo terminate pre-staging environment
+      - eb init --region eu-west-3 --platform node.js Gayole
+      - eb terminate Gayole-pre-staging --force

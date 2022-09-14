@@ -1,0 +1,12 @@
+{
+    "helper" : {
+        "actionMenu":{
+            "sendUnit":"Sélectionner une unité de la patrouille pour l'envoyer en mission.L'unité reste attachée à la patrouille pour le calcul des points d'action.",
+            "intelligence":"Sélectionne une unité pour l'envoyer dans une zone adjacent pour la mettre en observation pendant 1 ou 2 tours",
+            "recognition":"Sélectionne un groupe d'unité pour créer un détachement qui fera une reconnaissance d'une zone adjacente",
+            "cache":"La patrouille met en place une cahce de pièces détachées, de munition ou d'essence pour faciliter la maintenance futur d'une unité",
+            "maintenance":"Permet aux unités endomagées de faire une opération de réparation ou de ravitaillement",
+            "lowProfil":"Permet à la patrouille de camoufler sa présence et donc de faire baisser le niveau d'alarme. Cette action consomme tous les Points d'action de la patrouille"
+        }
+    }
+}

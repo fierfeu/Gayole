@@ -1,18 +1,31 @@
 'use strict'
 
-// testable with protractor only
-// Only initiate default value in storage
+import Game from '/game.mjs';
+import QOG from '/QOG.mjs';
+
 
 window.localStorage.setItem('user','null');
 localStorage.setItem('gameLaunched','false');
 
-import Menu from '/menu.mjs';
-import Game from '/game.mjs';
-import QOG from '/QOG.mjs';
-
-//globalThis.game = QOG.prototype;
+document.oncontextmenu = (ev) =>{ev.preventDefault();ev.stopImmediatePropagation();};
 new Game();
 
-let mainMenu = new Menu(document.getElementById('mainMenu'),'minifiedMainMenu','maxifiedMainMenu');
-document.getElementById('mainMenu').onclick = ()=>{mainMenu.toggle()};
-document.getElementsByTagName('button').item(0).onclick = ()=>{gameManager.create(QOG)};
+document.getElementById('mainMenu').onclick = document.getElementById('mainMenu').ontouchstart = ()=>{
+    document.getElementById('mainMenu').classList.toggle('maxifiedMainMenu');
+};
+
+const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});
+const QOGInit = new CustomEvent('GameInit',{});
+
+
+document.getElementsByTagName('button').item(0).onclick = document.getElementsByTagName('button').item(0).ontouchstart =()=>{
+    window.dispatchEvent(QOGCreation);
+    console.log('creation done');
+    window.dispatchEvent(QOGInit);
+    console.log('init done');
+};
+
+/* document.getElementById('gameBoard').addEventListener('mousemove', e => {
+    document.getElementById('mouse').innerHTML="X:"+e.offsetX+" Y:"+e.offsetY;
+    document.getElementById('client-mouse').innerHTML="cX:"+e.clientX+" cY:"+e.clientY;
+}); */

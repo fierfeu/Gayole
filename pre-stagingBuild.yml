@@ -1,0 +1,26 @@
+version: 0.2
+
+eb_codebuild_settings:
+  CodeBuildServiceRole: aws-elasticbeanstalk-service-role
+  ComputeType: BUILD_GENERAL1_SMALL
+  Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0 
+
+phases :
+  install :
+    commands :
+      - echo install eb cli
+      - yum -y install python37
+      - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+      - python get-pip.py 
+      - pip install awsebcli --upgrade
+
+  pre_build:
+    commands:
+      - echo eb version is
+      - eb --version
+  build :
+    commands :
+      - echo clone gayole-env environment for load tests
+      - eb init --region eu-west-3 Gayole
+      - eb clone Gayole-env -n Gayole-pre-staging
+      - eb deploy --staged

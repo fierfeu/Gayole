@@ -6,6 +6,7 @@ const app = require ('../../../src/Servers/App/index.js');
 
 describe ('[App_Launcher] webApp should run on localhost',() => {
     let port = (process.env.PORT) ? process.env.PORT : 80;
+    global.browser = (global.browser) ? global.browser : false;
 
     before(()=>{
         if (!browser)
