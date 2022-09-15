@@ -28,6 +28,7 @@ describe('[Game] game creation tests',()=>{
         expect(gameManager.getSequence).to.exist;
         
         const currentSequence = gameManager.getSequence();
+        console.log(gameManager.getSequence());
         expect(currentSequence[0]).to.equal('boards');
         expect(()=>{new Game()}).to.throw(); // singleton !
 

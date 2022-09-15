@@ -30,7 +30,7 @@ describe ('[QOG run] movement behaviour',()=>{
         const origine = await browser.findElement(By.id('strategicMap'));
         const zone2place = await browser.findElement(By.id('Cross1'));
         let coords = await zone2place.getAttribute('coords');
-        const unit2move = await browser.findElement(By.name("1st Patrol"));  //name ?
+        const unit2move = await browser.findElement(By.name("1st Patrol"),10000);  //name ?
 
         //use simulation for drag and drop
         await browser.actions({async:true}).move({origin: unit2move}).perform()
@@ -40,11 +40,11 @@ describe ('[QOG run] movement behaviour',()=>{
         await browser.sleep(500);
         await browser.executeScript(`dragMoveAndStay(arguments[0],arguments[1]);`,unit2move,zone2place);
 
-        expect(await unit2move.getAttribute('class')).to.contain('dragged');
-        let image = await browser.takeScreenshot()
-        await fs.writeFile('out.png',image,'base64', err => console.log(err))
+        expect(await unit2move.getAttribute('class'),10000).to.contain('dragged');
+        //let image = await browser.takeScreenshot()
+        //await fs.writeFile('out.png',image,'base64', err => console.log(err))
         expect(await browser.findElement(By.id('MVTcost')).isDisplayed()).to.true;
-        expect(await browser.findElement(By.id('MVTcost')).getText()).to.equal('-2');
+        expect(await browser.findElement(By.id('MVTcost')).getText()).to.equal("-2");
 
         await browser.executeScript('endingDrag(arguments[0]);',unit2move);
     })
