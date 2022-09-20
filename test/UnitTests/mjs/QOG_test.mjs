@@ -100,7 +100,8 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
     });
 
     it('setUp function initiate scenario data and pieces for the game QOG',async  ()=>{
-        globalThis.document = new JSDOM(HTML).window.document;
+        globalThis.window = new JSDOM(HTML).window;
+        globalThis.document = globalThis.window.document;
         let gameManager = {};
         gameManager.zones={};
         gameManager.zones['Siwa'] = new zone (document.getElementById('Siwa'),'Siwa');
@@ -123,6 +124,7 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
         expect(gameManager.zones["Siwa"].units["LRDGT2A"]).to.equal(gameManager.units["LRDGT2A"])
         expect(document.getElementById('turn').getElementsByTagName('span')[0].innerHTML).to.equal('1');
 
+        globalThis.window = undefined;
         globalThis.document=undefined;
     });
 

@@ -6,24 +6,20 @@ import QOG from '/QOG.mjs';
 
 window.localStorage.setItem('user','null');
 localStorage.setItem('gameLaunched','false');
-
-document.oncontextmenu = (ev) =>{ev.preventDefault();ev.stopImmediatePropagation();};
+const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});
 new Game();
 
+document.oncontextmenu = (ev) =>{ev.preventDefault();ev.stopImmediatePropagation();};
 document.getElementById('mainMenu').onclick = document.getElementById('mainMenu').ontouchstart = ()=>{
     document.getElementById('mainMenu').classList.toggle('maxifiedMainMenu');
 };
 
-const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});
-const QOGInit = new CustomEvent('GameInit',{});
-
-
-document.getElementsByTagName('button').item(0).onclick = document.getElementsByTagName('button').item(0).ontouchstart =()=>{
+// first button mamangement
+document.getElementsByTagName('button').item(0).onclick = ()=>{
     window.dispatchEvent(QOGCreation);
-    console.log('creation done');
-    window.dispatchEvent(QOGInit);
-    console.log('init done');
+    console.log('creation done'); // to be replaced by event storage
 };
+document.getElementsByTagName('button').item(0).ontouchstart = document.getElementsByTagName('button').item(0).onclick;
 
 /* document.getElementById('gameBoard').addEventListener('mousemove', e => {
     document.getElementById('mouse').innerHTML="X:"+e.offsetX+" Y:"+e.offsetY;

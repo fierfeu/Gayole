@@ -38,34 +38,36 @@ const MD_AXIS_UNIT = DISCRETION_MD[0];
 // End of constant and tables declaration
 
 export default class QOG {
-    
+    inizones =false;
+
     constructor () {
         throw ('ERROR QOG is not instanciable');
     }
 
-    boards () {
-        this.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
+    async boards () {
+        await this.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
             document.getElementById('gameBoard').innerHTML = data;
             document.getElementById('gameBoard').style.display="inline-block";
             QOG.prototype.initZones(this);
+            this.initZones=true;
         }).catch((err)=>{
-            throw err;
+            console.log(err);
         });
     }
 
-    setUp() {
+    async setUp() {
         const scenarioURL="/scenario_default.json";
-        this.loadExternalRessources({'url':scenarioURL}).then ((data)=>{
+        await this.loadExternalRessources({'url':scenarioURL}).then ((data)=>{
             QOG.prototype.scenarioParser(JSON.parse(data),this);
             QOG.prototype.initScenario.call(this,this.currentScenario);
             let turn = document.getElementById('turn').getElementsByTagName('span')[0];
             turn.innerHTML = this.currentScenario.conditions.turnNb;
             this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
-            window.localStorage.setItem('gameLaunched',this.currentGame.name);
+            window.localStorage.setItem("gameLaunched",this.currentGame.name);
             QOG.prototype.initGameEvent();
-            const Run = new CustomEvent('GameRunning',{});
-            window.dispatchEvent(Run)
         }).catch((err)=>{console.log(err)});
+        const Run = new window.CustomEvent('GameRunning',{});
+        window.dispatchEvent(Run);
     }
 
     didacticiel () {
@@ -77,7 +79,6 @@ export default class QOG {
     }
 
     run() {
-        console.log('runner')
         if(!(this.units instanceof Object)) throw 'ERROR no units to let game running'
         if(!(this.zones instanceof Object)) throw 'ERROR no zones to let game running'
         if(!(this.hasOwnProperty('currentScenario'))) throw 'ERROR no scenario to let game running';
@@ -117,7 +118,6 @@ export default class QOG {
         for(let area=0; area< gameZones.length;area++) {
             QOG.prototype.zones[gameZones[area].id]= new zone (gameZones[area],gameZones[area].id)
         };
-        
         for (let areaZone in QOG.prototype.zones ) {
             QOG.prototype.zones[areaZone].Element.ondragover=QOG.prototype.dragoverHandler;
             QOG.prototype.zones[areaZone].Element.ondragenter=QOG.prototype.dragEnterHandler;
@@ -131,10 +131,10 @@ export default class QOG {
                     const cost = sourceZone[i].split(':')[1];
                     QOG.prototype.zones[areaZone].linkTo(QOG.prototype.zones[name],cost);
                 };
-                
             };
+
             if(QOG.prototype.zones[areaZone].Element.dataset.hasOwnProperty('ground'))
-            QOG.prototype.zones[areaZone].ground = QOG.prototype.zones[areaZone].Element.dataset.ground;
+                QOG.prototype.zones[areaZone].ground = QOG.prototype.zones[areaZone].Element.dataset.ground;
         };
         if (gameManager) gameManager.zones = QOG.prototype.zones;
     }
@@ -457,7 +457,6 @@ export default class QOG {
 
      diceRoll () {
         let roll = 1+Math.round(Math.random()*5)
-        //console.log(roll); for test only
         return roll;
      }
 
@@ -525,7 +524,6 @@ export default class QOG {
         document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseout',QOG.prototype.hideHelp,true);
 
         document.getElementById('contextualContainer').style.display="block";
-        console.log("display Ok");
     }
 
     /**

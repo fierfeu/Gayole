@@ -1,5 +1,6 @@
 'use strict'
 
+const { doesNotMatch } = require("assert");
 const chai = require("chai");
 const expect = chai.expect;
 const fs = require('fs')
@@ -90,8 +91,15 @@ describe('[QOG Run Stealth] Intelligence action behaviour',()=>{
 
     it('Allows by right clicking on a Patrol to access to Patrol action menu', async ()=>{
         let unit2RightClick = await browser.findElement(By.name('1st Patrol'));
-        await browser.actions().contextClick(unit2RightClick).perform();
-        const actionsMenu = browser.findElement(By.id('contextualContainer'));
+        await browser.actions({async:true}).move({origin: unit2RightClick}).perform();
+        let image = await browser.takeScreenshot();
+        fs.writeFile("./test/images/rightclickPatrol.png",image,{encoding:'base64'}, (err)=>{if (err!=null) console.log(err)});
+        await browser.actions({async:true}).contextClick(unit2RightClick).perform();
+        const actionsMenu = await browser.findElement(By.id('contextualContainer'));
+        await browser.actions({async:true}).move({origin: actionsMenu}).perform();
+        image = await browser.takeScreenshot();
+        fs.writeFile("./test/images/showActionMenu.png",image,{encoding:'base64'}, (err)=>{if (err!=null) console.log(err)});
+
         await browser.wait(until.elementIsVisible(actionsMenu),4000);
         expect(await browser.executeScript('return gameManager.currentGame.currentUnit'))
             .to.equal(await unit2RightClick.getAttribute('id'));
@@ -116,6 +124,7 @@ describe('[QOG Run Stealth] Intelligence action behaviour',()=>{
         //Act to show contextual menu
         await browser.actions().contextClick(unit2RightClick).perform()
         const actionsMenu = browser.findElement(By.id('contextualContainer'))
+        await browser.actions().move({origin: actionsMenu}).perform();
         await browser.wait(until.elementIsVisible(actionsMenu),4000)
 
         //Assert that intelligence Item is available to click

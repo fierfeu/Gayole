@@ -1,7 +1,6 @@
 
 export default class Game {
 
-    sequence
     constructor () {
         if(globalThis.gameManager) throw('ERROR gameManager singleton allready created');
         globalThis.gameManager = this;
@@ -53,14 +52,14 @@ export default class Game {
                  throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' is not a function');
         }
         // create game events
-        window.addEventListener('GameInit',this.initialise);
         window.addEventListener('GameRunning',this.runner);
+        this.initialise();
 
     };
 
-    initialise () {
+    async initialise () {
         for(let i=0;i<gameManager.sequence.length;i++) {
-            gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
+            await gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
         }   
     }
 

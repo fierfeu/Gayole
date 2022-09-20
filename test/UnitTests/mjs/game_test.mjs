@@ -28,7 +28,6 @@ describe('[Game] game creation tests',()=>{
         expect(gameManager.getSequence).to.exist;
         
         const currentSequence = gameManager.getSequence();
-        console.log(gameManager.getSequence());
         expect(currentSequence[0]).to.equal('boards');
         expect(()=>{new Game()}).to.throw(); // singleton !
 
@@ -115,30 +114,6 @@ describe('[Game] gameManager is instanciable and runnable with events', ()=>{
         window.close(); // remove any eventlistener
         global.CustomEvent = undefined;
         global.window = undefined;
-    });
-
-    it('initiate good events to manage initialisation',()=>{
-        class GoodGameInterface  { 
-            getGameName () {return 'QOG'};
-            boards () {};
-            setUp () {}
-        }
-        const GameCreation = new CustomEvent('GameCreation',{
-            detail :{
-            'gameInterface': GoodGameInterface
-            }
-        });
-        window.dispatchEvent(GameCreation);
-        
-        const GameInit = new window.CustomEvent('GameInit',{});
-        let boardSpy = sinon.spy(GoodGameInterface.prototype,"boards");
-        let setUpSpy = sinon.spy(GoodGameInterface.prototype,"setUp");
-
-        window.dispatchEvent(GameInit);
-
-        expect (boardSpy.calledOnce).to.true;
-        expect (setUpSpy.calledAfter(boardSpy)).to.true;
-    
     });
 
     it('Initiate good event to allow game running',()=>{

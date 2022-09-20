@@ -8,7 +8,7 @@ options.addArguments('--start-maximized');
 //options.addArguments('--disable-popup-blocking');
 options.addArguments('--dom-automation');
 options.addArguments('--no-sandbox');
-options.addArguments("--disable-gpu");
+//options.addArguments("--disable-gpu");
 //options.addArguments("--disable-extensions");
 //options.addArguments("--disable-dev-shm-usage");
 options.addArguments("--headless"); 
