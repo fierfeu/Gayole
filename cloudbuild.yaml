@@ -6,5 +6,8 @@ steps:
   args: ["echo","installing Chrome, Chromedriver, mocha and c8"]
 - name: 'gcr.io/cloud-builders/wget'
   args: ["https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm"]
+- name: "gcr.io/cloud-builders/gcloud"
+  entrypoint: "yum"
+  args: ['-y','install','./google-chrome-stable_current_x86_64.rpm']
 options:
   logging: CLOUD_LOGGING_ONLY
