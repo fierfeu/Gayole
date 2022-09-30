@@ -1,6 +1,10 @@
 steps:
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy"]
-timeout: "1600s"
+  timeout: "1600s"
+- name: "ubuntu"
+  args: ["echo","installing Chrome, Chromedriver, mocha and c8"]
+- name: "ubuntu"
+  args: ["wget","https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm"]
 options:
   logging: CLOUD_LOGGING_ONLY
