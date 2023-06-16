@@ -6,7 +6,7 @@ import QOG from '/QOG.mjs';
 
 window.localStorage.setItem('user','null');
 localStorage.setItem('gameLaunched','false');
-const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});
+
 new Game();
 
 document.oncontextmenu = (ev) =>{ev.preventDefault();ev.stopImmediatePropagation();};
@@ -19,5 +19,4 @@ const QOGInit = new CustomEvent('GameInit',{});
 
 document.getElementsByTagName('button').item(0).onclick = ()=>{
     window.dispatchEvent(QOGCreation);
-    window.dispatchEvent(QOGInit)
 };

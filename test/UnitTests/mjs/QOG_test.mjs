@@ -84,6 +84,7 @@ describe('[QOG for gameManager] QOG prototype content good gameManager Interface
         globalThis.document = new JSDOM(EMPTYHTML).window.document;
         let gameManager={};
         gameManager.currentGame={};
+        gameManager.currentGame.turnLeft=0;
         gameManager.loadExternalRessources = (opts) => {
             gameManager.load=true;
             return new Promise((resolve)=>{resolve(board)}) };

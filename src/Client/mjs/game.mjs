@@ -4,8 +4,7 @@ export default class Game {
     constructor () {
         if(globalThis.gameManager) throw('ERROR gameManager singleton allready created');
         globalThis.gameManager = this;
-        //this.#sequence =['boards','setUp','run'] to repare bug #37
-        this.sequence =['boards','setUp']; // #37 bug to remove run call by game 
+        this.sequence =['boards','setUp']; 
         this.currentGame = {};
         this.currentScenario=[];
         window.addEventListener('GameCreation',(ev)=>{this.create(ev)});
@@ -53,8 +52,8 @@ export default class Game {
         }
         // create game events
 
-        window.addEventListener('GameInit',this.initialise);
         window.addEventListener('GameRunning',this.runner);
+        this;this.initialise();
 
     };
 
