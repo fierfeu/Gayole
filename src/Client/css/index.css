@@ -48,7 +48,7 @@ body {
     left:0;
     height : 30px;
     width : 30px;
-    background-image : url('/Hamburger_QOG_icon.png');
+    background-image : url('/Hamburger_icon.png');
     background-size : 100%;
     margin-right: 10px;
     box-shadow: var(--elevation4dp);

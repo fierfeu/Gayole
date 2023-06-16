@@ -83,7 +83,7 @@ describe('[mainMenu] has good css definition',()=>{
             expect(computdiv.getPropertyValue('height')).to.equal('30px');
             expect(computdiv.getPropertyValue('width')).to.equal('30px');
             expect(computdiv.getPropertyValue('background-color')).to.equal('rgba(247, 134, 41, 0.7)');
-            expect(computdiv.getPropertyValue('background-image')).to.equal("url(/Hamburger_QOG_icon.png)");
+            expect(computdiv.getPropertyValue('background-image')).to.equal("url(/Hamburger_icon.png)");
             expect(computdiv.getPropertyValue('background-size')).to.equal('100%');
             expect(window.getComputedStyle(document.getElementById('entete')).getPropertyValue('display')).to.equal('none');
             expect(window.getComputedStyle(document.getElementById('buttonList')).getPropertyValue('display')).to.equal('none');
