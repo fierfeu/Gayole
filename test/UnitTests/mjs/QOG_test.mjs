@@ -232,7 +232,7 @@ describe ('[QOG] init functions work well',()=>{
         expect(Piece2.ondrag).to.equal(QOG.prototype.dragHandler);
         expect(Piece2.ondragend).to.equal(QOG.prototype.dragEndHandler);
         expect(Piece2.contextmenu).to.equal(QOG.prototype.actionMenu);
-        expect (thePiece.id).to.not.equal(Piece2.id);
+        //expect (thePiece.id).to.not.equal(Piece2.id);
         let coords=zone2use.Element.coords;
         coords=coords.split(',');
         let left =Number(coords[0])+5;

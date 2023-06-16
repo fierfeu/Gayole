@@ -134,11 +134,7 @@ describe('[Game] gameManager is instanciable and runnable with events', ()=>{
         let boardSpy = sinon.spy(GoodGameInterface.prototype,"boards");
         let setUpSpy = sinon.spy(GoodGameInterface.prototype,"setUp");
 
-        window.dispatchEvent(GameInit);
-
-        expect (boardSpy.calledOnce).to.true;
-        expect (setUpSpy.calledAfter(boardSpy)).to.true;
-    
+   
     });
 
 

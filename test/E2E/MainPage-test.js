@@ -22,7 +22,7 @@ describe('[Main Page overall Tests]',()=>{
 
         it('has good script links and async to load main js', async ()=>{
             let jsScript = await browser.findElement(By.css('script'));
-            expect(await jsScript.getAttribute('src')).to.include('/QOG_Head.js');
+            expect(await jsScript.getAttribute('src')).to.include('/Head.js');
             expect(await jsScript.getAttribute('async')).to.equal('true');
             expect(await jsScript.getAttribute('type')).to.equal('module');
             
