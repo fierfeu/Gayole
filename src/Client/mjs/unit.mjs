@@ -22,6 +22,14 @@ export default class unit {
 
     }
 
+    /**
+     * @description perform an action if atached to the unit
+     * @param {HTMLEment.id} actionId 
+     */
+    performAction(actionId) {
+        if (typeof this.actions[actionId] == undefined) throw ("ERROR the requested action was'nt define fo this unit");
+    }
+
     getDescription () {
         if(!this.HTMLDescription) {
             this.HTMLDescription = '<div class="description"><span>'+this.name+'<span><hr><span>'+

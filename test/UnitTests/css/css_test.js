@@ -89,16 +89,15 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
             if(el.selectorText === '#entete') bodyIndex = index;
         });
         // we had allready verify that this rule exist
-        expect (indexSheet[bodyIndex].style['justify-content']).to.equal("space-between");
-        expect (indexSheet[bodyIndex].style['background-color']).to.equal("rgba(247, 134, 41, 1)");
-        expect (indexSheet[bodyIndex].style['align-items']).to.equal("center");
+        expect (indexSheet[bodyIndex].style['padding-left']).to.equal("40px");
+        expect (indexSheet[bodyIndex].style['height']).to.equal("32px");
 
         //to be sure that menu is always above map
         bodyIndex=null;
         indexSheet.forEach((el, index )=>{
             if(el.selectorText === '.maxifiedMainMenu') bodyIndex = index;
         });
-        expect (indexSheet[bodyIndex].style['z-index']).to.equal("10");
+        expect (indexSheet[bodyIndex].style['z-index']).to.equal("80");
 
         //to be sure that font is well declared
         bodyIndex=null;
@@ -116,26 +115,16 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
         indexSheet.forEach((el, index )=>{
             if(el.selectorText === '#gameBoard') bodyIndex = index;
         });
-        expect (indexSheet[bodyIndex].style['border-style']).to.equal('solid'); // for chrome as firefox doesn't care
-        expect (indexSheet[bodyIndex].style['border-image-source']).to.equal("url('/strategicBorder.png')");
-        expect (indexSheet[bodyIndex].style['border-image-slice']).to.equal('30 25 34 25');
-        expect (indexSheet[bodyIndex].style['border-image-repeat']).to.equal('round');
-        expect (indexSheet[bodyIndex].style['border-image-width']).to.equal('15px');
-        expect (indexSheet[bodyIndex].style['border-image-outset']).to.equal('13px');
-        expect (indexSheet[bodyIndex].style['position']).to.equal('absolute');
-        expect (indexSheet[bodyIndex].style['top']).to.equal('18px');
-        expect (indexSheet[bodyIndex].style['left']).to.equal('58px');
+        expect (indexSheet[bodyIndex].style['margin-left']).to.equal('36px'); 
+        expect (indexSheet[bodyIndex].style['z-index']).to.equal('10');
+        expect (indexSheet[bodyIndex].style['height']).to.equal('718px');
+        expect (indexSheet[bodyIndex].style['width']).to.equal('1186px');
         bodyIndex=null;
         indexSheet.forEach((el, index )=>{
             if(el.selectorText === '.strategicMap') bodyIndex = index;
         });
-        expect (indexSheet[bodyIndex].style['border-style']).to.equal('solid'); // for chrome as firefox doesn't care
-        expect (indexSheet[bodyIndex].style['border-image-source']).to.equal("url('/strategicBorder.png')");
-        expect (indexSheet[bodyIndex].style['border-image-slice']).to.equal('30 0 0 0');
-        expect (indexSheet[bodyIndex].style['border-image-repeat']).to.equal('round');
-        expect (indexSheet[bodyIndex].style['border-image-width']).to.equal('10px 10px 0 10.5px');
-        expect (indexSheet[bodyIndex].style['border-image-outset']).to.equal('10px');
-        expect (indexSheet[bodyIndex].style['padding']).to.equal('0');
+        expect (indexSheet[bodyIndex].style['margin-top']).to.equal('5px'); 
+        expect (indexSheet[bodyIndex].style['padding']).to.equal('2px');
         expect (indexSheet[bodyIndex].style['width']).to.equal('1180px');
         expect (indexSheet[bodyIndex].style['height']).to.equal('623px');
         expect (indexSheet[bodyIndex].style['position']).to.equal('relative'); // to be sure that isthe nearest ancestor of units

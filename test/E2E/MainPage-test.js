@@ -40,7 +40,6 @@ describe('[Main Page overall Tests]',()=>{
             // if I use promise in the following line, it'll resolved after the click()
             expect(await mainMenu.getAttribute('class')).to.equal('minifiedMainMenu');
             await mainMenu.click();
-            console.log(await mainMenu.getAttribute('class'));
             expect(await mainMenu.getAttribute('class')).to.equal('minifiedMainMenu maxifiedMainMenu');
             await mainMenu.click();
             expect(await mainMenu.getAttribute('class')).to.equal('minifiedMainMenu');

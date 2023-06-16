@@ -25,7 +25,8 @@ phases:
       - echo test if test framework is alive
       - npm run tests-alive
       - echo test code coverage for both unit and E2E tests
-      - c8 --check-coverage --lines 95 npm run all-tests
+      - npm run all-tests
+      - c8 --check-coverage --lines 95 npm run unit-tests
   post_build:
     commands:
       - echo Build completed on `date`

@@ -1,18 +1,16 @@
 'use strict'
 
-// testable with protractor only
-// Only initiate default value in storage
-
-window.localStorage.setItem('user','null');
-localStorage.setItem('gameLaunched','false');
-
 import Game from '/game.mjs';
 import QOG from '/QOG.mjs';
 
-//globalThis.game = QOG.prototype;
+
+window.localStorage.setItem('user','null');
+localStorage.setItem('gameLaunched','false');
+const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});
 new Game();
 
-document.getElementById('mainMenu').onclick = ()=>{
+document.oncontextmenu = (ev) =>{ev.preventDefault();ev.stopImmediatePropagation();};
+document.getElementById('mainMenu').onclick = document.getElementById('mainMenu').ontouchstart = ()=>{
     document.getElementById('mainMenu').classList.toggle('maxifiedMainMenu');
 };
 const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});

@@ -9,6 +9,7 @@ export default class Game {
         this.currentGame = {};
         this.currentScenario=[];
         window.addEventListener('GameCreation',(ev)=>{this.create(ev)});
+        this.currentGame.i18n={"lang":['en','fr']};
     }
 
     loadExternalRessources (opts) {
@@ -51,6 +52,7 @@ export default class Game {
                  throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' is not a function');
         }
         // create game events
+
         window.addEventListener('GameInit',this.initialise);
         window.addEventListener('GameRunning',this.runner);
 
@@ -59,6 +61,7 @@ export default class Game {
     initialise () {
         for(let i=0;i<gameManager.sequence.length;i++) {
             gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
+
         }   
     }
 

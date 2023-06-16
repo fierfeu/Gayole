@@ -12,7 +12,7 @@ const HTML = "<!doctype html><html><body></body></html>";
 
 describe('[Game] game creation tests',()=>{
     beforeEach(()=>{
-        global.window= new JSDOM(HTML,{url:'http://localhost',runScripts:"dangerously"}).window;
+        global.window= new JSDOM(HTML,{url:'http://localhost',pretendToBeVisual: true, runScripts:"dangerously"}).window;
         globalThis.gameManager = undefined;
     });
 
@@ -116,6 +116,7 @@ describe('[Game] gameManager is instanciable and runnable with events', ()=>{
         global.window = undefined;
     });
 
+
     it('initiate good events to manage initialisation',()=>{
         class GoodGameInterface  { 
             getGameName () {return 'QOG'};
@@ -139,6 +140,7 @@ describe('[Game] gameManager is instanciable and runnable with events', ()=>{
         expect (setUpSpy.calledAfter(boardSpy)).to.true;
     
     });
+
 
     it('Initiate good event to allow game running',()=>{
         class GoodGameInterface  { 

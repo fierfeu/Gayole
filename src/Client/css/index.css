@@ -1,7 +1,84 @@
+:root {
+    --main-color : rgb(250, 155, 77);
+    --main-color-variant : rgb(200, 103, 23);
+    --border-color : olive;
+    --dark-border-color : darkolivegreen;
+    --umbraColor : rgba(95, 49, 12, 0.2);
+    --penumbraColor : rgba(95, 49, 12, 0.14);
+    --ambientColor :rgba(95, 49, 12, 0.12);
+    --accent-color : rgb(170, 190, 250);
+    --accent-color-variant : rgb(11, 65, 211);
+    --elevation1dp : 0 2px 1px -1px var(--umbraColor), 0 1px 1px 0px var(--penumbraColor), 0px 1px 3px 0px var(--ambientColor);
+    --elevation2dp : 0 3px 1px -2px var(--umbraColor), 0 2px 2px 0px var(--penumbraColor), 0px 1px 5px 0px var(--ambientColor);
+    --elevation4dp : 0 2px 4px -1px var(--umbraColor), 0 4px 5px 0px var(--penumbraColor), 0px 1px 10px 0px var(--ambientColor);
+    --elevation6dp : 0 3px 5px -1px var(--umbraColor), 0 6px 10px 0px var(--penumbraColor), 0px 1px 18px 0px var(--ambientColor);
+    --elevation8dp : 0 5px 5px -3px var(--umbraColor), 0 8px 10px 1px var(--penumbraColor), 0px 3px 14px 2px var(--ambientColor);
+    --elevation12dp : 0 7px 8px -4px var(--umbraColor), 0 12px 17px 2px var(--penumbraColor), 0px 5px 22px 4px var(--ambientColor);
+
+}
+
 body {
+
     background-image : url('/QuiOseGagneFE.png');
     background-repeat: no-repeat;
     background-size: cover;
+
+    overflow: hidden;
+    padding: 5px;
+}
+
+@font-face {
+    font-family: mainMenuTitleFont;
+    src : url('/mainMenuTitle.ttf')format('truetype');
+}
+
+
+#mainMenu {
+    background-color : rgba(247, 134, 41, 0.7);
+}
+
+.warLetters {
+    font-family:mainMenuTitleFont;
+}
+
+.minifiedMainMenu {
+    position: absolute;
+    left:0;
+    height : 30px;
+    width : 30px;
+    background-image : url('/Hamburger_QOG_icon.png');
+    background-size : 100%;
+    margin-right: 10px;
+    box-shadow: var(--elevation4dp);
+    z-index: 40;
+}
+
+.minifiedMainMenu > * {display : none;}
+
+.maxifiedMainMenu {
+    box-shadow:  var(--elevation8dp);
+    margin: auto;
+    width : 200px; 
+    height : 250px;
+    background-image : none;
+    border-radius: 2%;
+    z-index:80;
+    left:0;
+}
+
+.maxifiedMainMenu > * {
+    display : flex;
+    
+}
+
+hr {
+    border: 1px solid var(--border-color);
+    border-radius: 5%;
+    margin-top:0px;
+  }
+
+.elevation-1dp {
+    box-shadow: var(--elevation1dp);
 }
 
 .mark {
@@ -26,7 +103,7 @@ body {
     width : 59px;
     height : 55px;
     border-radius : 6px;
-    border : solid 3px olive;
+    border : solid 3px  var(--border-color);
     background-color:Bisque;
     font-size: 45px;
     text-align: center;
@@ -45,7 +122,7 @@ body {
     height : 55px;
     border-radius : 6px;
     margin: 0 20px 10px 20px;
-    border : solid 3px olive;
+    border : solid 3px var(--border-color);
     background-color:Bisque;
     font-size: 45px;
     text-align: center;
@@ -64,41 +141,30 @@ body {
 }
 
 .dragged {
-    border: solid 2px darkolivegreen;
+    border: solid 2px var(--dark-border-color);
 }
 
-#mainMenu {
-    background-color : rgba(247, 134, 41, 0.7);
-}
 
 .dialogWindow {
-    background-color : rgba(247, 134, 41, 0.7);
+    background-color :var(--accent-color);
     position:absolute;
-    width:200px;
     height:auto;
-    top:90px;
-    border-style: solid;
-    border-image-source: url('/strategicBorder.png');
-    border-image-slice: 30 25 34 25;
-    border-image-repeat: round;
-    border-image-width: 10px;
-    border-image-outset: 10px;
-    z-index: 50;
+    top:130px;
+    width: 200px;
+    border: 1px solid var(--accent-color-variant);
+    border-radius: 2px;
+    box-shadow: var(--elevation6dp);
+    z-index: 60;
 }
-
-.minifiedMainMenu {
-    height : 30px;
-    width : 30px;
-    background-image : url('/Hamburger_QOG_icon.png');
-    background-size : 100%;
-}
-
-.minifiedMainMenu > * {display : none;}
 
 #entete {
-    justify-content:space-between;
-    align-items: center;
-    background-color : rgba(247, 134, 41, 1);
+    padding-left: 40px;
+    height: 32px;
+    background-color : var(--main-color);
+}
+
+#mainMenuTitle {
+    padding-top: 7px;
 }
 
 #buttonList {
@@ -107,41 +173,53 @@ body {
 }
 
 #gameBoard {
-    position : absolute;
-    left : 58px;
-    top : 18px;
-    z-index : 1;
-    border-style:solid;
-    border-image-source: url('/strategicBorder.png');
-    border-image-slice: 30 25 34 25;
-    border-image-repeat: round;
-    border-image-width: 15px;
-    border-image-outset: 13px;
+    z-index : 10;
+    margin-left: 36px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--main-color-variant);
+    padding: 5px;
+    height:718px;
+    width:1186px;
+    box-shadow: var(--elevation1dp);
+}
 
+.strategicMap {
+    position:relative;
+    width:1180px;
+    height:623px;
+    border: 1px solid var(--border-color);
+    background-color: var(--main-color);
+    border-radius: 8px;
+    margin-top: 5px;
+    padding:2px;
+
+}
+
+.strategicMap > img[src='/strategicMap.png'] {
+    border-radius: 8px;
 }
 
 @media (hover:none) and (pointer: coarse) and (orientation: landscape){
-    html, body {
-        transform: scale(0.38);
-        transform-origin: top left;
-        background-size: cover;
+    :root {
+        --scale: 1;
     }
 
-}
-
-@media (hover:none) and (pointer: coarse) and (orientation: portrait){
-    html, body {
-        transform: scale(1);
+    body {
+        transform: scale(var(--scale));
         transform-origin: top left;
-        background-size: cover;
     }
 
 }
 
 @media (hover:hover) and (pointer: fine) {
-    html, body {
-        height:750px;
-        width:1280px;
+    :root {
+        --scale: 1.3;
+    }
+
+    body {
+        transform: scale(var(--scale));
+        transform-origin: top left;
     }
 }
 
@@ -150,7 +228,11 @@ body {
 }
 
 .dialogZone {
-    height : 80px;
+    padding-top: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--main-color);
+    height : 75px;
     display:flex;
     flex-direction: row;
     align-items: center;
@@ -167,18 +249,6 @@ body {
     height : 30px;
 }
 
-.strategicMap {
-    position:relative;
-    width:1180px;
-    height:623px;
-    border-style: solid;
-    border-image-source: url('/strategicBorder.png');
-    border-image-slice: 30 0 0 0;
-    border-image-repeat: round;
-    border-image-width: 10px 10px 0 10.5px;
-    border-image-outset: 10px;
-    padding:0;
-}
 
 .btn-enabled {
     margin : 15px auto;
@@ -197,37 +267,19 @@ body {
     opacity: 0.5;
 }
 
-@font-face {
-    font-family: mainMenuTitleFont;
-    src : url('/mainMenuTitle.ttf')format('truetype');
+.contextualMenu {
+    display:none;
+    z-index:80;
+    position:absolute;
+    width: 135px;
+    background-color: var(--main-color);
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    border: var(--elevation8dp);
+    padding: 5px 0px;
 }
 
-
-.warLetters {
-    font-family:mainMenuTitleFont;
+.title {
+    border-bottom: 2px solid var(--dark-border-color);
 }
 
-.maxifiedMainMenu {
-    position: absolute;
-     margin: auto;
-     top: 0;
-     right: 0;
-     bottom: 0;
-     left: 0;
-    width : 200px; 
-    height : 250px;
-    background-image : none;
-    border-radius: 2%;
-    z-index:10;
-}
-
-.maxifiedMainMenu > * {
-    display : flex;
-    
-}
-
-hr {
-    border: 2px solid olive;
-    border-radius: 5%;
-    margin-top:0px;
-  }

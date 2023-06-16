@@ -2,35 +2,76 @@ import unit from './unit.mjs';
 import {unitSet} from './unitSet.mjs';
 import zone from './zone.mjs';
 
+// constants and game tables for "Who dares win"
+/** 
+ * @constant {String} NO_MVT
+ * @description value when movement is not allowed to a given zone
+ */
+const NO_MVT='No';
+/** 
+ * @constant {Object} DISCRETION_TEST
+ * @description table to define dice(d6) number and MD to roll discretion test
+ * @example dices = DISCRETION_TEST["Oasis"]["dice"]
+ */
+const DISCRETION_TEST = {
+    "Desert_rocky":{"dice":1,"MD":-1},
+    "Desert_sand":{"dice":1,"MD":0},
+    "Oasis":{"dice":2,"MD":0},
+    "Village":{"dice":2,"MD":0},
+    "Town":{"dice":3,"MD":0},
+    "Fort":{"dice":3,"MD":0},
+    "Airport":{"dice":3,"MD":0}
+};
+/** 
+ * @constant {Array} DISCRETION_MD
+ * @description Modifier to be applied according to the nb of unit moved
+ * @example md = DISCRETION_MD[unitSet.nbOfUnitInPatril()] 
+ */
+const DISCRETION_MD = [
+    1,0,0,0,1,1,1,2,2,3
+];
+/** 
+ * @constant {Number} MD_AXIS_UNIT
+ * @description Modifier to apply for each Axis unit in the targeted zone
+ */
+const MD_AXIS_UNIT = DISCRETION_MD[0];
+// End of constant and tables declaration
+
 export default class QOG {
+    inizones =false;
+
     constructor () {
         throw ('ERROR QOG is not instanciable');
     }
 
-    boards () {
-        this.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
+    async boards () {
+        await this.loadExternalRessources({'url':'/QOG_boardGame.html'}).then((data)=>{
             document.getElementById('gameBoard').innerHTML = data;
-            document.getElementById('gameBoard').style.display="block";
+            document.getElementById('gameBoard').style.display="inline-block";
             QOG.prototype.initZones(this);
+            this.initZones=true;
         }).catch((err)=>{
-            throw err;
+            console.log(err);
         });
     }
 
-    setUp() {
+    async setUp() {
         const scenarioURL="/scenario_default.json";
-        this.loadExternalRessources({'url':scenarioURL}).then ((data)=>{
+        await this.loadExternalRessources({'url':scenarioURL}).then ((data)=>{
             QOG.prototype.scenarioParser(JSON.parse(data),this);
             QOG.prototype.initScenario.call(this,this.currentScenario);
             let turn = document.getElementById('turn').getElementsByTagName('span')[0];
             turn.innerHTML = this.currentScenario.conditions.turnNb;
             this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
-            window.localStorage.setItem('gameLaunched',this.currentGame.name);
+            window.localStorage.setItem("gameLaunched",this.currentGame.name);
             QOG.prototype.initGameEvent();
             //QOG.prototype.run.call(this); // for #37 bug
             const Run = new CustomEvent('GameRunning',{});
         window.dispatchEvent(Run)
+
         }).catch((err)=>{console.log(err)});
+        const Run = new window.CustomEvent('GameRunning',{});
+        window.dispatchEvent(Run);
     }
 
     didacticiel () {
@@ -51,10 +92,11 @@ export default class QOG {
             if (this.units[id] instanceof unitSet) {
                 this.currentGame.patrolNb ++;
                 const nbOfUnitInPatrol = this.units[id].getNbOfUnitsInPatrol();
-                if (nbOfUnitInPatrol>1 && nbOfUnitInPatrol<3) {
+                if (nbOfUnitInPatrol>=1 && nbOfUnitInPatrol<3) {
+                    //@todo use diceRoll for all the following action Points calculation
                     this.units[id].actionPoints = 3+ Math.round(Math.random()*5);
                 }
-                else if (nbOfUnitInPatrol>4 && nbOfUnitInPatrol<8) {
+                else if (nbOfUnitInPatrol>=4 && nbOfUnitInPatrol<8) {
                     this.units[id].actionPoints = 4+ Math.round(Math.random()*5) +Math.round(Math.random()*5);
                 }
                 else {
@@ -66,7 +108,6 @@ export default class QOG {
 
             }
         }
-
 
     }
 
@@ -81,9 +122,10 @@ export default class QOG {
         for(let area=0; area< gameZones.length;area++) {
             QOG.prototype.zones[gameZones[area].id]= new zone (gameZones[area],gameZones[area].id)
         };
-        
         for (let areaZone in QOG.prototype.zones ) {
             QOG.prototype.zones[areaZone].Element.ondragover=QOG.prototype.dragoverHandler;
+            QOG.prototype.zones[areaZone].Element.ondragenter=QOG.prototype.dragEnterHandler;
+            QOG.prototype.zones[areaZone].Element.ondragleave=QOG.prototype.dragLeaveHandler;
             QOG.prototype.zones[areaZone].Element.ondrop = QOG.prototype.dropHandler;
             if(QOG.prototype.zones[areaZone].Element.dataset.links) {
                 let sourceZone=QOG.prototype.zones[areaZone].Element;
@@ -93,10 +135,10 @@ export default class QOG {
                     const cost = sourceZone[i].split(':')[1];
                     QOG.prototype.zones[areaZone].linkTo(QOG.prototype.zones[name],cost);
                 };
-                
             };
+
             if(QOG.prototype.zones[areaZone].Element.dataset.hasOwnProperty('ground'))
-            QOG.prototype.zones[areaZone].ground = QOG.prototype.zones[areaZone].Element.dataset.ground;
+                QOG.prototype.zones[areaZone].ground = QOG.prototype.zones[areaZone].Element.dataset.ground;
         };
         if (gameManager) gameManager.zones = QOG.prototype.zones;
     }
@@ -116,13 +158,12 @@ export default class QOG {
         if(helpWin.classList.contains('gameBoardHide')) {
             helpWin.innerHTML=ev.currentTarget.dataset.help;
             if(ev.currentTarget.style.position != 'absolute'){
-                helpWin.style.left='950px';
+                helpWin.style.left='960px';
                 helpWin.style.top='90px';
             } else {
-                helpWin.style.left = parseInt(ev.currentTarget.style.left)+60+'px';
-                helpWin.style.top = parseInt(ev.currentTarget.style.top)+60+'px';
+                helpWin.style.left = parseInt(ev.currentTarget.style.left)+80+'px';
+                helpWin.style.top = parseInt(ev.currentTarget.style.top)+80+'px';
             }
-            
             helpWin.classList.remove('gameBoardHide');
         };
     }
@@ -146,11 +187,12 @@ export default class QOG {
         if (unit4piece.draggable) {
             piece.draggable = "true";
             piece.ondragstart = QOG.prototype.dragStartHandler;
+            piece.ondrag = QOG.prototype.dragHandler;
             piece.ondragend = QOG.prototype.dragEndHandler;
+            piece.oncontextmenu = QOG.prototype.contextMenuHandler;
         }
 
         piece.id=unit4piece.name.replace(/\s+/g, '') + Date.now();
-
         let coords = where2place.Element.coords.split(',');
         piece.style.position ='absolute';
         piece.style.left = (parseInt(coords[0])+5)+'px';
@@ -176,10 +218,15 @@ export default class QOG {
                     case "town":
                         if(jsonDesc.town[0]==='random') {
                             for(const zoneName in manager.zones) {
-                               if (manager.zones[zoneName].ground === 'town') {
-                                QOG.prototype.randomizeUnit(manager.zones[zoneName],jsonDesc.town,manager);
-                                if (IADrived)
-                                    manager.zones[zoneName].Element.ondragover = "";
+                               if (manager.zones[zoneName].ground === 'Town') {
+                                    QOG.prototype.randomizeUnit(manager.zones[zoneName],jsonDesc.town,manager);
+                                    if (IADrived) {
+                                        manager.zones[zoneName].Element.ondrop = "";
+                                        manager.zones[zoneName].Element.ondragenter = "";
+                                        manager.zones[zoneName].Element.ondragleave = "";
+                                        manager.zones[zoneName].Element.ondragover = "";
+                                    }
+                                    
                                 }
                             }
                         }
@@ -187,8 +234,12 @@ export default class QOG {
                     case "zones" :
                         for (let key in jsonDesc.zones) {
                             manager.zones[key].attach(manager.units[jsonDesc.zones[key]]);
-                            if (IADrived)
+                            if (IADrived) {
+                                manager.zones[key].Element.ondrop = "";
+                                manager.zones[key].Element.ondragenter = "";
+                                manager.zones[key].Element.ondragleave = "";
                                 manager.zones[key].Element.ondragover = "";
+                            }
                             QOG.prototype.placeAPiece(manager.units[jsonDesc.zones[key]],manager.zones[key]);
                         }
                         break;
@@ -252,10 +303,9 @@ export default class QOG {
         event.target.removeEventListener('mouseover',QOG.prototype.showHelp,true);
         event.target.removeEventListener('mouseout',QOG.prototype.hideHelp,true);
         document.getElementById('dialogWindow').classList.add('gameBoardHide');
-        event.dataTransfer.effectAllowed = "move";
-        event.dataTransfer.setData("img",event.target);
-        event.dataTransfer.setData("UnitName", event.target.name);
-        event.dataTransfer.setData("NbUnits",1);// pour le moment depent si c'et un unit, un detachment ou une patrouille
+        
+        gameManager.unit2Move = gameManager.units[event.target.name];
+
         let fromZone;
         for (let [ZoneName,Zone] of Object.entries(gameManager.zones)) {
             const unit2move = gameManager.units[event.target.name];
@@ -264,12 +314,19 @@ export default class QOG {
                 break;
             };
         };
-        event.dataTransfer.setData("fromZone",fromZone);  
+ 
+        gameManager.fromZone = gameManager.zones[fromZone];
+
         event.target.classList.add('dragged');   
+        event.dataTransfer.effectAllowed = "move";
      }   
 
+     dragHandler (e) {
+        e.preventDefault()
+     }
+
      dragEndHandler (event) {
-        event.preventDefault();
+        //event.preventDefault();
         event.target.classList.remove('dragged');
         event.target.addEventListener('mouseover',QOG.prototype.showHelp,true);
         event.target.addEventListener('mouseout',QOG.prototype.hideHelp,true);
@@ -277,23 +334,259 @@ export default class QOG {
 
      dragoverHandler (event) {
         event.preventDefault();
+        const cost = parseInt(document.getElementById('MVTcost').innerText);
+        if (!Number.isNaN(cost)) {
+            event.dataTransfer.dropEffect = "move";
+        } else {
+            event.dataTransfer.dropEffect='none';
+        }
+
      }
 
      dropHandler(event) {
-        event.preventDefault();
+        const costDiv = document.getElementById('MVTcost');
+        let nbOfUnits
+        if (costDiv.innerText !== NO_MVT) {
+            const cost = parseInt(costDiv.innerText);
+            costDiv.classList.add('gameBoardHide');
+
+            const zone = gameManager.zones[event.target.id];
+
+            if (gameManager.fromZone.moveTo(zone,gameManager.unit2Move)) {
+                const img2move = document.getElementsByName(gameManager.unit2Move.name)[0];
+                img2move.style.left = Number(zone.Element.coords.split(',')[0])+5+"px";
+                img2move.style.top = Number (zone.Element.coords.split(',')[1])+5+"px";
+                const PA = document.getElementById('PA').getElementsByTagName('span')[0];
+                const remain = parseInt(PA.innerText)+cost;
+                PA.innerText = ''+(parseInt(PA.innerText)+cost);
+                if (typeof gameManager.unit2Move.getNbOfUnitsInPatrol !=='undefined') nbOfUnits = gameManager.unit2Move.getNbOfUnitsInPatrol();
+                else nbOfUnits = 1;
+                const discretionEvent = new window.CustomEvent('discretiontest',{detail:{NbOfUnits:nbOfUnits}});
+                zone.Element.addEventListener('discretiontest',QOG.prototype.performDiscretionTest)
+                zone.Element.dispatchEvent(discretionEvent);
+            }
+            gameManager.unit2Move = undefined;
+            gameManager.fromZone = undefined;
+        } 
         
-        const Zone = gameManager.zones[event.target.id];
-        const fromZone = gameManager.zones[event.dataTransfer.getData('fromZone')];
-        const unit2move = gameManager.units[event.dataTransfer.getData('UnitName')];
-        if (fromZone.moveTo(Zone,unit2move)) {
-            const img2move = document.getElementsByName(unit2move.name)[0];
-            img2move.style.left = Number(Zone.Element.coords.split(',')[0])+5+"px";
-            img2move.style.top = Number (Zone.Element.coords.split(',')[1])+5+"px";
+     }
+    
+     /**
+      * @description ondragenter handler
+      * @author fierfeu
+      * @param {DragEvent} event
+      * @memberof QOG
+      */
+     dragEnterHandler (event) {   
+        const zone = gameManager.zones[event.target.id];
+        let nbOfUnits=0;
+        // calculate cost
+        if (typeof gameManager.unit2Move.getNbOfUnitsInPatrol !=='undefined') nbOfUnits = gameManager.unit2Move.getNbOfUnitsInPatrol();
+        else nbOfUnits = 1;
+        let cost = Math.round(nbOfUnits * gameManager.fromZone.moveAllowedTo(zone,gameManager.unit2Move));
+        let zoneCoords = event.target.coords;
+        zoneCoords = zoneCoords.split(',');
+        const costDiv = document.getElementById('MVTcost');
+        costDiv.style.left = zoneCoords[2]+'px';
+        costDiv.style.top = (parseInt(zoneCoords[3])+95)+'px';
+        // verify that cost is less than actionpoints or disallow movement
+        const actionPoints = parseInt(document.getElementById('PA').getElementsByTagName('span')[0].innerText);
+        if ((actionPoints - cost) >= 0) {
+            event.dataTransfer.dropEffect = "move";
+            costDiv.innerText = "-"+cost;
+        } else {
+            event.dataTransfer.dropEffect='none';
+            costDiv.innerText = NO_MVT;
         }
-        
+        costDiv.classList.toggle('gameBoardHide');
 
      }
+
+     dragLeaveHandler(event) {
         
+         const costDiv = document.getElementById('MVTcost');
+         costDiv.classList.add('gameBoardHide');
+     }
+
+     performDiscretionTest(ev) {
+        if(!ev || !(ev instanceof window.CustomEvent)) throw('performDiscretionTest must be called throught a customeEvent firing process');
+        else {
+            let alarmed = false;
+            let roll1, roll2, roll3;
+            let MD = DISCRETION_MD[ev.detail.NbOfUnits];
+            let ground= ev.target.dataset.ground;
+            if(ground != undefined) {
+                ground = ground.split(',');
+                if (ground.length == 1) {
+                    switch (ground[0]) {
+                        case 'Desert_sand' :
+                            if (QOG.prototype.diceRoll()+MD > 5) alarmed=true;
+                            break;
+                        case 'Desert_rocky' :
+                            if ((QOG.prototype.diceRoll()-1)+MD > 5) alarmed=true;
+                            break; 
+                        case 'Village' :
+                            roll1 = QOG.prototype.diceRoll()+MD;
+                            roll2 = QOG.prototype.diceRoll()+MD;
+                            if (roll1 > 5 || roll2 >5 ) alarmed=true;
+                            break;
+                        case "Town" :
+                            roll1 = QOG.prototype.diceRoll()+MD;
+                            roll2 = QOG.prototype.diceRoll()+MD;
+                            roll3 = QOG.prototype.diceRoll()+MD;
+                            if (roll1 > 5 || roll2 >5 || roll3 >5 ) alarmed=true;
+                            break;
+                    }
+                } else {
+                    switch (ground[1]) {
+                        case "Oasis" :
+                            roll1 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            roll2 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            if (roll1 > 5 || roll2 >5 ) alarmed=true;
+                            break;
+                        case "Airport" :
+                            roll1 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            roll2 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            roll3 = gameManager.currentGame.prototype.diceRoll()+MD;
+                            if (roll1 > 5 || roll2 >5 || roll3 >5 ) alarmed=true;
+                            break;
+                    }
+    
+                }
+                if(alarmed) QOG.prototype.increaseAlarmLevel();
+            }
+            
+        }
+     }
+
+     diceRoll () {
+        let roll = 1+Math.round(Math.random()*5)
+        return roll;
+     }
+
+     increaseAlarmLevel(val=1) {
+        if(gameManager.currentGame.alarmLevel == 4) return;
+        let dialog = document.createElement('div');
+        let map = document.getElementById('strategicMap');
+        dialog.style.left="450px";
+        dialog.style.top ="300px";
+        dialog.style.position="absolute";
+        dialog.innerText = "You've been detected by Axis : Alarm Level increase by one";
+        dialog.classList.add('dialogWindow');
+        dialog.onclick= (ev) =>{ 
+            document.getElementById('strategicMap').removeChild(ev.target);
+        }
+        map.appendChild(dialog);
+        let alarmeView = document.getElementById('alarm');
+        if(val == -1) {
+            gameManager.currentGame.alarmLevel --;
+        } else {
+            if(gameManager.currentGame.alarmLevel)  gameManager.currentGame.alarmLevel ++
+            else gameManager.currentGame.alarmLevel=1
+        }
+        alarmeView.style.backgroundPositionX = (-56*gameManager.currentGame.alarmLevel)+'px';
+     }
+
+    /**
+     * @description this function manage the right click or ctrl-click to open contextual menu
+     * @memberof QOG.prototype
+     * @param {mouseEvent} ev 
+     */
+     async contextMenuHandler(ev) {
+        QOG.prototype.hideHelp(ev.toString());
+        gameManager.currentGame.currentUnit=ev.target.id;
+        ev.target.classList.toggle('dragged');
+        const actionMenu = document.getElementById('contextualContainer');
+        document.getElementById('strategicMap').onclick = QOG.prototype.closeContextMenuHandler;
+        if(document.getElementById('actionMenu') == null) {
+            await gameManager.loadExternalRessources({'url':'/en/actionsMenu.html'}).then((data)=>{
+                actionMenu.innerHTML += data; 
+            }).catch((err)=>{
+                throw err;
+            });
+        };
+        const intelligneceValidZones = QOG.prototype.intelligenceActionValid(gameManager.units[ev.target.name])
+        const PA = document.getElementById('PA').getElementsByTagName('span')[0]
+        if(intelligneceValidZones == "" || parseInt(PA.innerText) < 2) {
+            document.getElementById('intelligence').style.opacity=0.7
+            document.getElementById('intelligence').dataset.available="false"
+            document.getElementById('intelligence').removeEventListener('click',QOG.prototype.performAction)
+        } else {
+            document.getElementById('intelligence').style.opacity=1
+            document.getElementById('intelligence').dataset.available="true"
+            document.getElementById('intelligence').addEventListener('click',QOG.prototype.performAction)
+        }
+
+        const scale = parseFloat(getComputedStyle(document.body).getPropertyValue('--scale'));
+        actionMenu.style.top = ((ev.clientY)/scale)+'px';
+        actionMenu.style.left = ((ev.clientX)/scale)+'px';
+        if(parseInt(actionMenu.style.top) > 535) {
+            actionMenu.style.top ="535px"
+            actionMenu.style.left = (parseInt(actionMenu.style.left)+10)+"px"
+        }
+        document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseover',QOG.prototype.showHelp,true);
+        document.getElementById(gameManager.currentGame.currentUnit).removeEventListener('mouseout',QOG.prototype.hideHelp,true);
+
+        document.getElementById('contextualContainer').style.display="block";
+    }
+
+    /**
+     * @description use a click out of contextualMenu to close it
+     * @memberof QOG.prototype
+     * @param {mouseEvent} ev click on strategicMap
+     */
+    closeContextMenuHandler (ev) {
+        document.getElementById('contextualContainer').style.display='none';
+        document.getElementById(gameManager.currentGame.currentUnit).classList.toggle('dragged');
+        document.getElementById(gameManager.currentGame.currentUnit).addEventListener('mouseover',QOG.prototype.showHelp,true);
+        document.getElementById(gameManager.currentGame.currentUnit).addEventListener('mouseout',QOG.prototype.hideHelp,true);
+        gameManager.currentGame.currentUnit=undefined;
+        document.getElementById('strategicMap').removeEventListener('click',QOG.prototype.closeContextMenuHandler);
+    }
+
+    performAction (ev) {
+        if(ev.currentTarget.id != '' ) {
+            console.log(ev.currentTarget.id);
+            console.log(ev.currentTarget.dataset.help);
+            ev.stopPropagation();
+        }
+
+    }
+
+    //intelligence action management
+    /**
+     * @description test if a valid intelligence action is available for the current Patrol
+     * @memberof QOG.prototype
+     * @param {UnitSet} patrol
+     * @returns {Array[zones]} Avalibale zones for intelligence
+     */
+     intelligenceActionValid (patrol) {
+        let response = []
+        for (const [zoneName, zone] of Object.entries(gameManager.zones)) {
+            if(zone.isInZone(patrol)) {
+                const connections = zone.connectedZones()
+                let ground
+                for(const[connectionName,cost] of Object.entries(connections)) {
+                    ground = gameManager.zones[connectionName].getGround()
+                    if(ground) {
+                        ground = ground.split(',')
+                        switch(ground.length) {
+                            case 1:
+                                if(ground[0]=='Village'||ground[0]=='Town'||ground[0]=='Fort')
+                                    response.push(gameManager.zones[connectionName])
+                                break
+                            case 2:
+                                if(ground[1]=='Oasis'||ground[1]=='Airport')
+                                    response.push(gameManager.zones[connectionName])
+                                break
+                        }
+                    }
+                }
+                return response
+            }
+        }
+         throw ('unable to find the zone where the unit is')
+     }
 
 }
 

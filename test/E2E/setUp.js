@@ -5,13 +5,12 @@ const chrome = require('selenium-webdriver/chrome');
 
 var options = new chrome.Options();
 options.addArguments('--start-maximized');
-options.addArguments('--disable-popup-blocking');
+//options.addArguments('--disable-popup-blocking');
 options.addArguments('--dom-automation');
 options.addArguments('--no-sandbox');
-options.addArguments("--disable-gpu");
-options.addArguments("--no-sandbox");
-options.addArguments("--disable-extensions");
-options.addArguments("--disable-dev-shm-usage");
+//options.addArguments("--disable-gpu");
+//options.addArguments("--disable-extensions");
+//options.addArguments("--disable-dev-shm-usage");
 options.addArguments("--headless"); 
 
 

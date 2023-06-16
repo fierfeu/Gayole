@@ -2,8 +2,7 @@
 [travis-url]: https://travis-ci.org/fierfeu/Gayole
 
 # Gayole Sand Box
-**_This repository is a sand box for my own learning_**
-
+**_This repository is a sand box for my own learning_*
 ## Strucutral choices
 I began by working on a very light weight server in order to serve static page.
 As I continue to developp a one site page to use this lw server I kept both back and front in the same project.
@@ -51,17 +50,19 @@ test directory is organise in three main parts :
 I don't like frameworks so i don't use frameworks for the moment. 
 
 ##CI performed by travis-ci
-please have intention in the chrome version ...
+the travis ci is no more used
 
 ### site on heroku##
-I use heroku as a first attemp to DevOps and plan to migrate on azure.
-You can acces to [web site](https://gayole.herokuapp.com) through Heroku
-[load-tests]:###load tests
-Load tests are performed using jmeter+webdriver plugin and adress the [pre-production heroku app](https://gayole-web.herokuapp.com/).
-load tests are stored in "_test\Load tests_"
-I plan to test also Gatling.
+the Heroku site is now closed
 
-gayole.herokuapp.com 
+### I use know aws EB and code pipeline for CI/CD
+build files for code pipeline are availbale in the root of the project
+
+
+# Gayole android app
+following a training course on android devlopment I made a small app for android based on a WebView to acces Gayole web game.
+you'll find code of the app here : [link to android app repo](https://github.com/fierfeu/Gayole-Android-App)
+
 
 
 [![Build Status][travis-image]][travis-url]
