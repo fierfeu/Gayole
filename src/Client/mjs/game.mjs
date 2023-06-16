@@ -52,14 +52,16 @@ export default class Game {
                  throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' is not a function');
         }
         // create game events
+
+        window.addEventListener('GameInit',this.initialise);
         window.addEventListener('GameRunning',this.runner);
-        this.initialise();
 
     };
 
-    async initialise () {
+    initialise () {
         for(let i=0;i<gameManager.sequence.length;i++) {
-            await gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
+            gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
+
         }   
     }
 

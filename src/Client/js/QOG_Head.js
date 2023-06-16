@@ -13,15 +13,11 @@ document.oncontextmenu = (ev) =>{ev.preventDefault();ev.stopImmediatePropagation
 document.getElementById('mainMenu').onclick = document.getElementById('mainMenu').ontouchstart = ()=>{
     document.getElementById('mainMenu').classList.toggle('maxifiedMainMenu');
 };
+const QOGCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':QOG}});
+const QOGInit = new CustomEvent('GameInit',{});
 
-// first button mamangement
+
 document.getElementsByTagName('button').item(0).onclick = ()=>{
     window.dispatchEvent(QOGCreation);
-    console.log('creation done'); // to be replaced by event storage
+    window.dispatchEvent(QOGInit)
 };
-document.getElementsByTagName('button').item(0).ontouchstart = document.getElementsByTagName('button').item(0).onclick;
-
-/* document.getElementById('gameBoard').addEventListener('mousemove', e => {
-    document.getElementById('mouse').innerHTML="X:"+e.offsetX+" Y:"+e.offsetY;
-    document.getElementById('client-mouse').innerHTML="cX:"+e.clientX+" cY:"+e.clientY;
-}); */

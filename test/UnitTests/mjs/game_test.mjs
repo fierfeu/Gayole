@@ -116,6 +116,32 @@ describe('[Game] gameManager is instanciable and runnable with events', ()=>{
         global.window = undefined;
     });
 
+
+    it('initiate good events to manage initialisation',()=>{
+        class GoodGameInterface  { 
+            getGameName () {return 'QOG'};
+            boards () {};
+            setUp () {}
+        }
+        const GameCreation = new CustomEvent('GameCreation',{
+            detail :{
+            'gameInterface': GoodGameInterface
+            }
+        });
+        window.dispatchEvent(GameCreation);
+        
+        const GameInit = new window.CustomEvent('GameInit',{});
+        let boardSpy = sinon.spy(GoodGameInterface.prototype,"boards");
+        let setUpSpy = sinon.spy(GoodGameInterface.prototype,"setUp");
+
+        window.dispatchEvent(GameInit);
+
+        expect (boardSpy.calledOnce).to.true;
+        expect (setUpSpy.calledAfter(boardSpy)).to.true;
+    
+    });
+
+
     it('Initiate good event to allow game running',()=>{
         class GoodGameInterface  { 
             getGameName () {return 'QOG'};

@@ -65,6 +65,10 @@ export default class QOG {
             this.currentGame.turnLeft = this.currentScenario.conditions.turnNb;
             window.localStorage.setItem("gameLaunched",this.currentGame.name);
             QOG.prototype.initGameEvent();
+            //QOG.prototype.run.call(this); // for #37 bug
+            const Run = new CustomEvent('GameRunning',{});
+        window.dispatchEvent(Run)
+
         }).catch((err)=>{console.log(err)});
         const Run = new window.CustomEvent('GameRunning',{});
         window.dispatchEvent(Run);
