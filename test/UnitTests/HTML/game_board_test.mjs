@@ -51,7 +51,7 @@ describe ('[gameBoard] load resources',()=>{
     // il faudrait ajouter tout les tests sur les AREA comme par exemple :
     it('Possible to load all zones and create links',async ()=>{
         let document;
-        return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
+        return JSDOM.fromFile('src/Client/html/QOG_boardGame.html').then((dom)=>{
             document=dom.window.document;
             let zones=[];
             const map= document.getElementsByName('gameBoardMap');
@@ -85,7 +85,7 @@ describe('[DIALOG] html game board definition contain a dialog window',()=>{
 
     it('has a div called "dialogWindow to be compatible with gameManager',()=>{
         
-        return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
+        return JSDOM.fromFile('src/Client/html/QOG_boardGame.html').then((dom)=>{
             let document=dom.window.document;
             expect(document.getElementById('dialogWindow')).to.exist;
             expect(document.getElementById('dialogWindow').classList.contains('dialogWindow')).to.true;
@@ -96,7 +96,7 @@ describe('[DIALOG] html game board definition contain a dialog window',()=>{
 
 describe ('[GameQOG Run] html must contain movement HMI',()=>{
     it('contains a div with id cost to give data to user when drag and drop units',()=>{
-        return JSDOM.fromFile('src/Client/html/boardGame.html').then((dom)=>{
+        return JSDOM.fromFile('src/Client/html/QOG_boardGame.html').then((dom)=>{
             let document=dom.window.document;
             
             expect(document.getElementById('MVTcost')).to.exist;

@@ -584,7 +584,7 @@ describe('[QOG] scenario parser works well',()=>{
 
 describe ('[QOG game event] all game board event are initialised',()=>{
     
-    const board = fs.readFileSync('src/Client/html/boardGame.html');
+    const board = fs.readFileSync('src/Client/html/QOG_boardGame.html');
     it('turnNb div has mouseOver and mouseOut event managed',()=>{
         globalThis.document=undefined;
         expect(()=>{QOG.prototype.initGameEvent()}).to.throw();

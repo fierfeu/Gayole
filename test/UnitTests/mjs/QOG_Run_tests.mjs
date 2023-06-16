@@ -83,7 +83,7 @@ describe ('[QOG RUN] function work well',()=>{
 describe ('[QOG run Movement] verify that movement action is well managed',()=>{
 
     beforeEach (async ()=>{
-        await JSDOM.fromFile ('src/Client/html/boardGame.html',{
+        await JSDOM.fromFile ('src/Client/html/QOG_boardGame.html',{
             url:'http://localhost', 
             pretendToBeVisual: true,
             runScripts:"dangerously"
@@ -262,7 +262,7 @@ describe ('[QOG run Movement] verify that movement action is well managed',()=>{
 
 describe('[QOG run Movement] Discretion test is working well', () =>{
     beforeEach (async ()=>{
-        await JSDOM.fromFile ('src/Client/html/boardGame.html',{
+        await JSDOM.fromFile ('src/Client/html/QOG_boardGame.html',{
             url:'http://localhost', 
             pretendToBeVisual: true,
             runScripts:"dangerously"
