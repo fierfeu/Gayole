@@ -21,9 +21,6 @@ node_modules/
 .vscode/
 Documentation/
 zzz_spikes/
-.travis.yml
 pre-staging-terminate.ymlpre-stagingBuild.yml
-protractor.mac.conf.js
 src.tar.gz
 webserver.log
-buildspec.yml

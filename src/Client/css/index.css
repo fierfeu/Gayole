@@ -39,6 +39,8 @@ body {
 
 .warLetters {
     font-family:mainMenuTitleFont;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .minifiedMainMenu {
@@ -53,7 +55,9 @@ body {
     z-index: 40;
 }
 
+
 .minifiedMainMenu > * {display : none;}
+.minifiedSelectMenu > * {display : none;}
 
 .maxifiedMainMenu {
     box-shadow:  var(--elevation8dp);
@@ -66,7 +70,30 @@ body {
     left:0;
 }
 
+
+.maxifiedSelectMenu {
+    position: absolute;
+    box-shadow:  var(--elevation8dp);
+    margin: auto;
+    top : 0px;
+    width : 200px; 
+    height : 250px;
+    background-image : none;
+    border-radius: 2%;
+    z-index:80;
+    left:40px;
+    background-color : var(--main-color);
+    padding-top: 7px;
+    flex-direction: column;
+    align-items: center;
+}
+
 .maxifiedMainMenu > * {
+    display : flex;
+    
+}
+
+.maxifiedSelectMenu > * {
     display : flex;
     
 }

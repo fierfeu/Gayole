@@ -12,9 +12,10 @@ const sitePagesConf ={
     '/en/actionsMenu.html':'src/Client/html/en/actionsMenu.html',
     '/index.css' : 'src/Client/css/index.css',
     '/actionMenu.css':'src/Client/css/actionMenu.css',
-    '/QOG_Head.js' : 'src/Client/js/QOG_Head.js',
+    '/Head.js' : 'src/Client/js/Head.js',
     '/QOG_Parser.mjs': 'src/Client/mjs/QOG_Parser.mjs',
     '/QOG.mjs' : 'src/Client/mjs/QOG.mjs',
+    '/EPT.mjs' : 'src/Client/mjs/EPT.mjs',
     '/eventStorageInterface.mjs' : 'src/Client/mjs/eventStorageInterface.mjs',
     '/eventManager.mjs' : 'src/Client/mjs/eventManager.mjs',
     '/menu.mjs' : 'src/Client/mjs/menu.mjs',
@@ -50,7 +51,10 @@ const sitePagesConf ={
     '/PA.png':'src/Client/images/PA.png',
     '/mainMenuTitle.ttf' : 'src/Client/font/mainMenuTitle.ttf',
     '/dd4tests.js':'src/Client/js/dd4tests.js',
-    '/favicon.ico' : './src/Client/images/favicon.ico' 
+    '/favicon.ico' : './src/Client/images/favicon.ico',
+    '/QOG.png' : './src/Client/images/QOG.png',
+    '/EPT.png' : './src/Client/images/EPT.png',
+    '/storageWorker.js' : './src/Client/js/storageWorker.js' 
 };
 
 module.exports ={

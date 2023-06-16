@@ -1,0 +1,21 @@
+:root  {
+--primary-theme: #c2ccb7ff;
+--secondary-them: #dbebc0ff;
+--light-omber: #c3b299ff;
+--omber: #1f271bff;
+--dialog: #4c5760ff;
+--selected: #1f271bff;
+--unselected: #c3b299ff;
+}
+
+/*
+* Make body take up the entire screen
+* Remove body margin so layout containers don't cause extra overflow.
+*/
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0; 
+    background-color: var(--primary-theme);
+}
+
