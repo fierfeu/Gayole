@@ -2,7 +2,9 @@
 const path = require('path');
 const fs = require ('fs');
 const {JSDOM} = require('jsdom');
-const expect = require('chai').expect
+const expect = require('chai').expect;
+const vm = require('vm');
+
 
 describe ('[Head.js] is well loaded', ()=>{
     it('script tag has the good src location and is in head tag' , (done)=>{
@@ -14,4 +16,5 @@ describe ('[Head.js] is well loaded', ()=>{
         expect(headScripts.item(0).src).to.equal('http://localhost/Head.js');
         done();
     });
+
 } );

@@ -26,10 +26,12 @@
       "test/UnitTests/mjs/QOG_Didacticiel_tests.mjs",
       "test/UnitTests/mjs/QOG_Parser_test.mjs",
       "test/UnitTests/mjs/QOG_Run_tests.mjs",
+      "test/UnitTests/games/EPT/EPT_test.mjs",
       "test/E2E/setUp.js",
       "test/E2E/e2e-canary.js",
       "test/E2E/MainPage-test.js",
       "test/E2E/gameQOG-test.js"],
+
     "recursive": true,
     "full-trace": true
   }

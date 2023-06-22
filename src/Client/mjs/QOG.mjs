@@ -66,8 +66,7 @@ export default class QOG {
             window.localStorage.setItem("gameLaunched",this.currentGame.name);
             QOG.prototype.initGameEvent();
         }).catch((err)=>{console.log(err)});
-        const Run = new window.CustomEvent('GameRunning',{});
-        window.dispatchEvent(Run);
+ 
     }
 
     didacticiel () {

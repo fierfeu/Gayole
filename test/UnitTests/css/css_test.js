@@ -64,7 +64,7 @@ describe('[CSS TESTS] index.css has minifiedMainMenu and maxifiedMainMenu classe
             if(el.selectorText === 'body') bodyIndex = index;
         });
         expect (bodyIndex,'we must have a "body" selector').to.not.be.null;
-        expect (indexSheet[bodyIndex].style['background-image']).to.equal("url('/QuiOseGagneFE.png')");
+        expect (indexSheet[bodyIndex].style['background-image']).to.equal("url('/ggc.png')");
         expect (indexSheet[bodyIndex].style['background-repeat']).to.equal("no-repeat");
         expect (indexSheet[bodyIndex].style['background-size']).to.equal("cover");
         //getComputedStyle ... just to remember

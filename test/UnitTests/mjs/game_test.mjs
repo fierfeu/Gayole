@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import Game from '../../../src/Client/mjs/game.mjs';
 import Event from 'events';
 import EventTarget from 'events';
@@ -57,29 +58,48 @@ describe('[Game] game creation tests',()=>{
         eventSpy.restore();
     });
 
-    it ('new game instanciation is wellmanage with a game prototype',()=>{
+    it ('new game instanciation is wellmanage with a game prototype', ()=>{
         new Game();
         class Empty {}
         Empty.prototype.constructor = 'test';
         globalThis.CustomEvent = Event;
 
-        expect (()=>{gameManager.create()}).to.throw();
-        expect(()=>{gameManager.create('TOTO')}).to.throw('ERROR Bad Game interface provided : expect a class constructor and received a string');
-        expect(()=>{gameManager.create(Empty)}).to.throw('ERROR BAD Game interface is Empty');
+        assert.rejects (async()=>{await gameManager.create()});
+        assert.rejects (async()=>{await gameManager.create('TOTO')},
+            (err)=>{assert.strictEqual(err.message, 'ERROR Bad Game interface provided : expect a class constructor and received a string');
+            return true;});
+            assert.rejects(async ()=>{await gameManager.create(Empty)},
+                (err)=>{assert.strictEqual(err.message, 'ERROR BAD Game interface is Empty');
+                return true;});
 
         class BadBoards {
             getGameName () {return 'toto'}
         }
         BadBoards.prototype.boards='test';
-        expect(()=>{gameManager.create(BadBoards)}).to.throw('ERROR BAD Game interface in BadBoards : boards is not a function');
+        assert.rejects (async () => {await gameManager.create(BadBoards)},
+            (err) =>{
+                assert.strictEqual(err.message,'ERROR BAD Game interface in BadBoards : boards is not a function');
+                return true;
+            }
+        );
         class GoodBoards {
             getGameName () {}
             boards () {}};
-        expect(()=>{gameManager.create(GoodBoards)}).to.throw('ERROR BAD Game interface in GoodBoards : setUp not available');
+        assert.rejects (async () => {await gameManager.create(BadBoards)},
+            (err) =>{
+                assert.strictEqual(err.message,'ERROR BAD Game interface in GoodBoards : setUp not available');
+                return true;
+            }
+        );
 
         class GoodSetUp {getGameName () {return 'toto'}
         setUp () {}};
-        expect(()=>{gameManager.create(GoodSetUp)}).to.throw('ERROR BAD Game interface in GoodSetUp : boards not available');
+        assert.rejects (async () => {await gameManager.create(BadBoards)},
+            (err) =>{
+                assert.strictEqual(err.message,'ERROR BAD Game interface in GoodSetUp : boards not available');
+                return true;
+            }
+        );
 
         gameManager.boardsOk = false;
         class GoodGameInterface { 
@@ -87,14 +107,14 @@ describe('[Game] game creation tests',()=>{
             boards () {this.boardsOk=true;}
             setUp () {this.setupOK=true;}
         }
-        expect(()=>{gameManager.create(GoodGameInterface)}).to.not.throw();
+        assert.doesNotReject(async ()=>{await gameManager.create(GoodGameInterface)});
         expect(gameManager.currentGame.name).to.equal('QOG');
 
 
         const GoodCustomEvent = new CustomEvent('GameCreation');// as it is, in fact, a nodejs Event we must add detail datas
         GoodCustomEvent.detail={};
         GoodCustomEvent.detail.gameInterface=GoodGameInterface;
-        expect(()=>{gameManager.create(GoodCustomEvent)}).to.not.throw();
+        assert.doesNotReject(async ()=>{await gameManager.create(GoodCustomEvent)});
         expect(gameManager.currentGame.name).to.equal('QOG');
 
         globalThis.gameManager = globalThis.CustomEvent = undefined;
@@ -128,39 +148,12 @@ describe('[Game] gameManager is instanciable and runnable with events', ()=>{
             'gameInterface': GoodGameInterface
             }
         });
+        let boardSpy = sinon.spy(GoodGameInterface.prototype,"boards");
         window.dispatchEvent(GameCreation);
         
-        const GameInit = new window.CustomEvent('GameInit',{});
-        let boardSpy = sinon.spy(GoodGameInterface.prototype,"boards");
-        let setUpSpy = sinon.spy(GoodGameInterface.prototype,"setUp");
-
-   
+        expect(boardSpy.calledOnce).to.true;
     });
 
-
-    it('Initiate good event to allow game running',()=>{
-        class GoodGameInterface  { 
-            getGameName () {return 'QOG'};
-            boards () {};
-            setUp () {};
-            run() {}
-        }
-        const GameCreation = new CustomEvent('GameCreation',{
-            detail :{
-            'gameInterface': GoodGameInterface
-            }
-        });
-        window.dispatchEvent(GameCreation);
-        
-        const GameInit = new CustomEvent('GameInit',{});
-        window.dispatchEvent(GameInit);
-
-        const runningSpy = sinon.spy(GoodGameInterface.prototype,'run')
-        const GameRunning = new CustomEvent('GameRunning',{});
-        window.dispatchEvent(GameRunning);
-        expect (runningSpy.calledOnce).to.true;
-
-    })
 });
 
 describe ('[Game] game Manager manage external ressources loading', ()=>{

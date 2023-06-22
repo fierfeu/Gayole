@@ -35,32 +35,33 @@ export default class Game {
         return this.sequence;
     }
 
-    create(gameInterface) {
-        if(gameInterface instanceof CustomEvent) 
-            this.currentGame.gameInterface=gameInterface.detail.gameInterface;
-        else if(!(typeof gameInterface === 'function')) 
-            throw ('ERROR Bad Game interface provided : expect a class constructor and received a '+typeof gameInterface);
-        else this.currentGame.gameInterface = gameInterface;
-        if(this.currentGame.gameInterface.prototype.hasOwnProperty('getGameName')) 
-            this.currentGame.name= this.currentGame.gameInterface.prototype.getGameName();
-        else throw ('ERROR BAD Game interface is Empty');
-        for( let i=0;i<this.sequence.length;i++) {
-            if(!this.currentGame.gameInterface.prototype[this.sequence[i]]) 
-                throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' not available');
-            if (!(typeof this.currentGame.gameInterface.prototype[this.sequence[i]] === 'function'))
-                 throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' is not a function');
+    async create(gameInterface) {
+        try {
+            if(gameInterface === undefined) throw TypeError('ERROR no game interface specified');
+            if(gameInterface instanceof CustomEvent) 
+                this.currentGame.gameInterface=gameInterface.detail.gameInterface;
+            else if(!(typeof gameInterface === 'function')) 
+                throw ('ERROR Bad Game interface provided : expect a class constructor and received a '+typeof gameInterface);
+            else this.currentGame.gameInterface = gameInterface;
+            if(this.currentGame.gameInterface.prototype.hasOwnProperty('getGameName')) 
+                this.currentGame.name= this.currentGame.gameInterface.prototype.getGameName();
+            else throw ('ERROR BAD Game interface is Empty');
+            for( let i=0;i<this.sequence.length;i++) {
+                if(!this.currentGame.gameInterface.prototype[this.sequence[i]]) 
+                    throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' not available');
+                if (!(typeof this.currentGame.gameInterface.prototype[this.sequence[i]] === 'function'))
+                    throw ('ERROR BAD Game interface in '+ this.currentGame.gameInterface.name+' : '+this.sequence[i]+' is not a function');
+            }
+            await this.initialise();
+        } catch(error) {
+            throw error
         }
-        // create game events
-
-        window.addEventListener('GameRunning',this.runner);
-        this;this.initialise();
-
+        this.runner();
     };
 
-    initialise () {
+    async initialise () {
         for(let i=0;i<gameManager.sequence.length;i++) {
-            gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
-
+            await gameManager.currentGame.gameInterface.prototype[gameManager.sequence[i]].call(gameManager);
         }   
     }
 

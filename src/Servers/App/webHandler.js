@@ -32,6 +32,7 @@ const sitePagesConf ={
     '/en/helper.json':'src/Client/json/games/QOG/en/helper.json',
     '/fr/helper.json':'src/Client/json/games/QOG/fr/helper.json',
     '/QuiOseGagneFE.png' : 'src/Client/images/QuiOseGagneFE.png',
+    '/ggc.png':'src/Client/images/ggc.png',
     '/Hamburger_icon.png' : 'src/Client/images/Hamburger_icon.png',
     '/strategicMap.png' : 'src/Client/images/games/QOG/QOGMap.png',
     '/strategicBorder.png':'src/Client/images/strategicBorder.png',
