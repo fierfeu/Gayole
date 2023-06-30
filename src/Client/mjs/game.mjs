@@ -7,8 +7,9 @@ export default class Game {
         this.sequence =['boards','setUp']; 
         this.currentGame = {};
         this.currentScenario=[];
-        window.addEventListener('GameCreation',(ev)=>{this.create(ev)});
         this.currentGame.i18n={"lang":['en','fr']};
+        window.addEventListener('GameCreation',(ev)=>{this.create(ev)});
+
     }
 
     loadExternalRessources (opts) {
@@ -35,6 +36,12 @@ export default class Game {
         return this.sequence;
     }
 
+    /**
+     * 
+     * @param {CustomEvent} gameInterface 
+     * 
+     * CustomEvent.detail = {gameInterface,player,gameBoardElement}
+     */
     async create(gameInterface) {
         try {
             if(gameInterface === undefined) throw TypeError('ERROR no game interface specified');
@@ -66,6 +73,8 @@ export default class Game {
     }
 
     runner () {
+        const gameboard = document.getElementById('gameBoard')
+        gameboard.classList.toggle('gameBoardHide')
         gameManager.currentGame.gameInterface.prototype.run.call(gameManager)
     }
 

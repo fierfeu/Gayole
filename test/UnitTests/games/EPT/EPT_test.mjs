@@ -3,6 +3,7 @@ import unit from '../../../../src/Client/mjs/unit.mjs';
 import {unitSet} from '../../../../src/Client/mjs/unitSet.mjs';
 import zone from '../../../../src/Client/mjs/zone.mjs';
 import scenario from '../../../../src/Client/mjs/scenario.mjs';
+import game from '../../../../src/Client/mjs/game.mjs';
 
 import fs from 'fs';
 import chai from 'chai';
@@ -10,9 +11,10 @@ const expect = chai.expect;
 import jsdom from 'jsdom';
 const {JSDOM} = jsdom;
 import sinon from 'sinon';
+import { promise } from 'selenium-webdriver';
+import { it } from 'mocha';
 
-var window;
-const EPMPTYHTML = `<html>
+const EMPTYHTML = `<html>
                         <body>
                             <div id='gameBoard' class='gameBoardHide' >
                                 <div id='dialogZone' class='dialogZone'>
@@ -23,12 +25,38 @@ const EPMPTYHTML = `<html>
                         </body>
                     </html>`
 
+const EPTScenarioTestList =[["Default Scenario","This is the first scenario to learn how to play","/EPT_scenario_default.json"],["Scenarii for OCDT", ["first recognition","perform a recognition in first line","/EPT_OCDT-Rcegnition.json"]]]
+const scenarioTest = `
+{
+    "description": {
+        "name": "Default Scenario",
+        "long":"longue description of the defaultscenario",
+        "short":"This is the first scenario to learn how to play"
+    },
+    "maps" : {
+        "nb":1,
+        "desc":[["A.html",0]] 
+    },
+    "opponents":{},
+    "victoryConditions":{}
+}
+`
+const scenarioTestOCDT = `
+{
+    "description": {
+        "name": "Default Scenario",
+        "long":"longue description of the defaultscenario",
+        "short":"This is the first scenario to learn how to play"
+    },
+    "maps" : {
+        "nb":2,
+        "desc":[["A.html",0],["B.html",1]]
+    },
+    "opponents":{},
+    "victoryConditions":{}
+}
+`
 describe('[EPT for gameManager] EPT prototype content good gameManager Interface', ()=>{
-    const sandbox = sinon.createSandbox();
-
-    after(()=>{
-        sandbox.restore();
-    })
 
     it('EPT prototype is defined', () => {
         expect(EPT).to.not.be.undefined;
@@ -38,6 +66,7 @@ describe('[EPT for gameManager] EPT prototype content good gameManager Interface
     it('has boards function',()=>{
         expect(EPT.prototype.boards).to.exist;
         expect(typeof EPT.prototype.boards).to.equal('function');
+        expect(EPT.prototype.boards.constructor.name).to.equal('AsyncFunction')
     });
 
     it('has setUp function',()=>{
@@ -59,4 +88,231 @@ describe('[EPT for gameManager] EPT prototype content good gameManager Interface
         expect(typeof EPT.prototype.run).to.equal('function')
     })
 
+    it('throw "EPT not intantaible" when trying to create an instance of EPT', () => {
+        expect(() => {new EPT}).to.throw('EPT interface not Instantiable')
+    })
+
+})
+
+describe('[EPT for gameManager] EPT boards manage player ranking and initiate boards and zones', () => {
+    // set contextual gameManager
+    const gameManager = {
+        loadExternalRessources () {}
+    }
+
+
+    it('boards call player rank verification function',() => {
+        expect(EPT.prototype.rankVerification).to.exist
+        expect(typeof EPT.prototype.rankVerification).to.equal('function')
+        const verif = sinon.stub(EPT.prototype,'rankVerification')
+        EPT.prototype.boards.call(gameManager)
+        expect(verif.calledOnce).to.true
+        verif.restore()
+    })
+
+    it('boards call scenario selection function with player rank', ()=>{
+        expect(EPT.prototype.scenarioSelection).to.exist
+        expect(typeof EPT.prototype.scenarioSelection).to.equal('function')
+        expect(EPT.prototype.scenarioSelection.constructor.name).to.equal('AsyncFunction')
+        const verifRank = sinon.stub(EPT.prototype,'rankVerification')
+        const verifScenar = sinon.stub(EPT.prototype,'scenarioSelection')
+        const player={'rank':0}
+        EPT.prototype.boards.call(gameManager,player)
+        expect(verifScenar.calledOnce).to.true
+        expect(verifScenar.calledImmediatelyAfter(verifRank)).to.true
+        expect(verifScenar.calledWith(player.rank)).to.true
+        verifScenar.restore()
+        verifRank.restore()
+    })
+
+    it('boards call loadMaps function with maps ref list acocrding to selected scenario', async () => {
+        expect(EPT.prototype.loadMaps).to.exist
+        expect(typeof EPT.prototype.loadMaps).to.equal('function')
+        const verifScenar = sinon.stub(EPT.prototype,'scenarioSelection')
+        verifScenar.returns(Promise.resolve())
+        const verifLoad = sinon.stub(EPT.prototype,'loadMaps')
+        await EPT.prototype.boards.call(gameManager)
+        expect(verifLoad.calledOnce).to.true
+        expect(verifLoad.calledImmediatelyAfter(verifScenar)).to.true
+        verifLoad.restore()
+        verifScenar.restore()
+    })
+
+    it('boards call initzones function', async () => {
+        expect(EPT.prototype.initZones).to.exist
+        expect(typeof EPT.prototype.initZones).to.equal('function')
+        const verifScenar = sinon.stub(EPT.prototype,'scenarioSelection')
+        verifScenar.returns(Promise.resolve())
+        const verifLoad = sinon.stub(EPT.prototype,'loadMaps')
+        const verifInitZones = sinon.stub(EPT.prototype,'initZones')
+        await EPT.prototype.boards.call(gameManager)
+        expect(verifInitZones.calledOnce).to.true
+        expect(verifInitZones.calledImmediatelyAfter(verifLoad)).to.true
+        expect(verifInitZones.calledWith(gameManager)).to.true
+        verifScenar.restore()
+        verifLoad.restore()
+        verifInitZones.restore()
+    })
+})
+
+describe('[EPT for gameManager] EPT SetUp manage units and place it on the game board',()=>{
+
+    const gameManager = {}
+
+    it('SetUp call unit creation function',()=>{
+        expect(EPT.prototype.unitCreation).to.exist
+        expect(typeof EPT.prototype.unitCreation).to.equal('function')
+        const verifUnitCreation = sinon.stub(EPT.prototype,'unitCreation')
+        expect(()=>{EPT.prototype.setUp.call(gameManager)}).to.not.throw()
+        expect(verifUnitCreation.calledOnce).to.true
+        expect(verifUnitCreation.calledWith(gameManager)).to.true
+        verifUnitCreation.restore()
+    })
+
+    it('setUp call unit placement function', ()=>{
+        expect(EPT.prototype.placeUnits).to.exist
+        expect(typeof EPT.prototype.placeUnits).to.equal('function')
+        const verifUnitCreation = sinon.stub(EPT.prototype,'unitCreation')
+        const verifPlaceUnits = sinon.stub(EPT.prototype,'placeUnits')
+        expect(()=>{EPT.prototype.setUp.call(gameManager)}).to.not.throw()
+        expect(verifPlaceUnits.calledOnce).to.true
+        expect(verifPlaceUnits.calledImmediatelyAfter(verifUnitCreation)).to.true
+        expect(verifPlaceUnits.calledWith(gameManager)).to.true
+        verifPlaceUnits.restore()
+        verifUnitCreation.restore()
+    })
+})
+
+describe('[EPT gameInterface] scenarioSelection function allow to select and load scenario and return boards to load', ()=>{
+
+    //maps.desc = file to load + orientation with O:horizontal & 1:vertical
+        
+    beforeEach(()=>{
+        globalThis.gameManager={}
+        gameManager.loadExternalRessources = (opts)=>{
+            return new Promise((resolve) =>{resolve(opts.url)})
+        }
+        
+    })
+    it('for player.rank=-1 load default scenario and store is name in gameManager.currentScenarioName',()=>{
+        const player={'rank':-1}
+        const verifLoader = sinon.stub(gameManager,'loadExternalRessources')
+        expect (() =>{EPT.prototype.scenarioSelection.call(gameManager, player.rank)}).to.not.throw()
+        expect(verifLoader.calledOnce).to.true
+        expect(verifLoader.calledWith({'url':EPTScenarioTestList[0][2]})).to.true
+        expect(gameManager.currentScenarioName).to.equal(EPTScenarioTestList[0][0])
+        verifLoader.restore()
+    })
+
+    it('for player.rank >0 call select scenario function to retrieve scenario and store is name',()=>{
+        const player={'rank':1} // first level as OCDT
+        const verifLoader = sinon.stub(gameManager,'loadExternalRessources')
+        expect (() =>{EPT.prototype.scenarioSelection.call(gameManager, player.rank)}).to.not.throw()
+        expect(verifLoader.calledOnce).to.true
+        expect(verifLoader.calledWith({'url':EPTScenarioTestList[player.rank][1][2]})).to.true
+        expect(gameManager.currentScenarioName).to.equal(EPTScenarioTestList[player.rank][1][0])
+        verifLoader.restore()
+    })
+
+    it('store scenario content in gameManager.currentScenarioDescriptor', async ()=>{
+        const player={'rank':-1}
+        await EPT.prototype.scenarioSelection.call(gameManager, player.rank)
+        expect(gameManager.currentScenarioDescriptor).to.equal(EPTScenarioTestList[0][2])
+    })
+
+    it('store maps in current Scenario Descriptor', async () => {
+        const player = {'rank':-1}
+        gameManager.loadExternalRessources = (opts)=>{
+            return new Promise((resolve) =>{resolve(scenarioTest)})
+        }
+        const resultMaps = JSON.parse(scenarioTest).maps
+        await EPT.prototype.scenarioSelection.call(gameManager,player.rank)
+        expect(gameManager.currentScenarioDescriptor.maps).to.eql(resultMaps)
+    })
+
+})
+
+describe('Load maps store maps image in boardgame', () => {
+    beforeEach(() => {
+        globalThis.gameManager={}
+        globalThis.document = new JSDOM(EMPTYHTML).window.document
+    });
+
+    afterEach(() => {
+        globalThis.document=undefined
+        globalThis.gameManager=undefined
+    });
+    it('with player.rank=-1, put maps html in window strategicmap div', async () => {
+        //arrange
+        const player = {'rank':-1}
+        gameManager.loadExternalRessources = ()=>{
+            return new Promise((resolve) =>{resolve(scenarioTest)})
+        }
+        await EPT.prototype.scenarioSelection.call(gameManager, player.rank)
+        gameManager.loadExternalRessources = (opts)=>{
+            return new Promise((resolve) =>{resolve("<img src='"+opts.url+"'>")})
+        }
+        //act
+        await EPT.prototype.loadMaps.call(gameManager)
+        //assert
+        const strategicMap = document.getElementById('strategicMap')
+        const divs = strategicMap.getElementsByTagName('div')
+        expect(divs.length).to.equal(1)
+        expect(divs[0].id).to.equal('map0')
+        const imgs = divs[0].getElementsByTagName('img')
+        expect(imgs.length).to.equal(1)
+        const maps = JSON.parse(scenarioTestOCDT).maps
+        expect(divs[0].innerHTML).to.equal('<img src="'+maps.desc[0][0]+'">')
+    });
+
+    it('with rank player = OCDT, strategicMap html contains 2 maps', async () => {
+        //arrange
+        const player = {'rank':1}
+        gameManager.loadExternalRessources = ()=>{
+            return new Promise((resolve) =>{resolve(scenarioTestOCDT)})
+        }
+        await EPT.prototype.scenarioSelection.call(gameManager, player.rank)
+        gameManager.loadExternalRessources = (opts)=>{
+            return new Promise((resolve) =>{resolve('<img src="'+opts.url+'">')})
+        }
+        //act
+        await EPT.prototype.loadMaps.call(gameManager)
+        //assert
+        const strategicMap = document.getElementById('strategicMap')
+        const divs=strategicMap.getElementsByTagName('div')
+        const maps = JSON.parse(scenarioTestOCDT).maps
+        expect(divs.length).to.equal(2)
+        expect(divs[0].id).to.equal('map0')
+        expect(divs[1].id).to.equal('map1')
+        const imgs = strategicMap.getElementsByTagName('img')
+        expect(imgs.length).to.equal(2)
+        expect(divs[0].innerHTML).to.equal('<img src="'+maps.desc[0][0]+'">')
+        expect(divs[1].innerHTML).to.contains('<img src="'+maps.desc[1][0]+'"')
+    });
+
+    it('laodMaps manage orientation of maps', async () => {
+        //arrange
+        const player = {'rank':1}
+        gameManager.loadExternalRessources = ()=>{
+            return new Promise((resolve) =>{resolve(scenarioTestOCDT)})
+        }
+        await EPT.prototype.scenarioSelection.call(gameManager, player.rank)
+        gameManager.loadExternalRessources = (opts)=>{
+            return new Promise((resolve) =>{resolve('<img src="'+opts.url+'">')})
+        }
+        //act
+        await EPT.prototype.loadMaps.call(gameManager)
+        await EPT.prototype.loadMaps.call(gameManager)
+        //assert
+        const imgs = document.getElementsByTagName('img')
+        const maps = JSON.parse(scenarioTestOCDT).maps
+        for (let index = 0; index < maps.nb; index++) {
+            const element = maps.desc[index][0];
+            const orientation=maps.desc[index][1]
+            if(orientation===0)
+                expect(imgs[index].className).to.equal('')
+            else
+                expect(imgs[index].className).to.equal('verticalMap')
+        }
+    });
 });

@@ -1,0 +1,13 @@
+{
+    "description": {
+        "name": "Default Scenario",
+        "long":"longue description of the defaultscenario",
+        "short":"This is the first scenario to learn how to play"
+    },
+    "maps" : {
+        "nb":1,
+        "desc":[["A.html",0]] 
+    },
+    "opponents":{},
+    "victoryConditions":{}
+}

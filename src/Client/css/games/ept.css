@@ -19,3 +19,7 @@ body {
     background-color: var(--primary-theme);
 }
 
+.verticalMap {
+    transform: rotate(90deg);
+}
+
