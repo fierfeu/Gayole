@@ -106,7 +106,14 @@ export default class EPT{
     }
 
     initZones(gameManager) {
-
+        this.currentScenarioDescriptor.maps.data = []
+        for (let index = 0; index <this.currentScenarioDescriptor.maps.nb; index++) {
+            let id = 'map'+index
+            let element = document.getElementById(id)
+            let image = element.getElementsByTagName('img')
+            let idData = image[0].id
+                        this.currentScenarioDescriptor.maps.data[index] = window[idData]
+        }
     }
 
     unitCreation (gameManager) {

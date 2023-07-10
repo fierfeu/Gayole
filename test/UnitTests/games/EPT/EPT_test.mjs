@@ -54,7 +54,41 @@ const scenarioTestOCDT = `
     },
     "opponents":{},
     "victoryConditions":{}
-}
+}`
+
+const mapXHTML =`
+<div id='map0'>
+    <img id='mapX' src='mapX.png'>
+    <script>
+        var mapX = {
+            'description': 'Ouest Europe',
+            'width':6613,
+            'height': 4745,
+            'hexs':[
+                {'id':'0101','center':[0,228],'terrain':4,'bordure':0,'elevation':0,'batiment':0},
+                {'id':'0604','center':[2063,1430],'terrain':3,'bordure':{'type':3,'separate':['0503','0504','0603']},'elevation':1,'batiment':2},
+                {'id':'1710','center':[6613,4530],'terrain':0,'bordure':0,'elevation':0,'batiment':0}
+            ]
+
+        }
+    </script>
+</div>
+<div id='map1'>
+    <img id='mapX2' src='mapX.png'>
+    <script>
+        var mapX2 = {
+            'description': 'Ouest Europe map2',
+            'width':6613,
+            'height': 4745,
+            'hexs':[
+                {'id':'0101','center':[0,228],'terrain':4,'bordure':0,'elevation':0,'batiment':0},
+                {'id':'0604','center':[2063,1430],'terrain':3,'bordure':{'type':3,'separate':['0503','0504','0603']},'elevation':1,'batiment':2},
+                {'id':'1710','center':[6613,4530],'terrain':0,'bordure':0,'elevation':0,'batiment':0}
+            ]
+
+        }
+    </script>
+</div>
 `
 describe('[EPT for gameManager] EPT prototype content good gameManager Interface', ()=>{
 
@@ -67,6 +101,16 @@ describe('[EPT for gameManager] EPT prototype content good gameManager Interface
         expect(EPT.prototype.boards).to.exist;
         expect(typeof EPT.prototype.boards).to.equal('function');
         expect(EPT.prototype.boards.constructor.name).to.equal('AsyncFunction')
+        // verify sub functions called by boards
+        expect(EPT.prototype.rankVerification).to.exist
+        expect(typeof EPT.prototype.rankVerification).to.equal('function')
+        expect(EPT.prototype.scenarioSelection).to.exist
+        expect(typeof EPT.prototype.scenarioSelection).to.equal('function')
+        expect(EPT.prototype.scenarioSelection.constructor.name).to.equal('AsyncFunction')
+        expect(EPT.prototype.loadMaps).to.exist
+        expect(typeof EPT.prototype.loadMaps).to.equal('function')
+        expect(EPT.prototype.initZones).to.exist
+        expect(typeof EPT.prototype.initZones).to.equal('function')
     });
 
     it('has setUp function',()=>{
@@ -99,59 +143,60 @@ describe('[EPT for gameManager] EPT boards manage player ranking and initiate bo
     const gameManager = {
         loadExternalRessources () {}
     }
+     let verifRank,verifScenar,verifLoad,verifInitZones
 
-
-    it('boards call player rank verification function',() => {
-        expect(EPT.prototype.rankVerification).to.exist
-        expect(typeof EPT.prototype.rankVerification).to.equal('function')
-        const verif = sinon.stub(EPT.prototype,'rankVerification')
-        EPT.prototype.boards.call(gameManager)
-        expect(verif.calledOnce).to.true
-        verif.restore()
+    beforeEach(()=>{
+        verifRank = sinon.stub(EPT.prototype,'rankVerification')
+        verifScenar = sinon.stub(EPT.prototype,'scenarioSelection')
+        verifLoad = sinon.stub(EPT.prototype,'loadMaps')
+        verifInitZones = sinon.stub(EPT.prototype,'initZones')
     })
 
-    it('boards call scenario selection function with player rank', ()=>{
-        expect(EPT.prototype.scenarioSelection).to.exist
-        expect(typeof EPT.prototype.scenarioSelection).to.equal('function')
-        expect(EPT.prototype.scenarioSelection.constructor.name).to.equal('AsyncFunction')
-        const verifRank = sinon.stub(EPT.prototype,'rankVerification')
-        const verifScenar = sinon.stub(EPT.prototype,'scenarioSelection')
-        const player={'rank':0}
-        EPT.prototype.boards.call(gameManager,player)
-        expect(verifScenar.calledOnce).to.true
-        expect(verifScenar.calledImmediatelyAfter(verifRank)).to.true
-        expect(verifScenar.calledWith(player.rank)).to.true
+    afterEach(()=>{
+        verifInitZones.restore()
+        verifLoad.restore()
         verifScenar.restore()
         verifRank.restore()
     })
 
+
+    it('boards call player rank verification function',() => {
+
+        EPT.prototype.boards.call(gameManager)
+        expect(verifRank.calledOnce).to.true
+
+    })
+
+    it('boards call scenario selection function with player rank', ()=>{
+        const player={'rank':0}
+
+        EPT.prototype.boards.call(gameManager,player)
+
+        expect(verifScenar.calledOnce).to.true
+        expect(verifScenar.calledImmediatelyAfter(verifRank)).to.true
+        expect(verifScenar.calledWith(player.rank)).to.true
+
+    })
+
     it('boards call loadMaps function with maps ref list acocrding to selected scenario', async () => {
-        expect(EPT.prototype.loadMaps).to.exist
-        expect(typeof EPT.prototype.loadMaps).to.equal('function')
-        const verifScenar = sinon.stub(EPT.prototype,'scenarioSelection')
+
         verifScenar.returns(Promise.resolve())
-        const verifLoad = sinon.stub(EPT.prototype,'loadMaps')
+
         await EPT.prototype.boards.call(gameManager)
+
         expect(verifLoad.calledOnce).to.true
         expect(verifLoad.calledImmediatelyAfter(verifScenar)).to.true
-        verifLoad.restore()
-        verifScenar.restore()
+
     })
 
     it('boards call initzones function', async () => {
-        expect(EPT.prototype.initZones).to.exist
-        expect(typeof EPT.prototype.initZones).to.equal('function')
-        const verifScenar = sinon.stub(EPT.prototype,'scenarioSelection')
         verifScenar.returns(Promise.resolve())
-        const verifLoad = sinon.stub(EPT.prototype,'loadMaps')
-        const verifInitZones = sinon.stub(EPT.prototype,'initZones')
+
         await EPT.prototype.boards.call(gameManager)
         expect(verifInitZones.calledOnce).to.true
         expect(verifInitZones.calledImmediatelyAfter(verifLoad)).to.true
         expect(verifInitZones.calledWith(gameManager)).to.true
-        verifScenar.restore()
-        verifLoad.restore()
-        verifInitZones.restore()
+
     })
 })
 
@@ -314,5 +359,68 @@ describe('Load maps store maps image in boardgame', () => {
             else
                 expect(imgs[index].className).to.equal('verticalMap')
         }
+    });
+});
+
+describe('[EPT-Game Creation]Load data from mapX.html', () => {
+    it('load script from loadexternalressources', async () => {
+        const window = new JSDOM(mapXHTML,{runScripts: "dangerously" }).window
+        globalThis.document = window.document
+        const gameManager={
+            'currentScenarioDescriptor':{
+                'maps':{
+                    'nb':1,
+                    'desc':[['mapX.html']]
+                }
+            }
+        }
+
+        expect(window.eval('mapX')).to.exist
+        expect(window.eval('mapX.description')).to.equal('Ouest Europe')
+
+        globalThis.document=undefined
+    });
+
+    it('Init zones load maps data in currentScenarioDescriptor.maps.data[0] for one maps', () => {
+        const gameManager={
+            'currentScenarioDescriptor':{
+                'maps':{
+                    'nb':1,
+                    'desc':[['mapX.html']]
+                }
+            }
+        }
+        globalThis.window = new JSDOM(mapXHTML,{runScripts: "dangerously" }).window
+        globalThis.document = window.document
+
+        EPT.prototype.initZones.call(gameManager)
+
+        expect(gameManager.currentScenarioDescriptor.maps.data).to.exist
+        expect(gameManager.currentScenarioDescriptor.maps.data[0].description).to.equal('Ouest Europe')
+
+        globalThis.window=undefined
+        globalThis.document=undefined
+    });
+
+    it('Init zones load maps data in currentScenarioDescriptor.maps.data[0] and [1] for two maps', () => {
+                const gameManager={
+            'currentScenarioDescriptor':{
+                'maps':{
+                    'nb':2,
+                    'desc':[['mapX.html','mapX.html']]
+                }
+            }
+        }
+        globalThis.window = new JSDOM(mapXHTML,{runScripts: "dangerously" }).window
+        globalThis.document = window.document
+
+        EPT.prototype.initZones.call(gameManager)
+
+        expect(gameManager.currentScenarioDescriptor.maps.data).to.exist
+        expect(gameManager.currentScenarioDescriptor.maps.data[0].description).to.equal('Ouest Europe')
+        expect(gameManager.currentScenarioDescriptor.maps.data[1].description).to.equal('Ouest Europe map2')
+        
+        globalThis.window=undefined
+        globalThis.document=undefined
     });
 });

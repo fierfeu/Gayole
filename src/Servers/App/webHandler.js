@@ -40,6 +40,7 @@ const sitePagesConf ={
     '/strategicBorder.png':'src/Client/images/strategicBorder.png',
     '/vaevictis-logo.jpg':'src/Client/images/vaevictis-logo.jpg',
     '/underwork.jpg':'src/Client/images/underwork.jpg',
+    '/mapA.png':'src/Client/images/games/EPT/mapA.png',
     '/patrol1.png':'src/Client/images/games/QOG/patrol1.png',
     '/Axis-FC.png':'src/Client/images/games/QOG/Axis-FC.png',
     '/Axis_It_1.png':'src/Client/images/games/QOG/Axis_It_1.png',
