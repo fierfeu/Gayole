@@ -105,15 +105,32 @@ export default class EPT{
 
     }
 
-    initZones(gameManager) {
+    initZones() {
         this.currentScenarioDescriptor.maps.data = []
+        this.zones=[]
         for (let index = 0; index <this.currentScenarioDescriptor.maps.nb; index++) {
             let id = 'map'+index
             let element = document.getElementById(id)
             let image = element.getElementsByTagName('img')
             let idData = image[0].id
-                        this.currentScenarioDescriptor.maps.data[index] = window[idData]
+            this.currentScenarioDescriptor.maps.data[index] = window[idData]
+            const map = document.createElement("map")
+            map.name=id+"areas"
+            map.id=map.name
+            this.currentScenarioDescriptor.maps.data[index].hexs.forEach(zone => {
+                const area = document.createElement('area')
+                area.shape='poly'
+                area.id = zone.id
+                area.coords = zone.area.toString()
+                map.appendChild(area)
+                this.zones[area.id]=zone
+            });
+
+            image[0].useMap = "#"+map.name
+            element.appendChild(map)
         }
+        
+
     }
 
     unitCreation (gameManager) {

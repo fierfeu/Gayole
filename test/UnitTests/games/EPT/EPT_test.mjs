@@ -64,10 +64,14 @@ const mapXHTML =`
             'description': 'Ouest Europe',
             'width':6613,
             'height': 4745,
+            'radius' : 276,
             'hexs':[
-                {'id':'0101','center':[0,228],'terrain':4,'bordure':0,'elevation':0,'batiment':0},
-                {'id':'0604','center':[2063,1430],'terrain':3,'bordure':{'type':3,'separate':['0503','0504','0603']},'elevation':1,'batiment':2},
-                {'id':'1710','center':[6613,4530],'terrain':0,'bordure':0,'elevation':0,'batiment':0}
+                {'id':'0101','center':[0,224],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[144,0],[280,224],[144,460],[0,460],[0,0]]},
+                {'id':'0503','center':[1659,1185],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[1792,941],[1934,1179],[1792,1418],[1518,1418],[1382,1179],[1518,941]]},
+                {'id':'0603','center':[2063,950],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[2206,700],[2348,941],[2206,1179],[1934,1179],[1792,941],[1934,700]]},
+                {'id':'0604','center':[2063,1430],'terrain':3,'bordure':{'type':3,'separate':['0503','0504','0603']},'elevation':0,'batiment':0,'area':[[2206,1179],[2348,1418],[2206,1656],[1934,1656],[1792,1418],[1934,1179]]},
+                {'id':'0605','center':[2063,1910],'terrain':0,'bordure':0,'elevation':0,'batiment':1,'area':[[2206,1656],[2348,1893],[2206,2133],[1934,2133],[1792,1893],[1934,1656]]},
+                {'id':'0704','center':[2478,1665],'terrain':0,'bordure':0,'elevation':0,'batiment':2,'area':[[2626,1418],[2762,1656],[2626,1893],[2348,1893],[2206,1656],[2348,1418]]}
             ]
 
         }
@@ -80,10 +84,14 @@ const mapXHTML =`
             'description': 'Ouest Europe map2',
             'width':6613,
             'height': 4745,
+            'radius' : 276,
             'hexs':[
-                {'id':'0101','center':[0,228],'terrain':4,'bordure':0,'elevation':0,'batiment':0},
-                {'id':'0604','center':[2063,1430],'terrain':3,'bordure':{'type':3,'separate':['0503','0504','0603']},'elevation':1,'batiment':2},
-                {'id':'1710','center':[6613,4530],'terrain':0,'bordure':0,'elevation':0,'batiment':0}
+                {'id':'0101','center':[0,224],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[144,0],[280,224],[144,460],[0,460],[0,0]]},
+                {'id':'0503','center':[1659,1185],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[1792,941],[1934,1179],[1792,1418],[1518,1418],[1382,1179],[1518,941]]},
+                {'id':'0603','center':[2063,950],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[2206,700],[2348,941],[2206,1179],[1934,1179],[1792,941],[1934,700]]},
+                {'id':'0604','center':[2063,1430],'terrain':3,'bordure':{'type':3,'separate':['0503','0504','0603']},'elevation':0,'batiment':0,'area':[[2206,1179],[2348,1418],[2206,1656],[1934,1656],[1792,1418],[1934,1179]]},
+                {'id':'0605','center':[2063,1910],'terrain':0,'bordure':0,'elevation':0,'batiment':1,'area':[[2206,1656],[2348,1893],[2206,2133],[1934,2133],[1792,1893],[1934,1656]]},
+                {'id':'0704','center':[2478,1665],'terrain':0,'bordure':0,'elevation':0,'batiment':2,'area':[[2626,1418],[2762,1656],[2626,1893],[2348,1893],[2206,1656],[2348,1418]]}
             ]
 
         }
@@ -370,7 +378,7 @@ describe('[EPT-Game Creation]Load data from mapX.html', () => {
             'currentScenarioDescriptor':{
                 'maps':{
                     'nb':1,
-                    'desc':[['mapX.html']]
+                    'desc':[['mapX.html',0]]
                 }
             }
         }
@@ -386,7 +394,7 @@ describe('[EPT-Game Creation]Load data from mapX.html', () => {
             'currentScenarioDescriptor':{
                 'maps':{
                     'nb':1,
-                    'desc':[['mapX.html']]
+                    'desc':[['mapX.html',0]]
                 }
             }
         }
@@ -403,11 +411,11 @@ describe('[EPT-Game Creation]Load data from mapX.html', () => {
     });
 
     it('Init zones load maps data in currentScenarioDescriptor.maps.data[0] and [1] for two maps', () => {
-                const gameManager={
+        const gameManager={
             'currentScenarioDescriptor':{
                 'maps':{
                     'nb':2,
-                    'desc':[['mapX.html','mapX.html']]
+                    'desc':[['mapX.html',0],['mapX.html',0]]
                 }
             }
         }
@@ -422,5 +430,37 @@ describe('[EPT-Game Creation]Load data from mapX.html', () => {
         
         globalThis.window=undefined
         globalThis.document=undefined
+    });
+});
+
+describe('[EPT Game Prototype] init Zones initialises area for maps', () => {
+    it('initialise area for one map', () => {
+        const gameManager={
+            'currentScenarioDescriptor':{
+                'maps':{
+                    'nb':1,
+                    'desc':[['mapX.html',0]],
+                    'data':[]
+                }
+            }
+        }
+        globalThis.window = new JSDOM(mapXHTML,{runScripts: "dangerously" }).window
+        globalThis.document = window.document
+
+        EPT.prototype.initZones.call(gameManager)
+
+        const img = document.getElementById('mapX')
+        expect(img.useMap).to.equal('#map0areas')
+        expect(document.getElementById('map0areas')).to.exist
+        const area0101 = document.getElementById('0101')
+        expect(area0101).to.exist
+        expect(area0101.tagName).to.equal('AREA')
+        expect(area0101.shape).to.equal('poly')
+        expect(area0101.coords).to.equal("144,0,280,224,144,460,0,460,0,0")
+        const area0704 = document.getElementById('0704')
+        expect(area0704).to.exist
+        expect(gameManager.zones).to.exist
+        expect(gameManager.zones['0101']).to.exist
+        expect(gameManager.zones['0604'].terrain).to.equal(3)
     });
 });
