@@ -1,7 +1,11 @@
 const HIERARCHYRANKING = [['OCDT','2LT','1LT','CPT','MAJ'],['Cadet','Second Lieutnant','Lieutnant', 'Captain','Major']]
 const EPTScenarioList =[["Default Scenario","This is the first scenario to learn how to play","/EPT_scenario_default.json"],["Scenarii for OCDT", ["first recognition","perform a recognition in first line","/EPT_OCDT-Rcegnition.json"]]]
 
+const EPTPHASES = ['Initiate','Placement','Running','Ending']
+
 export default class EPT{
+    
+
     constructor () {
         throw('EPT interface not Instantiable')
     }
@@ -108,6 +112,7 @@ export default class EPT{
     initZones() {
         this.currentScenarioDescriptor.maps.data = []
         this.zones=[]
+        this.currentGamePhase = EPTPHASES[0]
         for (let index = 0; index <this.currentScenarioDescriptor.maps.nb; index++) {
             let id = 'map'+index
             let element = document.getElementById(id)
@@ -123,6 +128,8 @@ export default class EPT{
                 area.id = zone.id
                 area.coords = zone.area.toString()
                 map.appendChild(area)
+                area.addEventListener("mouseover", EPT.prototype.zoneOverHandler)
+                area.addEventListener("drop", EPT.prototype.zoneDropHandler)
                 this.zones[area.id]=zone
             });
 
@@ -138,6 +145,25 @@ export default class EPT{
     }
 
     placeUnits (gameManager) {
+
+    }
+
+
+    // Event handlers
+    /**
+     * zones Event Handlers
+     * zoneOverHandler
+     * @param {MouseEvent} event 
+     */
+    zoneOverHandler (event) {
+
+    }
+    /**
+     * zones Event Handlers
+     * zoneDropHandler
+     * @param {MouseEvent} event 
+     */
+    zoneDropHandler (event) {
 
     }
 }

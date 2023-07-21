@@ -462,5 +462,68 @@ describe('[EPT Game Prototype] init Zones initialises area for maps', () => {
         expect(gameManager.zones).to.exist
         expect(gameManager.zones['0101']).to.exist
         expect(gameManager.zones['0604'].terrain).to.equal(3)
+
+        globalThis.window = undefined
+        globalThis.document = undefined
+    });
+});
+
+describe.only('[EPT Game Prototype] init events according to currnet phase', () => {
+    it('current phase is Initiate', () => {
+        const gameManager={
+            'currentScenarioDescriptor':{
+                'maps':{
+                    'nb':1,
+                    'desc':[['mapX.html',0]],
+                    'data':[]
+                }
+            }
+        }
+        globalThis.window = new JSDOM(mapXHTML,{runScripts: "dangerously" }).window
+        globalThis.document = window.document
+
+        EPT.prototype.initZones.call(gameManager)
+
+        expect(gameManager.currentGamePhase).to.equal('Initiate')
+
+        globalThis.window = undefined
+        globalThis.document = undefined
+    });
+
+    it('EPT prototype has Over and drop event Handler', () => {
+        expect(EPT.prototype.zoneOverHandler).to.exist
+        expect(typeof EPT.prototype.zoneOverHandler).to.equal('function')
+        expect(EPT.prototype.zoneDropHandler).to.exist
+        expect(typeof EPT.prototype.zoneDropHandler).to.equal('function')
+    });
+
+    it('add event listener for over, touch and drop zone', () => {
+        const gameManager={
+            'currentScenarioDescriptor':{
+                'maps':{
+                    'nb':1,
+                    'desc':[['mapX.html',0]],
+                    'data':[]
+                }
+            }
+        }
+        globalThis.window = new JSDOM(mapXHTML,{runScripts: "dangerously" }).window
+        globalThis.document = window.document
+        const verifOver = sinon.stub(EPT.prototype,'zoneOverHandler')
+        const verifDrop = sinon.stub(EPT.prototype,'zoneDropHandler')
+
+        EPT.prototype.initZones.call(gameManager)
+
+        const area = document.getElementById('0101')
+        const MOUSEOVER = new window.Event('mouseover');
+        const DROP = new window.Event("drop")
+        area.dispatchEvent(MOUSEOVER)
+        expect(verifOver.calledOnce).to.true
+        area.dispatchEvent(DROP)
+        expect(verifDrop.calledOnce).to.true
+
+
+        globalThis.window = undefined
+        globalThis.document = undefined
     });
 });
