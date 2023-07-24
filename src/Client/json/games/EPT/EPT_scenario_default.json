@@ -2,12 +2,29 @@
     "description": {
         "name": "Default Scenario",
         "long":"longue description of the defaultscenario",
-        "short":"This is the first scenario to learn how to play"
+        "short":"This is the first scenario to learn how to play",
+        "date" :"5/05/1940"
     },
     "maps" : {
         "nb":1,
         "desc":[["A.html",0]] 
     },
-    "opponents":{},
+    "opponents":{
+        "FR":{
+            "nom":"Français",
+            "Corp":"1 GRDI",
+            "CorpTxt":"1st Recognition Group platoon",
+            "units": [
+                {"type":"CP","level":"Platton","unitName":"Pithiviers","FP":2,"RoF":6,"range":3,"Face":0,"Hesitant":[2,3],"Morale":7},
+                {"type":"SQ","PlatoonName":"Pithiviers","unitName":"A","FP":[4,3],"RoF":6,"range":4,"Morale":7},
+                {"type":"SQ","PlatoonName":"Pithiviers","unitName":"B","FP":[4,3],"RoF":6,"range":4,"Morale":7},
+                {"type":"SQ","PlatoonName":"Pithiviers","unitName":"C","FP":[4,3],"RoF":6,"range":4,"Morale":7},
+                {"type":"DY","Nb":1}
+            ]
+        },
+        "DE":{
+            "nom":"German",
+            "Corp":"7 PanzerDivision"
+        }},
     "victoryConditions":{}
 }

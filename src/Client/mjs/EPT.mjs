@@ -1,3 +1,7 @@
+import unit from './unit.mjs';
+import {unitSet} from './unitSet.mjs';
+import zone from './zone.mjs';
+
 const HIERARCHYRANKING = [['OCDT','2LT','1LT','CPT','MAJ'],['Cadet','Second Lieutnant','Lieutnant', 'Captain','Major']]
 const EPTScenarioList =[["Default Scenario","This is the first scenario to learn how to play","/EPT_scenario_default.json"],["Scenarii for OCDT", ["first recognition","perform a recognition in first line","/EPT_OCDT-Rcegnition.json"]]]
 
@@ -40,11 +44,13 @@ export default class EPT{
      * 
      * For use : only callable with setUp.call(gameManager,player) by game.mjs
      */
-    setUp () {
+    setUp (player) {
+        // Set Opponents and load data
+        EPT.prototype.setOpponents.call(this,player)
         // units creation
-        EPT.prototype.unitCreation(this)
+        EPT.prototype.createUnits.call(this)
         // unit placement
-        EPT.prototype.placeUnits(this)
+        EPT.prototype.placeUnits.call(this)
     }
 
 
@@ -140,11 +146,24 @@ export default class EPT{
 
     }
 
-    unitCreation (gameManager) {
+    setOpponents (player) {
+        this.opponents = this.currentScenarioDescriptor.opponents
+        if(player.country===undefined) {
+            player.country="FR"
+            player.name = "Frundefined"
+        }
+            
+        if (player.country==this.opponents[0].player)
+            this.opponents[0].player= player.name
+        else if (player.country==this.opponents[1].player)
+            this.opponents[1].player= player.name
+    }
+
+    createUnits () {
 
     }
 
-    placeUnits (gameManager) {
+    placeUnits () {
 
     }
 

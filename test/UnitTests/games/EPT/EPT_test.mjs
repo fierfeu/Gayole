@@ -31,13 +31,33 @@ const scenarioTest = `
     "description": {
         "name": "Default Scenario",
         "long":"longue description of the defaultscenario",
-        "short":"This is the first scenario to learn how to play"
+        "short":"This is the first scenario to learn how to play",
+        "date" :"5/05/1940"
     },
     "maps" : {
         "nb":1,
         "desc":[["A.html",0]] 
     },
-    "opponents":{},
+    "opponents":[
+        {
+            "player":"FR",
+            "nom":"Français",
+            "Corp":"1 GRDI",
+            "CorpTxt":"1st Recognition Group platoon",
+            "units": [
+                {"type":"CP","level":"Platton","unitName":"Pithiviers","FP":2,"RoF":6,"range":3,"Face":0,"Hesitant":[2,3],"Morale":7},
+                {"type":"SQ","PlatoonName":"Pithiviers","unitName":"A","FP":[4,3],"RoF":6,"range":4,"Morale":7},
+                {"type":"SQ","PlatoonName":"Pithiviers","unitName":"B","FP":[4,3],"RoF":6,"range":4,"Morale":7},
+                {"type":"SQ","PlatoonName":"Pithiviers","unitName":"C","FP":[4,3],"RoF":6,"range":4,"Morale":7},
+                {"type":"DY","Nb":1}
+            ]
+        },
+        {
+            "player":"DE",
+            "nom":"German",
+            "Corp":"7 PanzerDivision"
+        }
+    ],
     "victoryConditions":{}
 }
 `
@@ -101,7 +121,7 @@ const mapXHTML =`
 describe('[EPT for gameManager] EPT prototype content good gameManager Interface', ()=>{
 
     it('EPT prototype is defined', () => {
-        expect(EPT).to.not.be.undefined;
+        expect(EPT.prototype).to.not.be.undefined;
     });
 
 
@@ -205,34 +225,6 @@ describe('[EPT for gameManager] EPT boards manage player ranking and initiate bo
         expect(verifInitZones.calledImmediatelyAfter(verifLoad)).to.true
         expect(verifInitZones.calledWith(gameManager)).to.true
 
-    })
-})
-
-describe('[EPT for gameManager] EPT SetUp manage units and place it on the game board',()=>{
-
-    const gameManager = {}
-
-    it('SetUp call unit creation function',()=>{
-        expect(EPT.prototype.unitCreation).to.exist
-        expect(typeof EPT.prototype.unitCreation).to.equal('function')
-        const verifUnitCreation = sinon.stub(EPT.prototype,'unitCreation')
-        expect(()=>{EPT.prototype.setUp.call(gameManager)}).to.not.throw()
-        expect(verifUnitCreation.calledOnce).to.true
-        expect(verifUnitCreation.calledWith(gameManager)).to.true
-        verifUnitCreation.restore()
-    })
-
-    it('setUp call unit placement function', ()=>{
-        expect(EPT.prototype.placeUnits).to.exist
-        expect(typeof EPT.prototype.placeUnits).to.equal('function')
-        const verifUnitCreation = sinon.stub(EPT.prototype,'unitCreation')
-        const verifPlaceUnits = sinon.stub(EPT.prototype,'placeUnits')
-        expect(()=>{EPT.prototype.setUp.call(gameManager)}).to.not.throw()
-        expect(verifPlaceUnits.calledOnce).to.true
-        expect(verifPlaceUnits.calledImmediatelyAfter(verifUnitCreation)).to.true
-        expect(verifPlaceUnits.calledWith(gameManager)).to.true
-        verifPlaceUnits.restore()
-        verifUnitCreation.restore()
     })
 })
 
@@ -468,7 +460,7 @@ describe('[EPT Game Prototype] init Zones initialises area for maps', () => {
     });
 });
 
-describe.only('[EPT Game Prototype] init events according to currnet phase', () => {
+describe('[EPT Game Prototype] init events according to currnet phase', () => {
     it('current phase is Initiate', () => {
         const gameManager={
             'currentScenarioDescriptor':{
@@ -526,4 +518,55 @@ describe.only('[EPT Game Prototype] init events according to currnet phase', () 
         globalThis.window = undefined
         globalThis.document = undefined
     });
+});
+
+//task : add units to gameboard https://todoist.com/showTask?id=7068264534
+describe('[EPT GAME PROTO] setUp works well', () => {
+    it('EPT prototype has the good function for setUp',()=>{
+        expect(EPT.prototype.setOpponents).to.exist
+        expect(typeof EPT.prototype.setOpponents).to.equal('function')
+        expect(EPT.prototype.createUnits).to.exist
+        expect(typeof EPT.prototype.createUnits).to.equal('function')
+        expect(EPT.prototype.placeUnits).to.exist
+        expect(typeof EPT.prototype.placeUnits).to.equal('function')
+    })
+
+    it('called with the good sequence : Opponent, create, place', ()=>{
+        const verifSetOpp = sinon.stub(EPT.prototype,'setOpponents')
+        const verifCreate = sinon.stub(EPT.prototype,'createUnits')
+        const verifPlace = sinon.stub(EPT.prototype,'placeUnits')
+        const gameManager = {'data':'loaded'}
+
+        EPT.prototype.setUp.call(gameManager)
+
+        expect(verifSetOpp.calledOnce).to.true
+        expect(verifSetOpp.thisValues[0].data).to.be.equal('loaded')
+        expect(verifCreate.calledOnce).to.true
+        expect(verifCreate.calledImmediatelyAfter(verifSetOpp)).to.be.true
+        expect(verifCreate.thisValues[0].data).to.be.equal('loaded')
+        expect(verifPlace.calledOnce).to.true
+        expect(verifPlace.calledImmediatelyAfter(verifCreate)).to.be.true
+        expect(verifPlace.thisValues[0].data).to.be.equal('loaded')
+
+        verifCreate.restore()
+        verifPlace.restore()
+        verifSetOpp.restore()
+    })
+//define opponents side and store data
+describe.only('[EPT GAME PROTO] set Opponents data and initiate game opponents', () => {
+    it('read opponents from scenario and create them in game manager', () => {
+        const gameManager = {}
+        const player ={
+            "name":"testplayer",
+            "country":"FR"
+        }
+        gameManager.currentScenarioDescriptor = JSON.parse(scenarioTest)
+
+        EPT.prototype.setOpponents.call(gameManager,player)
+
+        expect(gameManager.opponents).to.exist
+        expect(gameManager.opponents.length).to.be.equal(2)
+        expect(gameManager.opponents[0].player).to.be.equal("testplayer")
+    });
+});
 });
