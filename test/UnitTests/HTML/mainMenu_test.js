@@ -11,11 +11,10 @@ var expect = chai.expect;
 
 describe('[mainMenu HTML Tests] mainMenu of index.html is well defined in HTML',()=>{
 
-    it('mainMenu exist in index.html and has the good className and the good parent',()=>{
+    it('mainMenu exist in index.html and has the good className',()=>{
         return JSDOM.fromFile('src/Client/html/index.html').then(dom =>{
             const document = dom.window.document;
             expect(document.getElementById('mainMenu')).to.exist;
-            expect(document.getElementById('mainMenu').parentNode.nodeName).to.equal('BODY');
             expect(document.getElementById('mainMenu').className).to.equal('minifiedMainMenu');
         });
     });

@@ -10,41 +10,49 @@
 
 
     <body>
-        <div id='mainMenu' class='minifiedMainMenu'>
-            <div id="entete">
-                <div class='minifiedMainMenu' ></div>
-                <div id='mainMenuTitle' class='warLetters'>Menu Principal</div>
-                <div style='width:2%'></div>
-            </div> 
-            <hr>
-            <div id='buttonList'>
-                <button id="create_btn" style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class = 'btn-enabled'>CREER NOUVELLE PARTIE</button>
-                <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class ='btn-disabled'>CHARGER PARTIE EXISTANTE</button>
-                <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class='btn-disabled'>ENREGISTRE LA PARTIE</button>
+        <div id="leftDialogZone">
+            <div id='mainMenu' class='minifiedMainMenu'>
+                <div id="entete">
+                    <div class='minifiedMainMenu' ></div>
+                    <div id='mainMenuTitle' class='warLetters'>Menu Principal</div>
+                    <div style='width:2%'></div>
+                </div> 
+                <hr>
+                <div id='buttonList'>
+                    <button id="create_btn" style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class = 'btn-enabled'>CREER NOUVELLE PARTIE</button>
+                    <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class ='btn-disabled'>CHARGER PARTIE EXISTANTE</button>
+                    <button style='width:70%;height:20%;background-color:lightgrey;color:darkslategrey;' class='btn-disabled'>ENREGISTRE LA PARTIE</button>
+                </div>
             </div>
-        </div>
-        <div id='selectGame' class='minifiedSelectMenu'>
-            <div >
-                <div id='Title' class='warLetters' >selectionnez un jeu</div>
-                <div style='width:2%'></div>
-            </div> 
-            <hr>
-            <div id='buttonList'>
-                <button id="QOG" style='color:darkslategrey;padding:1px' class = 'btn-enabled'>
-                <img src="QOG.png"></button>
-                <button id="EPT" style='color:darkslategrey;padding:1px' class ='btn-enabled'>
-                <img src="EPT.png"></button>
-            </div>
-        </div>
-        <div id='gameBoard' class='gameBoardHide' ><div id='dialogZone' class='dialogZone'>
 
-            </div><div id='strategicMap' class='strategicMap'>
+            <div id="VVlink">
+                <a href="https://www.vaevictismag.fr/">
+                    <img style='transform-origin:"left";transform: rotate(90deg);width:100px' src='vaevictis-logo.jpg'>
+                </a>
+            </div>
 
+
+            <div id="main dialogue"></div>
+            <div id='selectGame' class='minifiedSelectMenu'>
+                <div >
+                    <div id='Title' class='warLetters' >selectionnez un jeu</div>
+                    <div style='width:2%'></div>
+                </div> 
+                <hr>
+                <div id='buttonList'>
+                    <button id="QOG" style='color:darkslategrey;padding:1px' class = 'btn-enabled'>
+                    <img src="QOG.png"></button>
+                    <button id="EPT" style='color:darkslategrey;padding:1px' class ='btn-enabled'>
+                    <img src="EPT.png"></button>
+                </div>
             </div>
         </div>
-        <a href="https://www.vaevictismag.fr/en/">
-            <img style='transform: rotate(90deg);transform-origin: left; margin-bottom: 500px;margin-left:100px' src='vaevictis-logo.jpg'>
-        </a>
+        
+        <div id='gameBoard' class='gameBoardHide' >
+            <div id='dialogZone' class='dialogZone'></div>
+            <div id='strategicMap' class='strategicMap'></div>
+        </div>
+
         <div id='contextualContainer' class='contextualMenu'></div>
     </body>
 </html>

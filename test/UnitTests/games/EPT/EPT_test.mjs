@@ -80,18 +80,19 @@ const mapXHTML =`
 <div id='map0'>
     <img id='mapX' src='mapX.png'>
     <script>
-        var mapX = {
-            'description': 'Ouest Europe',
-            'width':6613,
-            'height': 4745,
-            'radius' : 276,
-            'hexs':[
-                {'id':'0101','center':[0,224],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[144,0],[280,224],[144,460],[0,460],[0,0]]},
-                {'id':'0503','center':[1659,1185],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[1792,941],[1934,1179],[1792,1418],[1518,1418],[1382,1179],[1518,941]]},
-                {'id':'0603','center':[2063,950],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[2206,700],[2348,941],[2206,1179],[1934,1179],[1792,941],[1934,700]]},
-                {'id':'0604','center':[2063,1430],'terrain':3,'bordure':{'type':3,'separate':['0503','0504','0603']},'elevation':0,'batiment':0,'area':[[2206,1179],[2348,1418],[2206,1656],[1934,1656],[1792,1418],[1934,1179]]},
-                {'id':'0605','center':[2063,1910],'terrain':0,'bordure':0,'elevation':0,'batiment':1,'area':[[2206,1656],[2348,1893],[2206,2133],[1934,2133],[1792,1893],[1934,1656]]},
-                {'id':'0704','center':[2478,1665],'terrain':0,'bordure':0,'elevation':0,'batiment':2,'area':[[2626,1418],[2762,1656],[2626,1893],[2348,1893],[2206,1656],[2348,1418]]}
+        var mapData =[]
+        mapData['mapX'] = {
+            "description":"Ouest Europe",
+            "width":6613,
+            "height": 4745,
+            "radius" : 276,
+            "hexs":[
+                {"id":"0101","center":[0,224],"terrain":0,"bordure":0,"elevation":0,"batiment":0,"area":[[144,0],[280,224],[144,460],[0,460],[0,0]]},
+                {"id":"0503","center":[1659,1185],"terrain":0,"bordure":0,"elevation":0,"batiment":0,"area":[[1792,941],[1934,1179],[1792,1418],[1518,1418],[1382,1179],[1518,941]]},
+                {"id":"0603","center":[2063,950],"terrain":0,"bordure":0,"elevation":0,"batiment":0,"area":[[2206,700],[2348,941],[2206,1179],[1934,1179],[1792,941],[1934,700]]},
+                {"id":"0604","center":[2063,1430],"terrain":3,"bordure":{"type":3,"separate":["0503","0504","0603"]},"elevation":0,"batiment":0,"area":[[2206,1179],[2348,1418],[2206,1656],[1934,1656],[1792,1418],[1934,1179]]},
+                {"id":"0605","center":[2063,1910],"terrain":0,"bordure":0,"elevation":0,"batiment":1,"area":[[2206,1656],[2348,1893],[2206,2133],[1934,2133],[1792,1893],[1934,1656]]},
+                {"id":"0704","center":[2478,1665],"terrain":0,"bordure":0,"elevation":0,"batiment":2,"area":[[2626,1418],[2762,1656],[2626,1893],[2348,1893],[2206,1656],[2348,1418]]}
             ]
 
         }
@@ -100,18 +101,18 @@ const mapXHTML =`
 <div id='map1'>
     <img id='mapX2' src='mapX.png'>
     <script>
-        var mapX2 = {
-            'description': 'Ouest Europe map2',
-            'width':6613,
-            'height': 4745,
-            'radius' : 276,
-            'hexs':[
-                {'id':'0101','center':[0,224],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[144,0],[280,224],[144,460],[0,460],[0,0]]},
-                {'id':'0503','center':[1659,1185],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[1792,941],[1934,1179],[1792,1418],[1518,1418],[1382,1179],[1518,941]]},
-                {'id':'0603','center':[2063,950],'terrain':0,'bordure':0,'elevation':0,'batiment':0,'area':[[2206,700],[2348,941],[2206,1179],[1934,1179],[1792,941],[1934,700]]},
-                {'id':'0604','center':[2063,1430],'terrain':3,'bordure':{'type':3,'separate':['0503','0504','0603']},'elevation':0,'batiment':0,'area':[[2206,1179],[2348,1418],[2206,1656],[1934,1656],[1792,1418],[1934,1179]]},
-                {'id':'0605','center':[2063,1910],'terrain':0,'bordure':0,'elevation':0,'batiment':1,'area':[[2206,1656],[2348,1893],[2206,2133],[1934,2133],[1792,1893],[1934,1656]]},
-                {'id':'0704','center':[2478,1665],'terrain':0,'bordure':0,'elevation':0,'batiment':2,'area':[[2626,1418],[2762,1656],[2626,1893],[2348,1893],[2206,1656],[2348,1418]]}
+        mapData['mapX2'] = {
+            "description": "Ouest Europe map2",
+            "width":6613,
+            "height": 4745,
+            "radius" : 276,
+            "hexs":[
+                {"id":"0101","center":[0,224],"terrain":0,"bordure":0,"elevation":0,"batiment":0,"area":[[144,0],[280,224],[144,460],[0,460],[0,0]]},
+                {"id":"0503","center":[1659,1185],"terrain":0,"bordure":0,"elevation":0,"batiment":0,"area":[[1792,941],[1934,1179],[1792,1418],[1518,1418],[1382,1179],[1518,941]]},
+                {"id":"0603","center":[2063,950],"terrain":0,"bordure":0,"elevation":0,"batiment":0,"area":[[2206,700],[2348,941],[2206,1179],[1934,1179],[1792,941],[1934,700]]},
+                {"id":"0604","center":[2063,1430],"terrain":3,"bordure":{"type":3,"separate":["0503","0504","0603"]},"elevation":0,"batiment":0,"area":[[2206,1179],[2348,1418],[2206,1656],[1934,1656],[1792,1418],[1934,1179]]},
+                {"id":"0605","center":[2063,1910],"terrain":0,"bordure":0,"elevation":0,"batiment":1,"area":[[2206,1656],[2348,1893],[2206,2133],[1934,2133],[1792,1893],[1934,1656]]},
+                {"id":"0704","center":[2478,1665],"terrain":0,"bordure":0,"elevation":0,"batiment":2,"area":[[2626,1418],[2762,1656],[2626,1893],[2348,1893],[2206,1656],[2348,1418]]}
             ]
 
         }
@@ -280,10 +281,12 @@ describe('[EPT gameInterface] scenarioSelection function allow to select and loa
 describe('Load maps store maps image in boardgame', () => {
     beforeEach(() => {
         globalThis.gameManager={}
-        globalThis.document = new JSDOM(EMPTYHTML).window.document
+        globalThis.window = new JSDOM(EMPTYHTML).window
+        globalThis.document = window.document
     });
 
     afterEach(() => {
+        globalThis.window = undefined
         globalThis.document=undefined
         globalThis.gameManager=undefined
     });
@@ -375,8 +378,8 @@ describe('[EPT-Game Creation]Load data from mapX.html', () => {
             }
         }
 
-        expect(window.eval('mapX')).to.exist
-        expect(window.eval('mapX.description')).to.equal('Ouest Europe')
+        expect(window.eval("mapData['mapX']")).to.exist
+        expect(window.eval("mapData['mapX'].description")).to.equal('Ouest Europe')
 
         globalThis.document=undefined
     });
@@ -454,13 +457,14 @@ describe('[EPT Game Prototype] init Zones initialises area for maps', () => {
         expect(gameManager.zones).to.exist
         expect(gameManager.zones['0101']).to.exist
         expect(gameManager.zones['0604'].terrain).to.equal(3)
+        expect(gameManager.zones['0101']instanceof zone).to.be.true
 
         globalThis.window = undefined
         globalThis.document = undefined
     });
 });
 
-describe('[EPT Game Prototype] init events according to currnet phase', () => {
+describe('[EPT Game Prototype] init events according to current phase', () => {
     it('current phase is Initiate', () => {
         const gameManager={
             'currentScenarioDescriptor':{
@@ -553,7 +557,7 @@ describe('[EPT GAME PROTO] setUp works well', () => {
         verifSetOpp.restore()
     })
 //define opponents side and store data
-describe.only('[EPT GAME PROTO] set Opponents data and initiate game opponents', () => {
+describe('[EPT GAME PROTO] set Opponents data and initiate game opponents', () => {
     it('read opponents from scenario and create them in game manager', () => {
         const gameManager = {}
         const player ={

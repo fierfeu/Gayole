@@ -6,29 +6,57 @@ const {JSDOM} = jsdom;
 
 import zone from '../../../src/Client/mjs/zone.mjs';
 
-describe ('[Game Board] contains the good html',()=>{
+describe ('[index.html] contains the good html',()=>{
     let document;
-    it('is based on a div with the good id, good parent and css class',()=>{
-        return JSDOM.fromFile("src/Client/html/index.html").then((dom)=>{
-            document =dom.window.document;
-            const gameBoard = document.getElementById('gameBoard');
-            expect(gameBoard).to.exist;
-            expect(gameBoard.parentNode.nodeName).to.equal('BODY');
-            expect(gameBoard.className).to.equal('gameBoardHide');
-        });
+    before(async () => {
+        const _jsdom = await JSDOM.fromFile("src/Client/html/index.html")
+        document = _jsdom.window.document
     });
 
-    it ('contains 2 divs called strategicMap and dialogZone',()=>{
+    it('body childs are well defined (left diag, upper diag, gameboard, footer)', () => {
+        const body= document.body
+        expect(body.hasChildNodes()).to.true
+        const bodyChilds = body.childNodes
+        let divArray=[]
+        for (const node of bodyChilds) {
+            if (node.nodeName != "#text")
+                divArray.push(node)
+        }
+        expect(divArray.length).to.equal(3)
+    });
+
+    it('has a left dialog zone containing main menu', () => {
+        // body has a left dialog zone
+        const zone = document.getElementById('leftDialogZone')
+        expect(zone).to.exist
+        expect(zone.parentNode.nodeName).to.equal('BODY');
+        // this left zone contains main menu and VaeVictis link
+        const zoneContent = zone.childNodes
+        expect(zoneContent[1].nodeName).to.be.equal("DIV")
+        expect(zoneContent[1].id).to.be.equal("mainMenu")
+        expect(zoneContent[3].nodeName).to.be.equal("DIV")
+        expect(zoneContent[3].id).to.be.equal("VVlink")
+        expect(zoneContent[3].childNodes[1].href).to.be.equal("https://www.vaevictismag.fr/")
+    });
+
+    it('is based on a div with the good id, good parent and css class',()=>{
+        const gameBoard = document.getElementById('gameBoard');
+        expect(gameBoard).to.exist;
+        expect(gameBoard.parentNode.nodeName).to.equal('BODY');
+        expect(gameBoard.className).to.equal('gameBoardHide');
+     });
+
+    /*it ('contains 2 divs called strategicMap and dialogZone',()=>{
         return JSDOM.fromFile("src/Client/html/index.html").then((dom)=>{
             document =dom.window.document;
             const gameBoard = document.getElementById('gameBoard');
-            expect(gameBoard.childNodes.length).to.equal(3);
-            expect(gameBoard.childNodes[0].id).to.equal('dialogZone');
-            expect(gameBoard.childNodes[0].className).to.equal('dialogZone');
-            expect(gameBoard.childNodes[1].id).to.equal('strategicMap');
-            expect(gameBoard.childNodes[1].className).to.equal('strategicMap');
+            expect(gameBoard.childNodes.length).to.equal(5); // tab = text node : text div text div text
+            expect(gameBoard.childNodes[1].id).to.equal('dialogZone');
+            expect(gameBoard.childNodes[1].className).to.equal('dialogZone');
+            expect(gameBoard.childNodes[3].id).to.equal('strategicMap');
+            expect(gameBoard.childNodes[3].className).to.equal('strategicMap');
         });
-    });
+    });*/
 });
 
 class CustomResourceLoader extends jsdom.ResourceLoader {

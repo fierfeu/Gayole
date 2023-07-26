@@ -33,7 +33,7 @@ export default class EPT{
         // scenario selection
         await EPT.prototype.scenarioSelection.call(this,player.rank)
         // boards import
-        EPT.prototype.loadMaps.call(this)
+        await EPT.prototype.loadMaps.call(this)
         // hex to zone convertion
         EPT.prototype.initZones.call(this,this)
     }
@@ -97,7 +97,14 @@ export default class EPT{
     }
 
     async loadMaps () {
+        window.alert(window.innerHeight+" : "+window.innerWidth)
+        const gameboard= document.getElementById('gameBoard')
+        gameboard.style.width = 2300
+        gameboard.style.height = 1210
+        gameboard.style.display='inline-block'
         const strategicMap=document.getElementById('strategicMap')
+        strategicMap.style.height = 11000
+        strategicMap.style.width = 2290
         for (let index = 0; index <this.currentScenarioDescriptor.maps.nb; index++) {
             const element = this.currentScenarioDescriptor.maps.desc[index][0]
             await this.loadExternalRessources({'url':element}).then((data)=>{
@@ -108,11 +115,10 @@ export default class EPT{
                 if(this.currentScenarioDescriptor.maps.desc[index][1]===1)
                     img.classList.toggle('verticalMap')
                 strategicMap.appendChild(div)
-
+                const script = div.getElementsByTagName('script')[0]
+                if(script) eval(script.innerHTML)
             })
         }
-        const imgs= strategicMap.getElementsByTagName('img')
-
     }
 
     initZones() {
@@ -124,19 +130,22 @@ export default class EPT{
             let element = document.getElementById(id)
             let image = element.getElementsByTagName('img')
             let idData = image[0].id
-            this.currentScenarioDescriptor.maps.data[index] = window[idData]
+            this.currentScenarioDescriptor.maps.data[index] = window.mapData[idData]
+            //image[0].style.width= this.currentScenarioDescriptor.maps.data[index].width/3
+            //image[0].style.height= this.currentScenarioDescriptor.maps.data[index].height/3
+            image[0].style.width = 2260
             const map = document.createElement("map")
             map.name=id+"areas"
             map.id=map.name
-            this.currentScenarioDescriptor.maps.data[index].hexs.forEach(zone => {
+            this.currentScenarioDescriptor.maps.data[index].hexs.forEach(hex => {
                 const area = document.createElement('area')
                 area.shape='poly'
-                area.id = zone.id
-                area.coords = zone.area.toString()
+                area.id = hex.id
+                area.coords = hex.area.toString()
                 map.appendChild(area)
                 area.addEventListener("mouseover", EPT.prototype.zoneOverHandler)
                 area.addEventListener("drop", EPT.prototype.zoneDropHandler)
-                this.zones[area.id]=zone
+                this.zones[area.id]=new zone(area,area.id,hex)
             });
 
             image[0].useMap = "#"+map.name
@@ -148,11 +157,7 @@ export default class EPT{
 
     setOpponents (player) {
         this.opponents = this.currentScenarioDescriptor.opponents
-        if(player.country===undefined) {
-            player.country="FR"
-            player.name = "Frundefined"
-        }
-            
+        if(player===undefined) player={"country":"FR","name":"Frundefined"} 
         if (player.country==this.opponents[0].player)
             this.opponents[0].player= player.name
         else if (player.country==this.opponents[1].player)
@@ -175,7 +180,7 @@ export default class EPT{
      * @param {MouseEvent} event 
      */
     zoneOverHandler (event) {
-
+        
     }
     /**
      * zones Event Handlers

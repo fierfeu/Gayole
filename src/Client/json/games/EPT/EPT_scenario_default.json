@@ -9,8 +9,9 @@
         "nb":1,
         "desc":[["A.html",0]] 
     },
-    "opponents":{
-        "FR":{
+    "opponents":[
+        {
+            "player":"FR",
             "nom":"Français",
             "Corp":"1 GRDI",
             "CorpTxt":"1st Recognition Group platoon",
@@ -22,9 +23,11 @@
                 {"type":"DY","Nb":1}
             ]
         },
-        "DE":{
+        {
+            "player":"DE",
             "nom":"German",
             "Corp":"7 PanzerDivision"
-        }},
+        }
+    ],
     "victoryConditions":{}
 }

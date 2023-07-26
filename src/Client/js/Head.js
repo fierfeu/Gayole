@@ -12,6 +12,8 @@ gameEventStorageWorker.addEventListener("message", (ev)=>{
 });
 gameEventStorageWorker.postMessage(msg);*/
 
+window.mapData=[]
+
 window.localStorage.setItem('user','null');
 localStorage.setItem('gameLaunched','false');
 new Game();
@@ -26,7 +28,6 @@ document.getElementById('QOG').onclick = document.getElementById('QOG').ontouchs
 const EPTCreation = new CustomEvent('GameCreation',{'detail':{'gameInterface':EPT}});
 document.getElementById('EPT').onclick = document.getElementById('EPT').ontouchstart = () => {
     window.dispatchEvent(EPTCreation);
-    console.log('EPTCreation sent');
     document.getElementById('selectGame').classList.toggle('maxifiedSelectMenu');
 };
 
